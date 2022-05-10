@@ -1,6 +1,17 @@
-import { Link } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { auth } from '../firebase';
 
 function Home() {
+  const navigator = useNavigate();
+  useEffect(() => {
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        navigator('/main');
+      }
+    });
+  }, [navigator]);
   return (
     <>
       <Link to={'/signin'}>
