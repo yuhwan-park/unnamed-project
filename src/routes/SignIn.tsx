@@ -1,4 +1,9 @@
-import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithRedirect,
+} from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -10,9 +15,13 @@ function SignIn() {
   const [error, setError] = useState('');
   const navigator = useNavigate();
   const methods = useForm<IFormData>();
+  const provider = new GoogleAuthProvider();
+  const onClickSignInWithGoogle = async () => {
+    await signInWithRedirect(auth, provider);
+  };
   const onSubmit = async ({ email, password }: IFormData) => {
     try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (err: any) {
       setError(err.message);
     }
@@ -33,6 +42,7 @@ function SignIn() {
         {error ? error : null}
       </FormProvider>
       <div>sign In form</div>
+      <button onClick={onClickSignInWithGoogle}>sign In with Google</button>
     </>
   );
 }

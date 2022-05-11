@@ -1,6 +1,8 @@
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   onAuthStateChanged,
+  signInWithRedirect,
 } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -13,15 +15,22 @@ function SignUp() {
   const [error, setError] = useState('');
   const navigator = useNavigate();
   const methods = useForm<IFormData>();
+  const provider = new GoogleAuthProvider();
+  const onClickSignUpWithGoogle = async () => {
+    // 구글 로그인
+    await signInWithRedirect(auth, provider);
+  };
   const onSubmit = async ({ email, password }: IFormData) => {
+    // 이메일 로그인
     try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
     } catch (err: any) {
       setError(err.message);
     }
   };
   useEffect(() => {
     onAuthStateChanged(auth, user => {
+      // 로그인 정보가 있다면 바로 메인 페이지로
       if (user) {
         navigator('/main');
       }
@@ -36,6 +45,7 @@ function SignUp() {
         {error ? error : null}
       </FormProvider>
       <div>sign Up form</div>
+      <button onClick={onClickSignUpWithGoogle}>signup with google</button>
     </>
   );
 }
