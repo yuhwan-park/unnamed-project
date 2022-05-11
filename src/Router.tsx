@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './routes/Home';
 import Main from './routes/Main';
+import RequestUpdatePassword from './routes/RequestUpdatePassword';
 import SignIn from './routes/SignIn';
 import SignUp from './routes/SignUp';
 
@@ -13,6 +14,10 @@ function Router() {
         <Route path="/main" element={<Main />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route
+          path="/requestUpdatePassword"
+          element={<RequestUpdatePassword />}
+        />
       </Routes>
     </BrowserRouter>
   );

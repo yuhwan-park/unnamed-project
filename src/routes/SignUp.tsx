@@ -6,7 +6,7 @@ import {
 } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AuthForm from '../components/AuthForm';
 import { auth } from '../firebase';
 import { IFormData } from '../types';
@@ -44,8 +44,10 @@ function SignUp() {
         </form>
         {error ? error : null}
       </FormProvider>
-      <div>sign Up form</div>
       <button onClick={onClickSignUpWithGoogle}>signup with google</button>
+      <div>
+        이미 계정이 있으신가요? <Link to={'/signin'}>로그인</Link>
+      </div>
     </>
   );
 }
