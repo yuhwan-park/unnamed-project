@@ -1,4 +1,5 @@
 import { useFormContext } from 'react-hook-form';
+import { ErrorMessage, SubmitInput, TextInput } from '../defaultStyle/SignPage';
 import { IFormData } from '../types';
 
 interface IAuthFormProps {
@@ -13,9 +14,13 @@ function AuthForm({ isSignUp }: IAuthFormProps) {
   return (
     <>
       {isSignUp ? (
-        <input {...register('nickname')} type="text" placeholder="닉네임" />
+        <TextInput
+          {...register('nickname')}
+          type="text"
+          placeholder="닉네임 (선택사항)"
+        />
       ) : null}
-      <input
+      <TextInput
         {...register('email', {
           required: {
             value: true,
@@ -29,8 +34,10 @@ function AuthForm({ isSignUp }: IAuthFormProps) {
         type="text"
         placeholder="이메일"
       />
-      {errors.email?.message ? errors.email.message : null}
-      <input
+      <ErrorMessage>
+        {errors.email?.message ? errors.email.message : null}
+      </ErrorMessage>
+      <TextInput
         {...register('password', {
           required: {
             value: true,
@@ -44,8 +51,10 @@ function AuthForm({ isSignUp }: IAuthFormProps) {
         type="password"
         placeholder="비밀번호"
       />
-      {errors.password?.message ? errors.password.message : null}
-      <input type="submit" value={'submit'} />
+      <ErrorMessage>
+        {errors.password?.message ? errors.password.message : null}
+      </ErrorMessage>
+      <SubmitInput type="submit" value={isSignUp ? '회원가입' : '로그인'} />
     </>
   );
 }

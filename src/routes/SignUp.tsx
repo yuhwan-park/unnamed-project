@@ -1,8 +1,6 @@
 import {
   createUserWithEmailAndPassword,
-  GoogleAuthProvider,
   onAuthStateChanged,
-  signInWithRedirect,
   updateProfile,
 } from 'firebase/auth';
 import { useEffect, useState } from 'react';
@@ -11,16 +9,23 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthForm from '../components/AuthForm';
 import { auth } from '../firebase';
 import { IFormData } from '../types';
+import SocialLogin from '../components/SocialLogin';
+import {
+  Logo,
+  Hr,
+  LinkStyle,
+  ErrorMessage,
+  Container,
+  FormContainer,
+  Message,
+  Form,
+} from '../defaultStyle/SignPage';
 
 function SignUp() {
   const [error, setError] = useState('');
   const navigator = useNavigate();
   const methods = useForm<IFormData>();
-  const provider = new GoogleAuthProvider();
-  const onClickSignUpWithGoogle = async () => {
-    // 구글 로그인
-    await signInWithRedirect(auth, provider);
-  };
+
   const onSubmit = async ({ email, password, nickname }: IFormData) => {
     // 이메일 로그인
     try {
@@ -45,18 +50,27 @@ function SignUp() {
     });
   }, [navigator]);
   return (
-    <>
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <AuthForm isSignUp={true} />
-        </form>
-        {error ? error : null}
-      </FormProvider>
-      <button onClick={onClickSignUpWithGoogle}>signup with google</button>
-      <div>
-        이미 계정이 있으신가요? <Link to={'/signin'}>로그인</Link>
-      </div>
-    </>
+    <Container>
+      <Logo draggable className="logo">
+        dail
+      </Logo>
+      <FormContainer>
+        <FormProvider {...methods}>
+          <Form onSubmit={methods.handleSubmit(onSubmit)}>
+            <AuthForm isSignUp={true} />
+          </Form>
+          <ErrorMessage>{error ? error : null}</ErrorMessage>
+        </FormProvider>
+        <Hr>또는</Hr>
+        <SocialLogin />
+        <Message>
+          이미 계정이 있으신가요?{' '}
+          <Link to={'/signin'}>
+            <LinkStyle>로그인</LinkStyle>
+          </Link>
+        </Message>
+      </FormContainer>
+    </Container>
   );
 }
 

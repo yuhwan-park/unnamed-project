@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Theme } from './theme';
-import { Helmet } from 'react-helmet';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -71,12 +70,6 @@ a {
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={Theme}>
-      <Helmet>
-        <style>
-          @import
-          url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap');
-        </style>
-      </Helmet>
       <GlobalStyle />
       <App />
     </ThemeProvider>
