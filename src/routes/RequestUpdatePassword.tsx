@@ -8,6 +8,7 @@ import {
   ErrorMessage,
   Form,
   FormContainer,
+  InputContainer,
   LinkStyle,
   Logo,
   SubmitInput,
@@ -40,20 +41,23 @@ function RequestUpdatePassword() {
           </Message>
         ) : (
           <Form onSubmit={handleSubmit(onSubmitEmail)}>
-            <TextInput
-              type="text"
-              {...register('email', {
-                required: {
-                  value: true,
-                  message: '필수 항목입니다.',
-                },
-                pattern: {
-                  value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/i,
-                  message: '이메일 형식에 맞지 않습니다.',
-                },
-              })}
-              placeholder="이메일"
-            />
+            <InputContainer>
+              <i className="fa-solid fa-envelope"></i>
+              <TextInput
+                type="text"
+                {...register('email', {
+                  required: {
+                    value: true,
+                    message: '필수 항목입니다.',
+                  },
+                  pattern: {
+                    value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/i,
+                    message: '이메일 형식에 맞지 않습니다.',
+                  },
+                })}
+                placeholder="이메일"
+              />
+            </InputContainer>
             <ErrorMessage>
               {errors.email?.message ? errors.email.message : null}
             </ErrorMessage>

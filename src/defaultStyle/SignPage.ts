@@ -70,8 +70,8 @@ export const ErrorMessage = styled.div`
 `;
 
 export const TextInput = styled.input`
-  padding: 10px;
-  padding-top: 20px;
+  padding: 20px 10px 10px 30px;
+  width: 100%;
   font-size: ${props => props.theme.fontSize.large};
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
@@ -98,4 +98,21 @@ export const SubmitInput = styled.input`
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
+`;
+
+export const InputContainer = styled.div`
+  position: relative;
+  i {
+    position: absolute;
+    top: 18px;
+    left: 5px;
+    font-size: 20px;
+    color: #bbb;
+    transition: color 0.25s ease-in-out;
+  }
+  &:focus-within {
+    i {
+      color: ${props => props.theme.dailColor};
+    }
+  }
 `;
