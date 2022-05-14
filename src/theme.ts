@@ -1,9 +1,12 @@
 import { DefaultTheme } from 'styled-components';
 
 export const Theme: DefaultTheme = {
-  dailColor: '#1082FD',
+  dailColor: {
+    normal: '#1082FD',
+    lighter: '#6bb1ff',
+    darker: '#0057c9',
+  },
   fontSize: {
-    large: '16px',
     medium: '14px',
     small: '12px',
   },

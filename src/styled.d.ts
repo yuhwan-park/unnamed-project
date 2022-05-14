@@ -2,9 +2,12 @@ import 'styled-components';
 
 declare module 'styled-components' {
   export interface DefaultTheme {
-    dailColor: string;
+    dailColor: {
+      lighter: string;
+      normal: string;
+      darker: string;
+    };
     fontSize: {
-      large: string;
       medium: string;
       small: string;
     };

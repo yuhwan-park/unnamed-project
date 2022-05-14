@@ -57,7 +57,7 @@ export const Message = styled.div`
 export const LinkStyle = styled.span`
   display: inline-block;
   font-size: ${props => props.theme.fontSize.medium};
-  color: ${props => props.theme.dailColor};
+  color: ${props => props.theme.dailColor.normal};
   &:hover {
     text-decoration: underline;
   }
@@ -72,13 +72,12 @@ export const ErrorMessage = styled.div`
 export const TextInput = styled.input`
   padding: 20px 10px 10px 30px;
   width: 100%;
-  font-size: ${props => props.theme.fontSize.large};
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   transition: border-bottom 0.25s ease-in-out;
   &:focus {
     outline: none;
-    border-bottom: 2px solid ${props => props.theme.dailColor};
+    border-bottom: 2px solid ${props => props.theme.dailColor.normal};
   }
   &::placeholder {
     color: #bbb;
@@ -87,12 +86,17 @@ export const TextInput = styled.input`
 
 export const SubmitInput = styled.input`
   cursor: pointer;
-  background-color: ${props => props.theme.dailColor};
+  background-color: ${props => props.theme.dailColor.normal};
   border: none;
   color: white;
   font-size: ${props => props.theme.fontSize.medium};
   padding: 10px 0;
   margin-top: 20px;
+  font-weight: 600;
+  transition: background-color 0.15s ease-in-out;
+  &:hover {
+    background-color: ${props => props.theme.dailColor.darker};
+  }
 `;
 
 export const Form = styled.form`
@@ -112,7 +116,7 @@ export const InputContainer = styled.div`
   }
   &:focus-within {
     i {
-      color: ${props => props.theme.dailColor};
+      color: ${props => props.theme.dailColor.normal};
     }
   }
 `;
