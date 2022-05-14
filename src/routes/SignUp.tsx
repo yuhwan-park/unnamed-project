@@ -3,6 +3,7 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithRedirect,
+  updateProfile,
 } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -20,10 +21,17 @@ function SignUp() {
     // 구글 로그인
     await signInWithRedirect(auth, provider);
   };
-  const onSubmit = async ({ email, password }: IFormData) => {
+  const onSubmit = async ({ email, password, nickname }: IFormData) => {
     // 이메일 로그인
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      if (nickname) {
+        await updateProfile(userCredential.user, { displayName: nickname });
+      }
     } catch (err: any) {
       setError(err.message);
     }
@@ -40,7 +48,7 @@ function SignUp() {
     <>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <AuthForm />
+          <AuthForm isSignUp={true} />
         </form>
         {error ? error : null}
       </FormProvider>

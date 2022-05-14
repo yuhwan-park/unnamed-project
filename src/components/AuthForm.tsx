@@ -1,13 +1,20 @@
 import { useFormContext } from 'react-hook-form';
 import { IFormData } from '../types';
 
-function AuthForm() {
+interface IAuthFormProps {
+  isSignUp: boolean;
+}
+
+function AuthForm({ isSignUp }: IAuthFormProps) {
   const {
     register,
     formState: { errors },
   } = useFormContext<IFormData>();
   return (
     <>
+      {isSignUp ? (
+        <input {...register('nickname')} type="text" placeholder="닉네임" />
+      ) : null}
       <input
         {...register('email', {
           required: {
@@ -20,7 +27,7 @@ function AuthForm() {
           },
         })}
         type="text"
-        placeholder="email"
+        placeholder="이메일"
       />
       {errors.email?.message ? errors.email.message : null}
       <input
@@ -35,7 +42,7 @@ function AuthForm() {
           },
         })}
         type="password"
-        placeholder="password"
+        placeholder="비밀번호"
       />
       {errors.password?.message ? errors.password.message : null}
       <input type="submit" value={'submit'} />

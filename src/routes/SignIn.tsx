@@ -40,7 +40,7 @@ function SignIn() {
     <>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <AuthForm />
+          <AuthForm isSignUp={false} />
         </form>
         {error ? error : null}
       </FormProvider>
