@@ -2,6 +2,7 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
+import Nav from '../components/Nav';
 
 function Main() {
   const navigator = useNavigate();
@@ -17,7 +18,7 @@ function Main() {
   }, [navigator]);
   return (
     <>
-      <div>Main</div>
+      <Nav />
       <button onClick={onClickSignOut}>signOut</button>
     </>
   );
