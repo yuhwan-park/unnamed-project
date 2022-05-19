@@ -1,7 +1,8 @@
-import dayjs from 'dayjs';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRecoilState } from 'recoil';
+import { dateState } from '../atoms';
 
 const dateVariants = {
   entry: (isBack: boolean) => ({
@@ -22,7 +23,7 @@ const dateVariants = {
 };
 
 export default function Nav() {
-  const [date, setDate] = useState(dayjs());
+  const [date, setDate] = useRecoilState(dateState);
   const [isBack, setIsBack] = useState(false);
   const onClick = () => {
     setIsBack(false);

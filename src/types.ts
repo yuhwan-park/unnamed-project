@@ -7,3 +7,7 @@ export interface IFormData {
 export interface IUpdatePasswordFormData {
   email: string;
 }
+
+export interface ITaskFormData {
+  title: string;
+}
