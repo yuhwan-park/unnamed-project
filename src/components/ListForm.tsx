@@ -59,7 +59,6 @@ export default function ListForm() {
         arr.push({ id: doc.id, ...doc.data() });
       });
       setTodos(arr);
-      console.log('running');
     });
   }, [date, setTodos]);
   return (

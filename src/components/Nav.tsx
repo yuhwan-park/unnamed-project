@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRecoilState } from 'recoil';
 import { dateState } from '../atoms';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
 
 const dateVariants = {
   entry: (isBack: boolean) => ({
@@ -33,9 +35,13 @@ export default function Nav() {
     setIsBack(true);
     setDate(prev => prev.add(-1, 'day'));
   };
+  const onClickLogOut = async () => {
+    await signOut(auth);
+  };
   return (
     <Container>
       <Menu className="fa-solid fa-bars"></Menu>
+      <LogOut onClick={onClickLogOut}>LogOut</LogOut>
       <PrevButton
         className="fa-solid fa-angle-left"
         onClick={onClickPrev}
@@ -60,6 +66,11 @@ export default function Nav() {
     </Container>
   );
 }
+
+const LogOut = styled.button`
+  position: absolute;
+  left: 100px;
+`;
 
 const Container = styled.div`
   display: flex;
