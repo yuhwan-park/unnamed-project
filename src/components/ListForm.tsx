@@ -17,7 +17,7 @@ import { ITaskFormData } from '../types';
 
 export default function ListForm() {
   const date = useRecoilValue(dateSelector);
-  const [todo, setTodo] = useState<DocumentData[]>([]);
+  const [todos, setTodos] = useState<DocumentData[]>([]);
   const [isNote, setIsNote] = useState(false);
   const { register, handleSubmit, setValue } = useForm<ITaskFormData>();
   const onToDoSubmit = ({ title }: ITaskFormData) => {
@@ -34,7 +34,7 @@ export default function ListForm() {
         isDone: false,
         isDeleted: false,
       };
-      setTodo(prev => [...prev, data]);
+      setTodos(prev => [...prev, data]);
       await addDoc(colRef, data);
     });
   };
@@ -58,17 +58,16 @@ export default function ListForm() {
       querySnapshot.forEach(doc => {
         arr.push(doc.data());
       });
-      console.log('running');
-      setTodo(arr);
+      setTodos(arr);
     });
   }, [date]);
   return (
-    <Container>
+    <Wrapper>
       <FormContainer onSubmit={handleSubmit(onToDoSubmit)}>
         <input
           type="text"
           {...register('title', { required: true })}
-          placeholder="할일"
+          placeholder="할 일을 추가해보세요."
         />
         <select onChange={onSelectChange}>
           <option value="toDo">할일</option>
@@ -76,24 +75,25 @@ export default function ListForm() {
         </select>
       </FormContainer>
 
-      <div>todo</div>
-      <ul>
-        {todo.map(x => (
-          <li key={x.createdAt}>{x.title}</li>
-        ))}
-      </ul>
-      <hr />
-      <div>note</div>
-      <ul></ul>
-    </Container>
+      <ListContainer>
+        <Title>할일</Title>
+        <ul>
+          {todos.map(todo => (
+            <li key={todo.createdAt}>{todo.title}</li>
+          ))}
+        </ul>
+        <hr />
+        <Title>노트</Title>
+        <ul></ul>
+      </ListContainer>
+    </Wrapper>
   );
 }
 
-const Container = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 30px;
-  background-color: rgb(244, 244, 244);
 `;
 
 const FormContainer = styled.form`
@@ -101,14 +101,35 @@ const FormContainer = styled.form`
   display: flex;
   width: 100%;
   height: 40px;
+  margin-bottom: 10px;
   input {
     position: absolute;
     width: 100%;
     height: 100%;
+    padding: 0 10px;
     border: none;
+    border-radius: 6px;
+    outline: none;
+    background-color: rgb(244, 244, 244);
   }
   select {
     position: absolute;
     right: 0;
+    border: none;
+    border-left: 1px solid #bbb;
+    border-radius: 6px;
+    height: 100%;
+    outline: none;
+    background-color: rgb(244, 244, 244);
   }
+`;
+
+const ListContainer = styled.div`
+  padding: 10px;
+  background-color: rgb(244, 244, 244);
+`;
+
+const Title = styled.div`
+  padding: 8px 0;
+  font-weight: 600;
 `;
