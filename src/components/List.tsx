@@ -20,6 +20,7 @@ export default function List() {
   const [todos, setTodos] = useRecoilState(todoState);
   const [isNote, setIsNote] = useState(false);
   const { register, handleSubmit, setValue } = useForm<ITaskFormData>();
+
   const onToDoSubmit = ({ title }: ITaskFormData) => {
     setValue('title', '');
     onAuthStateChanged(auth, async user => {
@@ -38,6 +39,7 @@ export default function List() {
       await addDoc(colRef, data);
     });
   };
+
   const onSelectChange = ({
     currentTarget: { value },
   }: React.ChangeEvent<HTMLSelectElement>) => {
@@ -47,6 +49,7 @@ export default function List() {
       setIsNote(false);
     }
   };
+
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
       const q = query(

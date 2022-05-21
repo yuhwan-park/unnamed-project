@@ -24,8 +24,8 @@ export default function ToDo({ todo }: DocumentData) {
   return (
     <>
       <List>
+        <Overlay check={todo.isDone} />
         <CheckBoxContainer>
-          <Overlay check={todo.isDone} />
           <CheckBox onClick={onClickCheckBox} check={todo.isDone}>
             {todo.isDone ? <i className="fa-solid fa-check"></i> : null}
           </CheckBox>

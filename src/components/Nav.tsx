@@ -27,7 +27,7 @@ const dateVariants = {
 export default function Nav() {
   const [date, setDate] = useRecoilState(dateState);
   const [isBack, setIsBack] = useState(false);
-  const onClick = () => {
+  const onClickNext = () => {
     setIsBack(false);
     setDate(prev => prev.add(1, 'day'));
   };
@@ -61,7 +61,7 @@ export default function Nav() {
       </AnimatePresence>
       <NextButton
         className="fa-solid fa-angle-right"
-        onClick={onClick}
+        onClick={onClickNext}
       ></NextButton>
     </Container>
   );

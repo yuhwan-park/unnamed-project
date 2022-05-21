@@ -11,9 +11,7 @@ export default function ListMenu({ todo }: DocumentData) {
   const date = useRecoilValue(dateSelector);
   const [menu, setMenu] = useState(false);
   const onClickDelete = async () => {
-    setTodos(todos => {
-      return todos.filter(t => todo.id !== t.id);
-    });
+    setTodos(todos => todos.filter(t => todo.id !== t.id));
     const docRef = doc(
       db,
       `${(auth.currentUser as User).uid}/${date}/ToDo/${todo.id}`,
@@ -33,7 +31,7 @@ export default function ListMenu({ todo }: DocumentData) {
     >
       <MenuIcon className="fa-solid fa-ellipsis"></MenuIcon>
       {menu ? (
-        <Modal modal={menu}>
+        <Modal>
           <MenuButton onClick={onClickDelete}>
             <i className="fa-solid fa-trash-can"></i>
             <span>삭제하기</span>
@@ -66,7 +64,7 @@ const MenuButton = styled.div`
   }
 `;
 
-const Modal = styled.div<{ modal: boolean }>`
+const Modal = styled.div`
   position: absolute;
   right: -30px;
   width: 200px;
