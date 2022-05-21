@@ -15,7 +15,7 @@ import { auth, db } from '../firebase';
 import { ITaskFormData } from '../types';
 import ToDo from './ToDo';
 
-export default function ListForm() {
+export default function List() {
   const date = useRecoilValue(dateSelector);
   const [todos, setTodos] = useRecoilState(todoState);
   const [isNote, setIsNote] = useState(false);

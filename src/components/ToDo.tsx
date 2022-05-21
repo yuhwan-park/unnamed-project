@@ -4,6 +4,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { dateSelector, todoState } from '../atoms';
 import { auth, db } from '../firebase';
+import ListMenu from './ListMenu';
 
 export default function ToDo({ todo }: DocumentData) {
   const setTodos = useSetRecoilState(todoState);
@@ -21,15 +22,18 @@ export default function ToDo({ todo }: DocumentData) {
     await setDoc(docRef, { isDone: copyTodo.isDone }, { merge: true });
   };
   return (
-    <List>
-      <Overlay check={todo.isDone} />
-      <CheckBoxContainer>
-        <CheckBox onClick={onClickCheckBox} check={todo.isDone}>
-          {todo.isDone ? <i className="fa-solid fa-check"></i> : null}
-        </CheckBox>
-      </CheckBoxContainer>
-      <span>{todo.title}</span>
-    </List>
+    <>
+      <List>
+        <CheckBoxContainer>
+          <Overlay check={todo.isDone} />
+          <CheckBox onClick={onClickCheckBox} check={todo.isDone}>
+            {todo.isDone ? <i className="fa-solid fa-check"></i> : null}
+          </CheckBox>
+        </CheckBoxContainer>
+        <span>{todo.title}</span>
+        <ListMenu todo={todo} />
+      </List>
+    </>
   );
 }
 
@@ -48,6 +52,11 @@ const List = styled.li`
   background-color: white;
   margin-bottom: 6px;
   cursor: pointer;
+  &:hover {
+    .fa-ellipsis {
+      opacity: 1;
+    }
+  }
 `;
 
 const CheckBoxContainer = styled.div`

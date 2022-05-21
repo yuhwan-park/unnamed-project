@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import Nav from '../components/Nav';
-import ListForm from '../components/ListForm';
+import List from '../components/List';
 
 function Main() {
   const [user, setUser] = useState<User>();
@@ -23,7 +23,7 @@ function Main() {
       {user ? (
         <>
           <Nav />
-          <ListForm />
+          <List />
         </>
       ) : null}
     </>
