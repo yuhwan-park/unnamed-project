@@ -1,13 +1,22 @@
 import dayjs from 'dayjs';
-import { User } from 'firebase/auth';
-import { atom } from 'recoil';
+import { DocumentData } from 'firebase/firestore';
+import { atom, selector } from 'recoil';
+
+interface IToDoData {
+  [field: string]: DocumentData[];
+}
 
 export const dateState = atom<dayjs.Dayjs>({
   key: 'date',
   default: dayjs(),
 });
 
-export const userState = atom<User | undefined>({
-  key: 'user',
-  default: undefined,
+export const dateSelector = selector<string>({
+  key: 'dateSelector',
+  get: ({ get }) => get(dateState).format('YYYYMMDD'),
+});
+
+export const todoState = atom<IToDoData>({
+  key: 'todo',
+  default: {},
 });

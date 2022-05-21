@@ -1,4 +1,4 @@
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase';
@@ -6,37 +6,40 @@ import Nav from '../components/Nav';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { ITaskFormData } from '../types';
-import { addDoc, collection } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  DocumentData,
+  getDocs,
+  orderBy,
+  query,
+} from 'firebase/firestore';
 import { useRecoilValue } from 'recoil';
-import { dateState } from '../atoms';
+import { dateSelector } from '../atoms';
 
 function Main() {
+  const [todo, setTodo] = useState<DocumentData[]>([]);
   const [isNote, setIsNote] = useState(false);
-  const date = useRecoilValue(dateState);
+  const date = useRecoilValue(dateSelector);
   const navigator = useNavigate();
   const { register, handleSubmit, setValue } = useForm<ITaskFormData>();
-  const onToDoSubmit = async ({ title }: ITaskFormData) => {
+  const onToDoSubmit = ({ title }: ITaskFormData) => {
     setValue('title', '');
-    try {
-      const user = auth.currentUser;
-      if (user) {
-        const colRef = collection(
-          db,
-          `${user.uid}/${date.format('YYYYMMDD')}/${isNote ? 'Note' : 'ToDo'}`,
-        );
-        await addDoc(colRef, {
-          title,
-          content: '',
-          createdAt: Date.now(),
-          isDone: false,
-          isDeleted: false,
-        });
-      } else {
-        throw new Error('Not Authorized');
-      }
-    } catch (e) {
-      console.error('Error adding document: ', e);
-    }
+    onAuthStateChanged(auth, async user => {
+      const colRef = collection(
+        db,
+        `${(user as User).uid}/${date}/${isNote ? 'Note' : 'ToDo'}`,
+      );
+      const data = {
+        title,
+        content: '',
+        createdAt: Date.now(),
+        isDone: false,
+        isDeleted: false,
+      };
+      setTodo(prev => [...prev, data]);
+      await addDoc(colRef, data);
+    });
   };
   const onSelectChange = ({
     currentTarget: { value },
@@ -48,12 +51,24 @@ function Main() {
     }
   };
   useEffect(() => {
-    onAuthStateChanged(auth, user => {
+    onAuthStateChanged(auth, async user => {
       if (!user) {
         navigator('/');
+      } else {
+        const q = query(
+          collection(db, user.uid, date, 'ToDo'),
+          orderBy('createdAt'),
+        );
+        const querySnapshot = await getDocs(q);
+        const arr: any = [];
+        querySnapshot.forEach(doc => {
+          arr.push(doc.data());
+        });
+        console.log('running');
+        setTodo(arr);
       }
     });
-  }, [navigator]);
+  }, [date, navigator]);
   return (
     <>
       <Nav />
@@ -70,6 +85,15 @@ function Main() {
           <option value="note">노트</option>
         </select>
       </Container>
+      <div>todo</div>
+      <ul>
+        {todo.map(x => (
+          <li key={x.createdAt}>{x.title}</li>
+        ))}
+      </ul>
+      <hr />
+      <div>note</div>
+      <ul></ul>
     </>
   );
 }
