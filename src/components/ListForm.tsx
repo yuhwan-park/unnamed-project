@@ -2,22 +2,22 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import {
   addDoc,
   collection,
-  DocumentData,
   getDocs,
   orderBy,
   query,
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { dateSelector } from '../atoms';
+import { dateSelector, todoState } from '../atoms';
 import { auth, db } from '../firebase';
 import { ITaskFormData } from '../types';
+import ToDo from './ToDo';
 
 export default function ListForm() {
   const date = useRecoilValue(dateSelector);
-  const [todos, setTodos] = useState<DocumentData[]>([]);
+  const [todos, setTodos] = useRecoilState(todoState);
   const [isNote, setIsNote] = useState(false);
   const { register, handleSubmit, setValue } = useForm<ITaskFormData>();
   const onToDoSubmit = ({ title }: ITaskFormData) => {
@@ -56,11 +56,12 @@ export default function ListForm() {
       const querySnapshot = await getDocs(q);
       const arr: any = [];
       querySnapshot.forEach(doc => {
-        arr.push(doc.data());
+        arr.push({ id: doc.id, ...doc.data() });
       });
       setTodos(arr);
+      console.log('running');
     });
-  }, [date]);
+  }, [date, setTodos]);
   return (
     <Wrapper>
       <FormContainer onSubmit={handleSubmit(onToDoSubmit)}>
@@ -78,9 +79,17 @@ export default function ListForm() {
       <ListContainer>
         <Title>할일</Title>
         <ul>
-          {todos.map(todo => (
-            <li key={todo.createdAt}>{todo.title}</li>
-          ))}
+          {todos.map(
+            todo =>
+              !todo.isDone && <ToDo key={todo.createdAt} todo={todo}></ToDo>,
+          )}
+        </ul>
+        <Title>완료</Title>
+        <ul>
+          {todos.map(
+            todo =>
+              todo.isDone && <ToDo key={todo.createdAt} todo={todo}></ToDo>,
+          )}
         </ul>
         <hr />
         <Title>노트</Title>
