@@ -2,40 +2,46 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import {
   addDoc,
   collection,
+  DocumentData,
   getDocs,
   orderBy,
   query,
+  where,
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { dateSelector, todoState } from '../atoms';
+import { dateSelector, noteState, todoState } from '../atoms';
 import { auth, db } from '../firebase';
 import { ITaskFormData } from '../types';
+import Note from './Note';
 import ToDo from './ToDo';
 
 export default function List() {
   const date = useRecoilValue(dateSelector);
   const [todos, setTodos] = useRecoilState(todoState);
+  const [notes, setNotes] = useRecoilState(noteState);
   const [isNote, setIsNote] = useState(false);
   const { register, handleSubmit, setValue } = useForm<ITaskFormData>();
 
   const onToDoSubmit = ({ title }: ITaskFormData) => {
     setValue('title', '');
     onAuthStateChanged(auth, async user => {
-      const colRef = collection(
-        db,
-        `${(user as User).uid}/${date}/${isNote ? 'Note' : 'ToDo'}`,
-      );
+      const colRef = collection(db, `${(user as User).uid}/${date}/Document`);
       const data = {
         title,
         content: '',
         createdAt: Date.now(),
         isDone: false,
         isDeleted: false,
+        isNote: isNote,
       };
-      setTodos(prev => [...prev, data]);
+      if (isNote) {
+        setNotes(prev => [...prev, data]);
+      } else {
+        setTodos(prev => [...prev, data]);
+      }
       await addDoc(colRef, data);
     });
   };
@@ -52,18 +58,32 @@ export default function List() {
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
-      const q = query(
-        collection(db, (user as User).uid, date, 'ToDo'),
+      const noteQuery = query(
+        collection(db, (user as User).uid, date, 'Document'),
         orderBy('createdAt'),
+        where('isNote', '==', true),
       );
-      const querySnapshot = await getDocs(q);
-      const arr: any = [];
-      querySnapshot.forEach(doc => {
-        arr.push({ id: doc.id, ...doc.data() });
+      const todoQuery = query(
+        collection(db, (user as User).uid, date, 'Document'),
+        orderBy('createdAt'),
+        where('isNote', '==', false),
+      );
+      const querySnapshot = await Promise.all([
+        getDocs(todoQuery),
+        getDocs(noteQuery),
+      ]);
+      const todoArr: DocumentData[] = [];
+      querySnapshot[0].forEach(doc => {
+        todoArr.push({ id: doc.id, ...doc.data() });
       });
-      setTodos(arr);
+      const noteArr: DocumentData[] = [];
+      querySnapshot[1].forEach(doc => {
+        noteArr.push({ id: doc.id, ...doc.data() });
+      });
+      setTodos(todoArr);
+      setNotes(noteArr);
     });
-  }, [date, setTodos]);
+  }, [date, setNotes, setTodos]);
   return (
     <Wrapper>
       <FormContainer onSubmit={handleSubmit(onToDoSubmit)}>
@@ -95,7 +115,13 @@ export default function List() {
         </ul>
         <hr />
         <Title>노트</Title>
-        <ul></ul>
+        <ul>
+          {notes.map(note => (
+            <Note key={note.createdAt} note={note}>
+              {note.title}
+            </Note>
+          ))}
+        </ul>
       </ListContainer>
     </Wrapper>
   );

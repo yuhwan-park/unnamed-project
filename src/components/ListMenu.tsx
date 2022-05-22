@@ -3,18 +3,23 @@ import { deleteDoc, doc, DocumentData } from 'firebase/firestore';
 import { useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { dateSelector, todoState } from '../atoms';
+import { dateSelector, noteState, todoState } from '../atoms';
 import { auth, db } from '../firebase';
 
-export default function ListMenu({ todo }: DocumentData) {
+export default function ListMenu({ document }: DocumentData) {
   const setTodos = useSetRecoilState(todoState);
+  const setNotes = useSetRecoilState(noteState);
   const date = useRecoilValue(dateSelector);
   const [menu, setMenu] = useState(false);
   const onClickDelete = async () => {
-    setTodos(todos => todos.filter(t => todo.id !== t.id));
+    if (document.isNote) {
+      setNotes(notes => notes.filter(note => document.id !== note.id));
+    } else {
+      setTodos(todos => todos.filter(todo => document.id !== todo.id));
+    }
     const docRef = doc(
       db,
-      `${(auth.currentUser as User).uid}/${date}/ToDo/${todo.id}`,
+      `${(auth.currentUser as User).uid}/${date}/Document/${document.id}`,
     );
     await deleteDoc(docRef);
   };

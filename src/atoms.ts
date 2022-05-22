@@ -16,3 +16,8 @@ export const todoState = atom<DocumentData[]>({
   key: 'todo',
   default: [],
 });
+
+export const noteState = atom<DocumentData[]>({
+  key: 'note',
+  default: [],
+});

@@ -31,7 +31,7 @@ export default function ToDo({ todo }: DocumentData) {
           </CheckBox>
         </CheckBoxContainer>
         <span>{todo.title}</span>
-        <ListMenu todo={todo} />
+        <ListMenu document={todo} />
       </List>
     </>
   );
