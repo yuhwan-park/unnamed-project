@@ -164,6 +164,7 @@ const FormContainer = styled.form`
 const ListContainer = styled.div`
   padding: 10px;
   background-color: rgb(244, 244, 244);
+  border-radius: 6px;
 `;
 
 const Title = styled.div`

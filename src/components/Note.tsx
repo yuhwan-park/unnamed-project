@@ -5,6 +5,9 @@ import ListMenu from './ListMenu';
 export default function Note({ note }: DocumentData) {
   return (
     <List>
+      <IconContainer>
+        <i className="fa-solid fa-note-sticky"></i>
+      </IconContainer>
       <span>{note.title}</span>
       <ListMenu document={note} />
     </List>
@@ -22,5 +25,17 @@ const List = styled.li`
     .fa-ellipsis {
       opacity: 1;
     }
+  }
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  i {
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 20px;
   }
 `;
