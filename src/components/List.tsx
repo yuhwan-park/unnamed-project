@@ -99,29 +99,40 @@ export default function List() {
       </FormContainer>
 
       <ListContainer>
-        <Title>할일</Title>
-        <ul>
-          {todos.map(
-            todo =>
-              !todo.isDone && <ToDo key={todo.createdAt} todo={todo}></ToDo>,
-          )}
-        </ul>
-        <Title>완료</Title>
-        <ul>
-          {todos.map(
-            todo =>
-              todo.isDone && <ToDo key={todo.createdAt} todo={todo}></ToDo>,
-          )}
-        </ul>
-        <hr />
-        <Title>노트</Title>
-        <ul>
-          {notes.map(note => (
-            <Note key={note.createdAt} note={note}>
-              {note.title}
-            </Note>
-          ))}
-        </ul>
+        {todos.length ? (
+          <>
+            <Title>할일</Title>
+            <ul>
+              {todos.map(
+                todo =>
+                  !todo.isDone && (
+                    <ToDo key={todo.createdAt} todo={todo}></ToDo>
+                  ),
+              )}
+            </ul>
+            <Title>완료</Title>
+            <ul>
+              {todos.map(
+                todo =>
+                  todo.isDone && <ToDo key={todo.createdAt} todo={todo}></ToDo>,
+              )}
+            </ul>
+            <hr />
+          </>
+        ) : null}
+        {notes.length ? (
+          <>
+            <Title>노트</Title>
+            <ul>
+              {notes.map(note => (
+                <Note key={note.createdAt} note={note}>
+                  {note.title}
+                </Note>
+              ))}
+            </ul>
+          </>
+        ) : null}
+        {!todos.length && !notes.length && <h1>오늘은 할일이 없습니다!</h1>}
       </ListContainer>
     </Wrapper>
   );
