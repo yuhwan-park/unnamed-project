@@ -13,7 +13,7 @@ import {
   Logo,
   SubmitInput,
   TextInput,
-} from '../defaultStyle/SignPage';
+} from '../defaultStyle/sign-page';
 import { auth } from '../firebase';
 import { IUpdatePasswordFormData } from '../types';
 

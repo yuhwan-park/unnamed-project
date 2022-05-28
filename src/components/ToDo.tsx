@@ -1,34 +1,60 @@
 import { User } from 'firebase/auth';
 import { doc, DocumentData, setDoc } from 'firebase/firestore';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { dateSelector, todoState } from '../atoms';
 import { auth, db } from '../firebase';
+import { List, Title } from '../defaultStyle/main-page';
 import ListMenu from './ListMenu';
+import { setTitle } from '../hooks';
 
 export default function ToDo({ todo }: DocumentData) {
   const setTodos = useSetRecoilState(todoState);
+  const navigator = useNavigate();
+  const { register } = useForm({
+    mode: 'onBlur',
+  });
   const date = useRecoilValue(dateSelector);
+  const docRef = doc(
+    db,
+    `${(auth.currentUser as User).uid}/${date}/Document/${todo.id}`,
+  );
+
   const onClickCheckBox = async () => {
     setTodos(todos =>
       todos.map(t => (t.id === todo.id ? { ...t, isDone: !todo.isDone } : t)),
     );
-    const docRef = doc(
-      db,
-      `${(auth.currentUser as User).uid}/${date}/Document/${todo.id}`,
-    );
+
     await setDoc(docRef, { isDone: !todo.isDone }, { merge: true });
+  };
+
+  const onClickList = () => {
+    navigator(`/main/${todo.id}`);
+  };
+
+  const onBlur = async (e: any) => {
+    await setTitle(docRef, e);
   };
   return (
     <>
-      <List>
+      <List onClick={onClickList}>
         <Overlay check={todo.isDone} />
         <CheckBoxContainer>
           <CheckBox onClick={onClickCheckBox} check={todo.isDone}>
             {todo.isDone ? <i className="fa-solid fa-check"></i> : null}
           </CheckBox>
         </CheckBoxContainer>
-        <span>{todo.title}</span>
+
+        <Title
+          type="text"
+          defaultValue={todo.title}
+          {...register('todoTitle', {
+            onBlur,
+          })}
+        />
+
         <ListMenu document={todo} />
       </List>
     </>
@@ -41,20 +67,6 @@ const Overlay = styled.div<{ check: boolean }>`
   height: 100%;
   background-color: rgba(255, 255, 255, 0.8);
   display: ${props => (props.check ? 'block' : 'none')};
-`;
-
-const List = styled.li`
-  position: relative;
-  display: flex;
-  align-items: center;
-  background-color: white;
-  margin-bottom: 6px;
-  cursor: pointer;
-  &:hover {
-    .fa-ellipsis {
-      opacity: 1;
-    }
-  }
 `;
 
 const CheckBoxContainer = styled.div`

@@ -11,7 +11,9 @@ function Router() {
       <Routes>
         <Route path="/" element={<Home />} />
         {/* 로그인 없이 main 강제접속 시 Home으로 redirect */}
-        <Route path="/main" element={<Main />} />
+        <Route path="/main" element={<Main />}>
+          <Route path="/main/:id" element={<Main />} />
+        </Route>
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route

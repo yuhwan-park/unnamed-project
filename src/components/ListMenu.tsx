@@ -49,6 +49,7 @@ export default function ListMenu({ document }: DocumentData) {
 const MenuContainer = styled.div`
   position: absolute;
   right: 0;
+  cursor: pointer;
 `;
 
 const MenuButton = styled.div`

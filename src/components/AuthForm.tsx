@@ -4,7 +4,7 @@ import {
   InputContainer,
   SubmitInput,
   TextInput,
-} from '../defaultStyle/SignPage';
+} from '../defaultStyle/sign-page';
 import { IFormData } from '../types';
 
 interface IAuthFormProps {

@@ -7,6 +7,7 @@ import {
   orderBy,
   query,
   setDoc,
+  Timestamp,
   where,
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
@@ -44,7 +45,7 @@ export default function List() {
         id: docRef.id,
         title,
         content: '',
-        createdAt: Date.now(),
+        createdAt: Timestamp.fromDate(new Date()),
         isDone: false,
         isDeleted: false,
         isNote,
