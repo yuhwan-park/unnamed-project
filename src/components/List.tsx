@@ -112,20 +112,20 @@ export default function List() {
       </FormContainer>
 
       <ListContainer>
-        {doingTodo ? (
+        {doingTodo.length ? (
           <ul>
             <Title>할일</Title>
-            {todos.map(
-              todo => !todo.isDone && <ToDo key={todo.createdAt} todo={todo} />,
-            )}
+            {doingTodo.map(todo => (
+              <ToDo key={todo.id} todo={todo} />
+            ))}
           </ul>
         ) : null}
-        {doneTodo ? (
+        {doneTodo.length ? (
           <ul>
             <Title>완료</Title>
-            {todos.map(
-              todo => todo.isDone && <ToDo key={todo.createdAt} todo={todo} />,
-            )}
+            {doneTodo.map(todo => (
+              <ToDo key={todo.id} todo={todo} />
+            ))}
           </ul>
         ) : null}
         {notes.length ? (

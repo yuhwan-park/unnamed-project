@@ -18,12 +18,12 @@ export const todoState = atom<DocumentData[]>({
 });
 export const doingTodoState = selector({
   key: 'doingTodoSelector',
-  get: ({ get }) => get(todoState).filter(todo => !todo.isDone).length,
+  get: ({ get }) => get(todoState).filter(todo => !todo.isDone),
 });
 
 export const doneTodoState = selector({
   key: 'doneTodoSelector',
-  get: ({ get }) => get(todoState).filter(todo => todo.isDone).length,
+  get: ({ get }) => get(todoState).filter(todo => todo.isDone),
 });
 
 export const noteState = atom<DocumentData[]>({
