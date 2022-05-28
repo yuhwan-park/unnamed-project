@@ -10,16 +10,14 @@ export default function ToDo({ todo }: DocumentData) {
   const setTodos = useSetRecoilState(todoState);
   const date = useRecoilValue(dateSelector);
   const onClickCheckBox = async () => {
-    const copyTodo = Object.assign({}, todo);
-    copyTodo.isDone = !copyTodo.isDone;
     setTodos(todos =>
-      todos.map(todo => (todo.id === copyTodo.id ? copyTodo : todo)),
+      todos.map(t => (t.id === todo.id ? { ...t, isDone: !todo.isDone } : t)),
     );
     const docRef = doc(
       db,
-      `${(auth.currentUser as User).uid}/${date}/ToDo/${todo.id}`,
+      `${(auth.currentUser as User).uid}/${date}/Document/${todo.id}`,
     );
-    await setDoc(docRef, { isDone: copyTodo.isDone }, { merge: true });
+    await setDoc(docRef, { isDone: !todo.isDone }, { merge: true });
   };
   return (
     <>

@@ -1,11 +1,12 @@
 import { onAuthStateChanged, User } from 'firebase/auth';
 import {
-  addDoc,
   collection,
+  doc,
   DocumentData,
   getDocs,
   orderBy,
   query,
+  setDoc,
   where,
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
@@ -28,21 +29,24 @@ export default function List() {
   const onToDoSubmit = ({ title }: ITaskFormData) => {
     setValue('title', '');
     onAuthStateChanged(auth, async user => {
-      const colRef = collection(db, `${(user as User).uid}/${date}/Document`);
+      const docRef = doc(
+        collection(db, `${(user as User).uid}/${date}/Document`),
+      );
       const data = {
+        id: docRef.id,
         title,
         content: '',
         createdAt: Date.now(),
         isDone: false,
         isDeleted: false,
-        isNote: isNote,
+        isNote,
       };
       if (isNote) {
         setNotes(prev => [...prev, data]);
       } else {
         setTodos(prev => [...prev, data]);
       }
-      await addDoc(colRef, data);
+      await setDoc(docRef, data);
     });
   };
 
@@ -74,11 +78,11 @@ export default function List() {
       ]);
       const todoArr: DocumentData[] = [];
       querySnapshot[0].forEach(doc => {
-        todoArr.push({ id: doc.id, ...doc.data() });
+        todoArr.push(doc.data());
       });
       const noteArr: DocumentData[] = [];
       querySnapshot[1].forEach(doc => {
-        noteArr.push({ id: doc.id, ...doc.data() });
+        noteArr.push(doc.data());
       });
       setTodos(todoArr);
       setNotes(noteArr);
@@ -105,16 +109,14 @@ export default function List() {
             <ul>
               {todos.map(
                 todo =>
-                  !todo.isDone && (
-                    <ToDo key={todo.createdAt} todo={todo}></ToDo>
-                  ),
+                  !todo.isDone && <ToDo key={todo.createdAt} todo={todo} />,
               )}
             </ul>
             <Title>완료</Title>
             <ul>
               {todos.map(
                 todo =>
-                  todo.isDone && <ToDo key={todo.createdAt} todo={todo}></ToDo>,
+                  todo.isDone && <ToDo key={todo.createdAt} todo={todo} />,
               )}
             </ul>
             <hr />
