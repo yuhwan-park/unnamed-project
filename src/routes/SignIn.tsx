@@ -13,7 +13,7 @@ import {
   LinkStyle,
   Logo,
   Message,
-} from '../defaultStyle/sign-page';
+} from '../style/sign-page';
 import { auth } from '../firebase';
 import { IFormData } from '../types';
 

@@ -76,8 +76,9 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 70px;
+  height: 5vh;
   background-color: #474747;
+  overflow: hidden;
 `;
 
 const Today = styled(motion.div)`

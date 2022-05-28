@@ -19,7 +19,7 @@ import {
   FormContainer,
   Message,
   Form,
-} from '../defaultStyle/sign-page';
+} from '../style/sign-page';
 
 function SignUp() {
   const [error, setError] = useState('');

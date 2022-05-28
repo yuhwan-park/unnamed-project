@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { dateSelector } from '../atoms';
-import { List, Title } from '../defaultStyle/main-page';
+import { List, Title } from '../style/main-page';
 import { auth, db } from '../firebase';
 import { setTitle } from '../hooks';
 import ListMenu from './ListMenu';

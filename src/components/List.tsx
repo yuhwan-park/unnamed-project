@@ -147,8 +147,8 @@ export default function List() {
 }
 
 const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
+  height: 93vh;
+  width: 100%;
   padding: 30px;
 `;
 

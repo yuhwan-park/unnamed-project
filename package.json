@@ -17,6 +17,7 @@
     "react-dom": "^18.1.0",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.30.0",
+    "react-reflex": "^4.0.9",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "recoil": "^0.7.3-alpha.2",

@@ -3,6 +3,7 @@ import App from './App';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Theme } from './theme';
 import { RecoilRoot } from 'recoil';
+import 'react-reflex/styles.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -65,6 +66,9 @@ a {
 .logo {
   font-family: 'Comfortaa', cursive;
   color : #1082FD;
+}
+body {
+  overflow: hidden;
 }
 `;
 
