@@ -13,7 +13,13 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { dateSelector, noteState, todoState } from '../atoms';
+import {
+  dateSelector,
+  doingTodoState,
+  doneTodoState,
+  noteState,
+  todoState,
+} from '../atoms';
 import { auth, db } from '../firebase';
 import { ITaskFormData } from '../types';
 import Note from './Note';
@@ -21,6 +27,8 @@ import ToDo from './ToDo';
 
 export default function List() {
   const date = useRecoilValue(dateSelector);
+  const doingTodo = useRecoilValue(doingTodoState);
+  const doneTodo = useRecoilValue(doneTodoState);
   const [todos, setTodos] = useRecoilState(todoState);
   const [notes, setNotes] = useRecoilState(noteState);
   const [isNote, setIsNote] = useState(false);
@@ -103,24 +111,21 @@ export default function List() {
       </FormContainer>
 
       <ListContainer>
-        {todos.length ? (
-          <>
+        {doingTodo ? (
+          <ul>
             <Title>할일</Title>
-            <ul>
-              {todos.map(
-                todo =>
-                  !todo.isDone && <ToDo key={todo.createdAt} todo={todo} />,
-              )}
-            </ul>
+            {todos.map(
+              todo => !todo.isDone && <ToDo key={todo.createdAt} todo={todo} />,
+            )}
+          </ul>
+        ) : null}
+        {doneTodo ? (
+          <ul>
             <Title>완료</Title>
-            <ul>
-              {todos.map(
-                todo =>
-                  todo.isDone && <ToDo key={todo.createdAt} todo={todo} />,
-              )}
-            </ul>
-            <hr />
-          </>
+            {todos.map(
+              todo => todo.isDone && <ToDo key={todo.createdAt} todo={todo} />,
+            )}
+          </ul>
         ) : null}
         {notes.length ? (
           <>
@@ -178,6 +183,12 @@ const ListContainer = styled.div`
   padding: 10px;
   background-color: rgb(244, 244, 244);
   border-radius: 6px;
+  ul {
+    border-bottom: 1px solid #bbb;
+    &:last-child {
+      border: none;
+    }
+  }
 `;
 
 const Title = styled.div`
