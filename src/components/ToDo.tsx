@@ -8,7 +8,7 @@ import { dateSelector, todoState } from '../atoms';
 import { auth, db } from '../firebase';
 import { List, Title } from '../style/main-page';
 import ListMenu from './ListMenu';
-import { setTitle } from '../hooks';
+import { setTitle } from '../utils';
 
 export default function ToDo({ todo }: DocumentData) {
   const setTodos = useSetRecoilState(todoState);

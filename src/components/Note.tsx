@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { dateSelector } from '../atoms';
 import { List, Title } from '../style/main-page';
 import { auth, db } from '../firebase';
-import { setTitle } from '../hooks';
+import { setTitle } from '../utils';
 import ListMenu from './ListMenu';
 
 export default function Note({ note }: DocumentData) {

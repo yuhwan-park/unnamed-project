@@ -147,7 +147,7 @@ export default function List() {
 }
 
 const Wrapper = styled.div`
-  height: 93vh;
+  height: 100%;
   width: 100%;
   padding: 30px;
 `;

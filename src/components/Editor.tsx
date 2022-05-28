@@ -10,7 +10,7 @@ const Container = styled.div`
     transition: right 0.2s ease-in-out;
     z-index: 4;
     width: 70%;
-    height: 95vh;
+    height: 100%;
     position: absolute;
     right: 0;
     box-shadow: 0 6px 20px rgb(0 0 0 / 15%);
