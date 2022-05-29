@@ -1,10 +1,14 @@
 import styled from 'styled-components';
 
-export default function Editor() {
-  return <Container></Container>;
+interface IEditorProps {
+  detail: boolean;
 }
 
-const Container = styled.div`
+export default function Editor({ detail }: IEditorProps) {
+  return <Container className="detail-trigger" detail={detail}></Container>;
+}
+
+const Container = styled.div<IEditorProps>`
   background-color: white;
   @media (max-width: 1024px) {
     transition: right 0.2s ease-in-out;
@@ -12,7 +16,7 @@ const Container = styled.div`
     width: 70%;
     height: 100%;
     position: absolute;
-    right: 0;
+    right: ${props => (props.detail ? '0' : '-100%')};
     box-shadow: 0 6px 20px rgb(0 0 0 / 15%);
   }
 `;

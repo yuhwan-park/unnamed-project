@@ -24,7 +24,9 @@ export default function ToDo({ todo }: DocumentData) {
 
   const onClickCheckBox = async () => {
     setTodos(todos =>
-      todos.map(t => (t.id === todo.id ? { ...t, isDone: !todo.isDone } : t)),
+      todos.map(value =>
+        value.id === todo.id ? { ...value, isDone: !todo.isDone } : value,
+      ),
     );
 
     await setDoc(docRef, { isDone: !todo.isDone }, { merge: true });
@@ -39,9 +41,13 @@ export default function ToDo({ todo }: DocumentData) {
   };
   return (
     <>
-      <List onClick={onClickList}>
+      <List onClick={onClickList} className="detail-trigger">
         <CheckBoxContainer>
-          <CheckBox onClick={onClickCheckBox} isDone={todo.isDone}>
+          <CheckBox
+            className="check-box"
+            onClick={onClickCheckBox}
+            isDone={todo.isDone}
+          >
             {todo.isDone ? <i className="fa-solid fa-check"></i> : null}
           </CheckBox>
         </CheckBoxContainer>

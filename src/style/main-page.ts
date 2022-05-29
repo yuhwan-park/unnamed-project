@@ -14,7 +14,7 @@ export const List = styled.li`
 `;
 
 export const Title = styled.input`
-  width: 80%;
+  width: 100%;
   border: none;
   &:focus {
     outline: none;
