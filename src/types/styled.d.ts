@@ -11,5 +11,8 @@ declare module 'styled-components' {
       medium: string;
       small: string;
     };
+    fontFamily: {
+      main: string;
+    };
   }
 }

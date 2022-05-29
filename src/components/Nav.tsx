@@ -85,8 +85,9 @@ const Today = styled(motion.div)`
   text-align: center;
   width: 300px;
   padding: 0 55px;
-  font-size: 24px;
+  font-size: 18px;
   color: white;
+  font-family: ${props => props.theme.fontFamily.main};
 `;
 
 const Button = styled.i`

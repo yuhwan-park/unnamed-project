@@ -10,4 +10,7 @@ export const Theme: DefaultTheme = {
     medium: '14px',
     small: '12px',
   },
+  fontFamily: {
+    main: `'Nanum Gothic', sans-serif`,
+  },
 };

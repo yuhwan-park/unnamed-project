@@ -5,6 +5,7 @@ import { Theme } from './theme';
 import { RecoilRoot } from 'recoil';
 import 'react-reflex/styles.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
+import { Helmet } from 'react-helmet';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -41,6 +42,7 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {
   line-height: 1;
+  overflow: hidden;
 }
 menu, ol, ul {
   list-style: none;
@@ -60,6 +62,7 @@ table {
 * {
   box-sizing: border-box;
   font-size: 16px;
+  font-family: 'Nanum Gothic', sans-serif;
 }
 a {
   text-decoration: none;
@@ -68,14 +71,21 @@ a {
   font-family: 'Comfortaa', cursive;
   color : #1082FD;
 }
-body {
-  overflow: hidden;
-}
 `;
 
 root.render(
   <RecoilRoot>
     <ThemeProvider theme={Theme}>
+      <Helmet>
+        <style>
+          @import
+          url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Nanum+Gothic&display=swap');
+        </style>
+        <script
+          src="https://kit.fontawesome.com/b85839e547.js"
+          crossOrigin="anonymous"
+        ></script>
+      </Helmet>
       <GlobalStyle />
       <App />
     </ThemeProvider>
