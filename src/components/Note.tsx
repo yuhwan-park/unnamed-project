@@ -28,7 +28,7 @@ export default function Note({ note }: DocumentData) {
     await setTitle(docRef, e);
   };
   return (
-    <List onClick={onClickList}>
+    <List onClick={onClickList} className="show-editor-trigger">
       <IconContainer>
         <i className="fa-solid fa-note-sticky"></i>
       </IconContainer>

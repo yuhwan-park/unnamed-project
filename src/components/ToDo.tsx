@@ -41,7 +41,7 @@ export default function ToDo({ todo }: DocumentData) {
   };
   return (
     <>
-      <List onClick={onClickList} className="detail-trigger">
+      <List onClick={onClickList} className="show-editor-trigger">
         <CheckBoxContainer>
           <CheckBox
             className="check-box"

@@ -1,31 +1,54 @@
 import styled from 'styled-components';
-import { createEditor } from 'slate';
-import { Slate, Editable, withReact } from 'slate-react';
-import { useState } from 'react';
+import { Editor } from '@toast-ui/react-editor';
+import { useEffect } from 'react';
 
 interface IEditorProps {
-  detail: boolean;
+  showEditor: boolean;
 }
 
-export default function ContentEditor({ detail }: IEditorProps) {
-  const [editor] = useState(() => withReact(createEditor()));
+export default function ContentEditor({ showEditor }: IEditorProps) {
+  useEffect(() => {
+    const el = document.querySelector('.toastui-editor-mode-switch');
+    if (el) (el as HTMLElement).style.display = 'none';
+  }, []);
   return (
-    <Container className="detail-trigger" detail={detail}>
-      asdasdsadas
+    <Container className="show-editor-trigger" showEditor={showEditor}>
+      <HeaderContainer></HeaderContainer>
+      <EditorContainer>
+        <Editor
+          previewStyle="vertical"
+          height="100%"
+          initialEditType="wysiwyg"
+          useCommandShortcut={true}
+          toolbarItems={[
+            ['heading', 'bold', 'italic', 'strike'],
+            ['hr', 'quote'],
+            ['ul', 'ol', 'task'],
+            ['image', 'link'],
+          ]}
+        />
+      </EditorContainer>
     </Container>
   );
 }
+
+const HeaderContainer = styled.div`
+  height: 50px;
+`;
+const EditorContainer = styled.div`
+  height: calc(100% - 50px);
+`;
 
 const Container = styled.div<IEditorProps>`
   background-color: white;
   height: 100%;
   @media (max-width: 1024px) {
-    transition: right 0.2s ease-in-out;
     z-index: 4;
     width: 70%;
     position: absolute;
     height: calc(100% - 50px);
-    right: ${props => (props.detail ? '0' : '-100%')};
+    right: 0;
+    display: ${props => (props.showEditor ? 'block' : 'none')};
     box-shadow: 0 6px 20px rgb(0 0 0 / 15%);
   }
 `;

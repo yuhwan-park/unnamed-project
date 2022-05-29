@@ -10,7 +10,7 @@ import ContentEditor from '../components/ContentEditor';
 
 function Main() {
   const [user, setUser] = useState<User>();
-  const [detail, setDetail] = useState(false);
+  const [showEditor, setShowEditor] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
   const navigator = useNavigate();
 
@@ -18,7 +18,7 @@ function Main() {
     const target = e.target as HTMLDivElement;
     if (width > 1024) return;
     if (target.closest('.check-box')) return;
-    setDetail(Boolean(target.closest('.detail-trigger')));
+    setShowEditor(Boolean(target.closest('.show-editor-trigger')));
   };
 
   useEffect(() => {
@@ -39,11 +39,11 @@ function Main() {
 
   useEffect(() => {
     const closeDetail = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' || e.keyCode === 27) setDetail(false);
+      if (e.key === 'Escape' || e.keyCode === 27) setShowEditor(false);
     };
-    if (detail) window.addEventListener('keydown', closeDetail);
+    if (showEditor) window.addEventListener('keydown', closeDetail);
     return () => window.removeEventListener('keydown', closeDetail);
-  }, [detail]);
+  }, [showEditor]);
 
   return (
     <>
@@ -63,14 +63,14 @@ function Main() {
                     minSize={400}
                     maxSize={1000}
                   >
-                    <ContentEditor detail={detail} />
+                    <ContentEditor showEditor={showEditor} />
                   </ReflexElement>
                 </ReflexContainer>
               </ResponsiveContainer>
             ) : (
               <ResponsiveContainer>
                 <List />
-                <ContentEditor detail={detail} />
+                <ContentEditor showEditor={showEditor} />
               </ResponsiveContainer>
             )}
           </>

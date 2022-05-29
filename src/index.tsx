@@ -4,6 +4,7 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Theme } from './theme';
 import { RecoilRoot } from 'recoil';
 import 'react-reflex/styles.css';
+import '@toast-ui/editor/dist/toastui-editor.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
