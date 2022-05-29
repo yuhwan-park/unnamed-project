@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import Nav from '../components/Nav';
 import List from '../components/List';
-import Editor from '../components/Editor';
 import styled from 'styled-components';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
+import ContentEditor from '../components/ContentEditor';
 
 function Main() {
   const [user, setUser] = useState<User>();
@@ -46,42 +46,47 @@ function Main() {
   }, [detail]);
 
   return (
-    <div onClick={onClickScreen}>
-      {user ? (
-        <>
-          <Nav />
-
-          {width > 1024 ? (
-            <Container>
-              <ReflexContainer orientation="vertical">
-                <ReflexElement className="left-pane" minSize={300}>
-                  <List />
-                </ReflexElement>
-                <ReflexSplitter />
-                <ReflexElement className="right-pane" minSize={300}>
-                  <Editor detail={detail} />
-                </ReflexElement>
-              </ReflexContainer>
-            </Container>
-          ) : (
-            <ResponsiveContainer>
-              <List />
-              <Editor detail={detail} />
-            </ResponsiveContainer>
-          )}
-        </>
-      ) : null}
-    </div>
+    <>
+      <Nav />
+      <Wrapper onClick={onClickScreen}>
+        {user ? (
+          <>
+            {width > 1024 ? (
+              <ResponsiveContainer>
+                <ReflexContainer orientation="vertical">
+                  <ReflexElement className="left-pane">
+                    <List />
+                  </ReflexElement>
+                  <ReflexSplitter style={{ border: 'none' }} />
+                  <ReflexElement
+                    className="right-pane"
+                    minSize={400}
+                    maxSize={1000}
+                  >
+                    <ContentEditor detail={detail} />
+                  </ReflexElement>
+                </ReflexContainer>
+              </ResponsiveContainer>
+            ) : (
+              <ResponsiveContainer>
+                <List />
+                <ContentEditor detail={detail} />
+              </ResponsiveContainer>
+            )}
+          </>
+        ) : null}
+      </Wrapper>
+    </>
   );
 }
 
 export default Main;
 
-const Container = styled.div`
-  height: 95vh;
+const Wrapper = styled.div`
+  height: calc(100vh - 50px);
 `;
 
 const ResponsiveContainer = styled.div`
   display: flex;
-  height: 95vh;
+  height: 100%;
 `;
