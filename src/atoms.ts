@@ -16,6 +16,7 @@ export const todoState = atom<DocumentData[]>({
   key: 'todo',
   default: [],
 });
+
 export const doingTodoState = selector({
   key: 'doingTodoSelector',
   get: ({ get }) => get(todoState).filter(todo => !todo.isDone),

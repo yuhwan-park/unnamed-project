@@ -1,33 +1,41 @@
 import styled from 'styled-components';
 import { Editor } from '@toast-ui/react-editor';
 import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 interface IEditorProps {
   showEditor: boolean;
 }
 
 export default function ContentEditor({ showEditor }: IEditorProps) {
+  const params = useParams();
   useEffect(() => {
     const el = document.querySelector('.toastui-editor-mode-switch');
     if (el) (el as HTMLElement).style.display = 'none';
   }, []);
   return (
     <Container className="show-editor-trigger" showEditor={showEditor}>
-      <HeaderContainer></HeaderContainer>
-      <EditorContainer>
-        <Editor
-          previewStyle="vertical"
-          height="100%"
-          initialEditType="wysiwyg"
-          useCommandShortcut={true}
-          toolbarItems={[
-            ['heading', 'bold', 'italic', 'strike'],
-            ['hr', 'quote'],
-            ['ul', 'ol', 'task'],
-            ['image', 'link'],
-          ]}
-        />
-      </EditorContainer>
+      {params['id'] ? (
+        <>
+          <HeaderContainer></HeaderContainer>
+          <EditorContainer>
+            <Editor
+              previewStyle="vertical"
+              height="100%"
+              initialEditType="wysiwyg"
+              useCommandShortcut={true}
+              toolbarItems={[
+                ['heading', 'bold', 'italic', 'strike'],
+                ['hr', 'quote'],
+                ['ul', 'ol', 'task'],
+                ['image', 'link'],
+              ]}
+            />
+          </EditorContainer>
+        </>
+      ) : (
+        <div>세부사항을 보려면 할일 혹은 노트의 제목을 클릭하세요.</div>
+      )}
     </Container>
   );
 }
