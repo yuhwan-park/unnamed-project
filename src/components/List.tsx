@@ -120,6 +120,7 @@ export default function List() {
             ))}
           </ul>
         ) : null}
+
         {doneTodo.length ? (
           <ul>
             <Title>완료</Title>
@@ -128,6 +129,7 @@ export default function List() {
             ))}
           </ul>
         ) : null}
+
         {notes.length ? (
           <>
             <Title>노트</Title>
@@ -140,6 +142,7 @@ export default function List() {
             </ul>
           </>
         ) : null}
+
         {!todos.length && !notes.length && <h1>오늘은 할일이 없습니다!</h1>}
       </ListContainer>
     </Wrapper>

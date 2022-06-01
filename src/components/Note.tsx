@@ -1,26 +1,21 @@
-import { User } from 'firebase/auth';
-import { doc, DocumentData, setDoc } from 'firebase/firestore';
+import { DocumentData, setDoc } from 'firebase/firestore';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { dateSelector, noteState, paramState } from '../atoms';
+import { noteState, paramState } from '../atoms';
 import { List, Title } from '../style/main-page';
-import { auth, db } from '../firebase';
 import ListMenu from './ListMenu';
+import { useGetDocRef } from '../hooks';
 
 export default function Note({ note }: DocumentData) {
   const setParams = useSetRecoilState(paramState);
   const setNotes = useSetRecoilState(noteState);
-  const date = useRecoilValue(dateSelector);
+  const docRef = useGetDocRef(note.id);
   const navigator = useNavigate();
   const { register } = useForm({
     mode: 'onBlur',
   });
-  const docRef = doc(
-    db,
-    `${(auth.currentUser as User).uid}/${date}/Document/${note.id}`,
-  );
   const onClickList = () => {
     setParams(note.id);
     navigator(`/main/${note.id}`);

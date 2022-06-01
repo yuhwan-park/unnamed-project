@@ -1,24 +1,19 @@
-import { User } from 'firebase/auth';
-import { doc, DocumentData, setDoc } from 'firebase/firestore';
+import { DocumentData, setDoc } from 'firebase/firestore';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { dateSelector, paramState, todoState } from '../atoms';
-import { auth, db } from '../firebase';
+import { paramState, todoState } from '../atoms';
+import { useGetDocRef } from '../hooks';
 import { List, Title } from '../style/main-page';
 import ListMenu from './ListMenu';
 
 export default function ToDo({ todo }: DocumentData) {
   const setParams = useSetRecoilState(paramState);
   const setTodos = useSetRecoilState(todoState);
+  const docRef = useGetDocRef(todo.id);
   const navigator = useNavigate();
   const { register } = useForm();
-  const date = useRecoilValue(dateSelector);
-  const docRef = doc(
-    db,
-    `${(auth.currentUser as User).uid}/${date}/Document/${todo.id}`,
-  );
 
   const onClickCheckBox = async () => {
     setTodos(todos =>
@@ -26,7 +21,6 @@ export default function ToDo({ todo }: DocumentData) {
         value.id === todo.id ? { ...value, isDone: !todo.isDone } : value,
       ),
     );
-
     await setDoc(docRef, { isDone: !todo.isDone }, { merge: true });
   };
 

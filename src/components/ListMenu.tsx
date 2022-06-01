@@ -1,15 +1,14 @@
-import { User } from 'firebase/auth';
-import { deleteDoc, doc, DocumentData } from 'firebase/firestore';
+import { deleteDoc, DocumentData } from 'firebase/firestore';
 import { useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { dateSelector, noteState, todoState } from '../atoms';
-import { auth, db } from '../firebase';
+import { noteState, todoState } from '../atoms';
+import { useGetDocRef } from '../hooks';
 
 export default function ListMenu({ document }: DocumentData) {
   const setTodos = useSetRecoilState(todoState);
   const setNotes = useSetRecoilState(noteState);
-  const date = useRecoilValue(dateSelector);
+  const docRef = useGetDocRef(document.id);
   const [menu, setMenu] = useState(false);
   const onClickDelete = async () => {
     if (document.isNote) {
@@ -17,10 +16,6 @@ export default function ListMenu({ document }: DocumentData) {
     } else {
       setTodos(todos => todos.filter(todo => document.id !== todo.id));
     }
-    const docRef = doc(
-      db,
-      `${(auth.currentUser as User).uid}/${date}/Document/${document.id}`,
-    );
     await deleteDoc(docRef);
   };
   const onMouseEnterIntoMenu = () => {
