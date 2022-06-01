@@ -4,18 +4,16 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { dateSelector, todoState } from '../atoms';
+import { dateSelector, paramState, todoState } from '../atoms';
 import { auth, db } from '../firebase';
 import { List, Title } from '../style/main-page';
 import ListMenu from './ListMenu';
-import { setTitle } from '../utils';
 
 export default function ToDo({ todo }: DocumentData) {
+  const setParams = useSetRecoilState(paramState);
   const setTodos = useSetRecoilState(todoState);
   const navigator = useNavigate();
-  const { register } = useForm({
-    mode: 'onBlur',
-  });
+  const { register } = useForm();
   const date = useRecoilValue(dateSelector);
   const docRef = doc(
     db,
@@ -33,11 +31,20 @@ export default function ToDo({ todo }: DocumentData) {
   };
 
   const onClickList = () => {
+    setParams(todo.id);
     navigator(`/main/${todo.id}`);
   };
 
+  const onChange = (e: any) => {
+    setTodos(todos =>
+      todos.map(value =>
+        value.id === todo.id ? { ...value, title: e.target.value } : value,
+      ),
+    );
+  };
+
   const onBlur = async (e: any) => {
-    await setTitle(docRef, e);
+    await setDoc(docRef, { title: e.target.value }, { merge: true });
   };
   return (
     <>
@@ -58,6 +65,7 @@ export default function ToDo({ todo }: DocumentData) {
           defaultValue={todo.title}
           {...register('todoTitle', {
             onBlur,
+            onChange,
           })}
         />
 

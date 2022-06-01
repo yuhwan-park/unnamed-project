@@ -2,12 +2,15 @@ import styled from 'styled-components';
 import { Editor } from '@toast-ui/react-editor';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { selectedContentState } from '../atoms';
 
 interface IEditorProps {
   showEditor: boolean;
 }
 
 export default function ContentEditor({ showEditor }: IEditorProps) {
+  const content = useRecoilValue(selectedContentState);
   const params = useParams();
   useEffect(() => {
     const el = document.querySelector('.toastui-editor-mode-switch');
@@ -17,7 +20,7 @@ export default function ContentEditor({ showEditor }: IEditorProps) {
     <Container className="show-editor-trigger" showEditor={showEditor}>
       {params['id'] ? (
         <>
-          <HeaderContainer></HeaderContainer>
+          <HeaderContainer>{content ? content.title : null}</HeaderContainer>
           <EditorContainer>
             <Editor
               previewStyle="vertical"

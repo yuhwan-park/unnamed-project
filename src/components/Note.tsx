@@ -1,16 +1,17 @@
 import { User } from 'firebase/auth';
-import { doc, DocumentData } from 'firebase/firestore';
+import { doc, DocumentData, setDoc } from 'firebase/firestore';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { dateSelector } from '../atoms';
+import { dateSelector, noteState, paramState } from '../atoms';
 import { List, Title } from '../style/main-page';
 import { auth, db } from '../firebase';
-import { setTitle } from '../utils';
 import ListMenu from './ListMenu';
 
 export default function Note({ note }: DocumentData) {
+  const setParams = useSetRecoilState(paramState);
+  const setNotes = useSetRecoilState(noteState);
   const date = useRecoilValue(dateSelector);
   const navigator = useNavigate();
   const { register } = useForm({
@@ -21,11 +22,19 @@ export default function Note({ note }: DocumentData) {
     `${(auth.currentUser as User).uid}/${date}/Document/${note.id}`,
   );
   const onClickList = () => {
+    setParams(note.id);
     navigator(`/main/${note.id}`);
+  };
+  const onChange = (e: any) => {
+    setNotes(notes =>
+      notes.map(value =>
+        value.id === note.id ? { ...value, title: e.target.value } : value,
+      ),
+    );
   };
 
   const onBlur = async (e: any) => {
-    await setTitle(docRef, e);
+    await setDoc(docRef, { title: e.target.value }, { merge: true });
   };
   return (
     <List onClick={onClickList} className="show-editor-trigger">
@@ -36,6 +45,7 @@ export default function Note({ note }: DocumentData) {
         defaultValue={note.title}
         {...register('noteTitle', {
           onBlur,
+          onChange,
         })}
       />
       <ListMenu document={note} />
