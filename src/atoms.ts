@@ -17,25 +17,32 @@ export const dateSelector = selector<string>({
   get: ({ get }) => get(dateState).format('YYYYMMDD'),
 });
 
-export const todoState = atom<DocumentData[]>({
+export const documentState = atom<DocumentData[]>({
   key: 'todo',
   default: [],
 });
 
 export const doingTodoState = selector({
   key: 'doingTodoSelector',
-  get: ({ get }) => get(todoState).filter(todo => !todo.isDone),
+  get: ({ get }) =>
+    get(documentState).filter(document => !document.isDone && !document.isNote),
 });
 
 export const doneTodoState = selector({
   key: 'doneTodoSelector',
-  get: ({ get }) => get(todoState).filter(todo => todo.isDone),
+  get: ({ get }) =>
+    get(documentState).filter(document => document.isDone && !document.isNote),
+});
+
+export const noteState = selector({
+  key: 'noteSelector',
+  get: ({ get }) => get(documentState).filter(document => document.isNote),
 });
 
 export const selectedContentState = selector({
   key: 'selectedContentState',
   get: ({ get }) => {
-    const todos = get(todoState);
+    const todos = get(documentState);
     const notes = get(noteState);
     const params = get(paramState);
 
@@ -44,9 +51,4 @@ export const selectedContentState = selector({
       notes.find(note => note.id === params)
     );
   },
-});
-
-export const noteState = atom<DocumentData[]>({
-  key: 'note',
-  default: [],
 });

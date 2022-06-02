@@ -2,20 +2,15 @@ import { deleteDoc, DocumentData } from 'firebase/firestore';
 import { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { noteState, todoState } from '../atoms';
+import { documentState } from '../atoms';
 import { useGetDocRef } from '../hooks';
 
 export default function ListMenu({ document }: DocumentData) {
-  const setTodos = useSetRecoilState(todoState);
-  const setNotes = useSetRecoilState(noteState);
+  const setDocument = useSetRecoilState(documentState);
   const docRef = useGetDocRef(document.id);
   const [menu, setMenu] = useState(false);
   const onClickDelete = async () => {
-    if (document.isNote) {
-      setNotes(notes => notes.filter(note => document.id !== note.id));
-    } else {
-      setTodos(todos => todos.filter(todo => document.id !== todo.id));
-    }
+    setDocument(todos => todos.filter(todo => document.id !== todo.id));
     await deleteDoc(docRef);
   };
   const onMouseEnterIntoMenu = () => {

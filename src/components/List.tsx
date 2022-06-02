@@ -8,7 +8,6 @@ import {
   query,
   setDoc,
   Timestamp,
-  where,
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -16,10 +15,10 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import {
   dateSelector,
+  documentState,
   doingTodoState,
   doneTodoState,
   noteState,
-  todoState,
 } from '../atoms';
 import { auth, db } from '../firebase';
 import { ITaskFormData } from '../types';
@@ -30,8 +29,8 @@ export default function List() {
   const date = useRecoilValue(dateSelector);
   const doingTodo = useRecoilValue(doingTodoState);
   const doneTodo = useRecoilValue(doneTodoState);
-  const [todos, setTodos] = useRecoilState(todoState);
-  const [notes, setNotes] = useRecoilState(noteState);
+  const notes = useRecoilValue(noteState);
+  const [documents, setDocuments] = useRecoilState(documentState);
   const [isNote, setIsNote] = useState(false);
   const { register, handleSubmit, setValue } = useForm<ITaskFormData>();
 
@@ -50,11 +49,7 @@ export default function List() {
         isDeleted: false,
         isNote,
       };
-      if (isNote) {
-        setNotes(prev => [...prev, data]);
-      } else {
-        setTodos(prev => [...prev, data]);
-      }
+      setDocuments(prev => [...prev, data]);
       await setDoc(docRef, data);
     });
   };
@@ -71,32 +66,19 @@ export default function List() {
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
-      const noteQuery = query(
+      const docQurey = query(
         collection(db, (user as User).uid, date, 'Document'),
         orderBy('createdAt'),
-        where('isNote', '==', true),
       );
-      const todoQuery = query(
-        collection(db, (user as User).uid, date, 'Document'),
-        orderBy('createdAt'),
-        where('isNote', '==', false),
-      );
-      const querySnapshot = await Promise.all([
-        getDocs(todoQuery),
-        getDocs(noteQuery),
-      ]);
-      const todoArr: DocumentData[] = [];
-      querySnapshot[0].forEach(doc => {
-        todoArr.push(doc.data());
+      const querySnapshot = await getDocs(docQurey);
+
+      const tempArray: DocumentData[] = [];
+      querySnapshot.forEach(doc => {
+        tempArray.push(doc.data());
       });
-      const noteArr: DocumentData[] = [];
-      querySnapshot[1].forEach(doc => {
-        noteArr.push(doc.data());
-      });
-      setTodos(todoArr);
-      setNotes(noteArr);
+      setDocuments(tempArray);
     });
-  }, [date, setNotes, setTodos]);
+  }, [date, setDocuments]);
   return (
     <Wrapper>
       <FormContainer onSubmit={handleSubmit(onToDoSubmit)}>
@@ -132,18 +114,16 @@ export default function List() {
 
         {notes.length ? (
           <>
-            <Title>노트</Title>
             <ul>
+              <Title>노트</Title>
               {notes.map(note => (
-                <Note key={note.createdAt} note={note}>
-                  {note.title}
-                </Note>
+                <Note key={note.id} note={note} />
               ))}
             </ul>
           </>
         ) : null}
 
-        {!todos.length && !notes.length && <h1>오늘은 할일이 없습니다!</h1>}
+        {!documents.length && <h1>오늘은 할일이 없습니다!</h1>}
       </ListContainer>
     </Wrapper>
   );

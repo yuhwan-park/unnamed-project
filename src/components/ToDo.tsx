@@ -3,20 +3,20 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { paramState, todoState } from '../atoms';
+import { documentState, paramState } from '../atoms';
 import { useGetDocRef } from '../hooks';
 import { List, Title } from '../style/main-page';
 import ListMenu from './ListMenu';
 
 export default function ToDo({ todo }: DocumentData) {
   const setParams = useSetRecoilState(paramState);
-  const setTodos = useSetRecoilState(todoState);
+  const setDocument = useSetRecoilState(documentState);
   const docRef = useGetDocRef(todo.id);
   const navigator = useNavigate();
   const { register } = useForm();
 
   const onClickCheckBox = async () => {
-    setTodos(todos =>
+    setDocument(todos =>
       todos.map(value =>
         value.id === todo.id ? { ...value, isDone: !todo.isDone } : value,
       ),
@@ -30,7 +30,7 @@ export default function ToDo({ todo }: DocumentData) {
   };
 
   const onChange = (e: any) => {
-    setTodos(todos =>
+    setDocument(todos =>
       todos.map(value =>
         value.id === todo.id ? { ...value, title: e.target.value } : value,
       ),
