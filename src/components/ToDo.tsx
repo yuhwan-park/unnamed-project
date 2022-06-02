@@ -3,13 +3,12 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { documentState, paramState } from '../atoms';
+import { documentState } from '../atoms';
 import { useGetDocRef } from '../hooks';
 import { List, Title } from '../style/main-page';
 import ListMenu from './ListMenu';
 
 export default function ToDo({ todo }: DocumentData) {
-  const setParams = useSetRecoilState(paramState);
   const setDocument = useSetRecoilState(documentState);
   const docRef = useGetDocRef(todo.id);
   const navigator = useNavigate();
@@ -25,7 +24,6 @@ export default function ToDo({ todo }: DocumentData) {
   };
 
   const onClickList = () => {
-    setParams(todo.id);
     navigator(`/main/${todo.id}`);
   };
 

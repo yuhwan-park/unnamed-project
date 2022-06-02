@@ -3,19 +3,17 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { documentState, paramState } from '../atoms';
+import { documentState } from '../atoms';
 import { List, Title } from '../style/main-page';
 import ListMenu from './ListMenu';
 import { useGetDocRef } from '../hooks';
 
 export default function Note({ note }: DocumentData) {
-  const setParams = useSetRecoilState(paramState);
   const setDocument = useSetRecoilState(documentState);
   const docRef = useGetDocRef(note.id);
   const navigator = useNavigate();
   const { register } = useForm();
   const onClickList = () => {
-    setParams(note.id);
     navigator(`/main/${note.id}`);
   };
   const onChange = (e: any) => {

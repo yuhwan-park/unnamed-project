@@ -2,25 +2,47 @@ import styled from 'styled-components';
 import { Editor } from '@toast-ui/react-editor';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { selectedContentState } from '../atoms';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { selectedContentState, paramState } from '../atoms';
+import { Title } from '../style/main-page';
+import { useForm } from 'react-hook-form';
 
 interface IEditorProps {
   showEditor: boolean;
 }
 
 export default function ContentEditor({ showEditor }: IEditorProps) {
+  const setParams = useSetRecoilState(paramState);
   const content = useRecoilValue(selectedContentState);
   const params = useParams();
+  const { register, setValue } = useForm();
+
+  useEffect(() => {
+    if (params['id']) {
+      setParams(params['id']);
+    }
+  }, [params, setParams]);
+
+  useEffect(() => {
+    setValue('title', content?.title);
+  }, [content, setValue]);
+
   useEffect(() => {
     const el = document.querySelector('.toastui-editor-mode-switch');
     if (el) (el as HTMLElement).style.display = 'none';
   }, []);
+
   return (
     <Container className="show-editor-trigger" showEditor={showEditor}>
       {params['id'] ? (
         <>
-          <HeaderContainer>{content ? content.title : null}</HeaderContainer>
+          <HeaderContainer>
+            <Title
+              type="text"
+              defaultValue={content?.title}
+              {...register('title')}
+            />
+          </HeaderContainer>
           <EditorContainer>
             <Editor
               previewStyle="vertical"

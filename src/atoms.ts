@@ -42,13 +42,9 @@ export const noteState = selector({
 export const selectedContentState = selector({
   key: 'selectedContentState',
   get: ({ get }) => {
-    const todos = get(documentState);
-    const notes = get(noteState);
+    const documents = get(documentState);
     const params = get(paramState);
 
-    return (
-      todos.find(todo => todo.id === params) ||
-      notes.find(note => note.id === params)
-    );
+    return documents.find(document => document.id === params);
   },
 });
