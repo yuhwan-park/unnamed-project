@@ -1,16 +1,12 @@
 import { onAuthStateChanged, User } from 'firebase/auth';
 import {
   collection,
-  doc,
   DocumentData,
   getDocs,
   orderBy,
   query,
-  setDoc,
-  Timestamp,
 } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import {
@@ -21,7 +17,7 @@ import {
   noteState,
 } from '../atoms';
 import { auth, db } from '../firebase';
-import { ITaskFormData } from '../types';
+import ContentForm from './ContentForm';
 import Note from './Note';
 import ToDo from './ToDo';
 
@@ -31,38 +27,6 @@ export default function List() {
   const doneTodo = useRecoilValue(doneTodoState);
   const notes = useRecoilValue(noteState);
   const [documents, setDocuments] = useRecoilState(documentState);
-  const [isNote, setIsNote] = useState(false);
-  const { register, handleSubmit, setValue } = useForm<ITaskFormData>();
-
-  const onToDoSubmit = ({ title }: ITaskFormData) => {
-    setValue('title', '');
-    onAuthStateChanged(auth, async user => {
-      const docRef = doc(
-        collection(db, `${(user as User).uid}/${date}/Document`),
-      );
-      const data = {
-        id: docRef.id,
-        title,
-        content: '',
-        createdAt: Timestamp.fromDate(new Date()),
-        isDone: false,
-        isDeleted: false,
-        isNote,
-      };
-      setDocuments(prev => [...prev, data]);
-      await setDoc(docRef, data);
-    });
-  };
-
-  const onSelectChange = ({
-    currentTarget: { value },
-  }: React.ChangeEvent<HTMLSelectElement>) => {
-    if (value === 'note') {
-      setIsNote(true);
-    } else {
-      setIsNote(false);
-    }
-  };
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
@@ -81,17 +45,7 @@ export default function List() {
   }, [date, setDocuments]);
   return (
     <Wrapper>
-      <FormContainer onSubmit={handleSubmit(onToDoSubmit)}>
-        <input
-          type="text"
-          {...register('title', { required: true })}
-          placeholder="할 일을 추가해보세요."
-        />
-        <select onChange={onSelectChange}>
-          <option value="toDo">할일</option>
-          <option value="note">노트</option>
-        </select>
-      </FormContainer>
+      <ContentForm />
 
       <ListContainer>
         {doingTodo.length ? (
@@ -133,34 +87,6 @@ const Wrapper = styled.div`
   height: 100%;
   width: 100%;
   padding: 30px;
-`;
-
-const FormContainer = styled.form`
-  position: relative;
-  display: flex;
-  width: 100%;
-  height: 40px;
-  margin-bottom: 10px;
-  input {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    padding: 0 10px;
-    border: none;
-    border-radius: 6px;
-    outline: none;
-    background-color: rgb(244, 244, 244);
-  }
-  select {
-    position: absolute;
-    right: 0;
-    border: none;
-    border-left: 1px solid #bbb;
-    border-radius: 6px;
-    height: 100%;
-    outline: none;
-    background-color: rgb(244, 244, 244);
-  }
 `;
 
 const ListContainer = styled.div`
