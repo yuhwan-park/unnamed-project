@@ -1,4 +1,6 @@
+import React from 'react';
 import { DocumentData, setDoc } from 'firebase/firestore';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
@@ -8,11 +10,11 @@ import { useGetDocRef } from '../hooks';
 import { List, Title } from '../style/main-page';
 import ListMenu from './ListMenu';
 
-export default function ToDo({ todo }: DocumentData) {
+function ToDo({ todo }: DocumentData) {
   const setDocument = useSetRecoilState(documentState);
   const docRef = useGetDocRef(todo.id);
   const navigator = useNavigate();
-  const { register } = useForm();
+  const { register, setValue } = useForm();
 
   const onClickCheckBox = async () => {
     setDocument(todos =>
@@ -38,6 +40,10 @@ export default function ToDo({ todo }: DocumentData) {
   const onBlur = async (e: any) => {
     await setDoc(docRef, { title: e.target.value }, { merge: true });
   };
+
+  useEffect(() => {
+    setValue('todoTitle', todo.title);
+  }, [setValue, todo]);
   return (
     <>
       <List onClick={onClickList} className="show-editor-trigger">
@@ -66,6 +72,8 @@ export default function ToDo({ todo }: DocumentData) {
     </>
   );
 }
+
+export default React.memo(ToDo);
 
 const CheckBoxContainer = styled.div`
   display: flex;

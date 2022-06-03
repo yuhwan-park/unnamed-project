@@ -2,11 +2,6 @@ import dayjs from 'dayjs';
 import { DocumentData } from 'firebase/firestore';
 import { atom, selector } from 'recoil';
 
-export const paramState = atom({
-  key: 'param',
-  default: '',
-});
-
 export const dateState = atom<dayjs.Dayjs>({
   key: 'date',
   default: dayjs(),
@@ -37,14 +32,4 @@ export const doneTodoState = selector({
 export const noteState = selector({
   key: 'noteSelector',
   get: ({ get }) => get(documentState).filter(document => document.isNote),
-});
-
-export const selectedContentState = selector({
-  key: 'selectedContentState',
-  get: ({ get }) => {
-    const documents = get(documentState);
-    const params = get(paramState);
-
-    return documents.find(document => document.id === params);
-  },
 });

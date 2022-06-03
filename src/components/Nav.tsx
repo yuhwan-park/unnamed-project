@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -24,7 +25,7 @@ const dateVariants = {
   }),
 };
 
-export default function Nav() {
+function Nav() {
   const [date, setDate] = useRecoilState(dateState);
   const [isBack, setIsBack] = useState(false);
   const onClickNext = () => {
@@ -66,6 +67,8 @@ export default function Nav() {
     </Container>
   );
 }
+
+export default React.memo(Nav);
 
 const LogOut = styled.button`
   position: absolute;

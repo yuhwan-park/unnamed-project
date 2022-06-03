@@ -1,5 +1,6 @@
 import { deleteDoc, DocumentData } from 'firebase/firestore';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { documentState } from '../atoms';
@@ -7,11 +8,13 @@ import { useGetDocRef } from '../hooks';
 
 export default function ListMenu({ document }: DocumentData) {
   const setDocument = useSetRecoilState(documentState);
+  const navigator = useNavigate();
   const docRef = useGetDocRef(document.id);
   const [menu, setMenu] = useState(false);
   const onClickDelete = async () => {
     setDocument(todos => todos.filter(todo => document.id !== todo.id));
     await deleteDoc(docRef);
+    navigator('/main');
   };
   const onMouseEnterIntoMenu = () => {
     setMenu(true);

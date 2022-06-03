@@ -1,27 +1,40 @@
 import styled from 'styled-components';
 import { Editor } from '@toast-ui/react-editor';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { selectedContentState, paramState } from '../atoms';
+import { useRecoilState } from 'recoil';
+import { documentState } from '../atoms';
 import { Title } from '../style/main-page';
 import { useForm } from 'react-hook-form';
+import { DocumentData, setDoc } from 'firebase/firestore';
+import { useGetDocRef } from '../hooks';
 
 interface IEditorProps {
   showEditor: boolean;
 }
 
 export default function ContentEditor({ showEditor }: IEditorProps) {
-  const setParams = useSetRecoilState(paramState);
-  const content = useRecoilValue(selectedContentState);
+  const [documents, setDocuments] = useRecoilState(documentState);
+  const [content, setContent] = useState<DocumentData>();
+  const docRef = useGetDocRef(content?.id);
   const params = useParams();
   const { register, setValue } = useForm();
 
+  const onChange = (e: any) => {
+    setDocuments(todos =>
+      todos.map(value =>
+        value.id === params['id'] ? { ...value, title: e.target.value } : value,
+      ),
+    );
+  };
+
+  const onBlur = async (e: any) => {
+    await setDoc(docRef, { title: e.target.value }, { merge: true });
+  };
   useEffect(() => {
-    if (params['id']) {
-      setParams(params['id']);
-    }
-  }, [params, setParams]);
+    const content = documents.find(document => document.id === params['id']);
+    setContent(content);
+  }, [documents, params]);
 
   useEffect(() => {
     setValue('title', content?.title);
@@ -37,10 +50,14 @@ export default function ContentEditor({ showEditor }: IEditorProps) {
       {params['id'] ? (
         <>
           <HeaderContainer>
-            <Title
+            <EditorTitle
               type="text"
               defaultValue={content?.title}
-              {...register('title')}
+              {...(register('title'),
+              {
+                onChange,
+                onBlur,
+              })}
             />
           </HeaderContainer>
           <EditorContainer>
@@ -55,12 +72,11 @@ export default function ContentEditor({ showEditor }: IEditorProps) {
                 ['ul', 'ol', 'task'],
                 ['image', 'link'],
               ]}
+              placeholder="설명"
             />
           </EditorContainer>
         </>
-      ) : (
-        <div>세부사항을 보려면 할일 혹은 노트의 제목을 클릭하세요.</div>
-      )}
+      ) : null}
     </Container>
   );
 }
@@ -70,6 +86,12 @@ const HeaderContainer = styled.div`
 `;
 const EditorContainer = styled.div`
   height: calc(100% - 50px);
+`;
+
+const EditorTitle = styled(Title)`
+  padding: 5px 10px;
+  font-weight: 700;
+  height: 100%;
 `;
 
 const Container = styled.div<IEditorProps>`
