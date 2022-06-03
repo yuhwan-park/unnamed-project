@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { documentState } from '../atoms';
 import { Title } from '../style/main-page';
-import { useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { DocumentData, setDoc } from 'firebase/firestore';
 import { useGetDocRef } from '../hooks';
 
@@ -14,11 +14,11 @@ interface IEditorProps {
 }
 
 export default function ContentEditor({ showEditor }: IEditorProps) {
+  const params = useParams();
   const [documents, setDocuments] = useRecoilState(documentState);
   const [content, setContent] = useState<DocumentData>();
-  const docRef = useGetDocRef(content?.id);
-  const params = useParams();
-  const { register, setValue } = useForm();
+  const docRef = useGetDocRef(params['id']);
+  const { register, setValue } = useFormContext();
 
   const onChange = (e: any) => {
     setDocuments(todos =>
@@ -29,16 +29,19 @@ export default function ContentEditor({ showEditor }: IEditorProps) {
   };
 
   const onBlur = async (e: any) => {
-    await setDoc(docRef, { title: e.target.value }, { merge: true });
+    if (docRef) {
+      await setDoc(docRef, { title: e.target.value }, { merge: true });
+    }
   };
+
   useEffect(() => {
-    const content = documents.find(document => document.id === params['id']);
-    setContent(content);
+    const newContent = documents.find(doc => doc.id === params['id']);
+    setContent(newContent);
   }, [documents, params]);
 
   useEffect(() => {
     setValue('title', content?.title);
-  }, [content, setValue]);
+  }, [content?.title, setValue]);
 
   useEffect(() => {
     const el = document.querySelector('.toastui-editor-mode-switch');

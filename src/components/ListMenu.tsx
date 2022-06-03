@@ -13,7 +13,7 @@ export default function ListMenu({ document }: DocumentData) {
   const [menu, setMenu] = useState(false);
   const onClickDelete = async () => {
     setDocument(todos => todos.filter(todo => document.id !== todo.id));
-    await deleteDoc(docRef);
+    if (docRef) await deleteDoc(docRef);
     navigator('/main');
   };
   const onMouseEnterIntoMenu = () => {

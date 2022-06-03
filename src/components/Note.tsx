@@ -25,7 +25,9 @@ export default function Note({ note }: DocumentData) {
   };
 
   const onBlur = async (e: any) => {
-    await setDoc(docRef, { title: e.target.value }, { merge: true });
+    if (docRef) {
+      await setDoc(docRef, { title: e.target.value }, { merge: true });
+    }
   };
   return (
     <List onClick={onClickList} className="show-editor-trigger">

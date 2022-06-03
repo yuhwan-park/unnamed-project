@@ -1,7 +1,7 @@
 import React from 'react';
 import { DocumentData, setDoc } from 'firebase/firestore';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -14,7 +14,7 @@ function ToDo({ todo }: DocumentData) {
   const setDocument = useSetRecoilState(documentState);
   const docRef = useGetDocRef(todo.id);
   const navigator = useNavigate();
-  const { register, setValue } = useForm();
+  const { register, setValue } = useFormContext();
 
   const onClickCheckBox = async () => {
     setDocument(todos =>
@@ -22,7 +22,7 @@ function ToDo({ todo }: DocumentData) {
         value.id === todo.id ? { ...value, isDone: !todo.isDone } : value,
       ),
     );
-    await setDoc(docRef, { isDone: !todo.isDone }, { merge: true });
+    if (docRef) await setDoc(docRef, { isDone: !todo.isDone }, { merge: true });
   };
 
   const onClickList = () => {
@@ -38,11 +38,12 @@ function ToDo({ todo }: DocumentData) {
   };
 
   const onBlur = async (e: any) => {
-    await setDoc(docRef, { title: e.target.value }, { merge: true });
+    if (docRef)
+      await setDoc(docRef, { title: e.target.value }, { merge: true });
   };
 
   useEffect(() => {
-    setValue('todoTitle', todo.title);
+    setValue(`todoTitle-${todo.id}`, todo.title);
   }, [setValue, todo]);
   return (
     <>
@@ -61,7 +62,7 @@ function ToDo({ todo }: DocumentData) {
           type="text"
           isDone={todo.isDone}
           defaultValue={todo.title}
-          {...register('todoTitle', {
+          {...register(`todoTitle-${todo.id}`, {
             onBlur,
             onChange,
           })}

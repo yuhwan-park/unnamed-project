@@ -4,9 +4,11 @@ import { useRecoilValue } from 'recoil';
 import { dateSelector } from '../atoms';
 import { auth, db } from '../firebase';
 
-function useGetDocRef(id: string) {
+function useGetDocRef(id: string | undefined) {
   const date = useRecoilValue(dateSelector);
-  return doc(db, `${(auth.currentUser as User).uid}/${date}/Document/${id}`);
+  return id
+    ? doc(db, `${(auth.currentUser as User).uid}/${date}/Document/${id}`)
+    : null;
 }
 
 export { useGetDocRef };
