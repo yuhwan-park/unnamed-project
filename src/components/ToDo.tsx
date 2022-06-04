@@ -1,7 +1,6 @@
 import React from 'react';
 import { DocumentData, setDoc } from 'firebase/firestore';
-import { useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -14,7 +13,7 @@ function ToDo({ todo }: DocumentData) {
   const setDocument = useSetRecoilState(documentState);
   const docRef = useGetDocRef(todo.id);
   const navigator = useNavigate();
-  const { register, setValue } = useFormContext();
+  const { register } = useForm();
 
   const onClickCheckBox = async () => {
     setDocument(todos =>
@@ -41,10 +40,6 @@ function ToDo({ todo }: DocumentData) {
     if (docRef)
       await setDoc(docRef, { title: e.target.value }, { merge: true });
   };
-
-  useEffect(() => {
-    setValue(`todoTitle-${todo.id}`, todo.title);
-  }, [setValue, todo]);
   return (
     <>
       <List onClick={onClickList} className="show-editor-trigger">

@@ -7,13 +7,11 @@ import List from '../components/List';
 import styled from 'styled-components';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import ContentEditor from '../components/ContentEditor';
-import { FormProvider, useForm } from 'react-hook-form';
 
 function Main() {
   const [user, setUser] = useState<User>();
   const [showEditor, setShowEditor] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
-  const methods = useForm();
   const navigator = useNavigate();
 
   const onClickScreen = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -50,36 +48,35 @@ function Main() {
   return (
     <>
       <Nav />
-      <FormProvider {...methods}>
-        <Wrapper onClick={onClickScreen}>
-          {user ? (
-            <>
-              {width > 1024 ? (
-                <ResponsiveContainer>
-                  <ReflexContainer orientation="vertical">
-                    <ReflexElement className="left-pane">
-                      <List />
-                    </ReflexElement>
-                    <ReflexSplitter style={{ border: 'none' }} />
-                    <ReflexElement
-                      className="right-pane"
-                      minSize={400}
-                      maxSize={1000}
-                    >
-                      <ContentEditor showEditor={showEditor} />
-                    </ReflexElement>
-                  </ReflexContainer>
-                </ResponsiveContainer>
-              ) : (
-                <ResponsiveContainer>
-                  <List />
-                  <ContentEditor showEditor={showEditor} />
-                </ResponsiveContainer>
-              )}
-            </>
-          ) : null}
-        </Wrapper>
-      </FormProvider>
+
+      <Wrapper onClick={onClickScreen}>
+        {user ? (
+          <>
+            {width > 1024 ? (
+              <ResponsiveContainer>
+                <ReflexContainer orientation="vertical">
+                  <ReflexElement className="left-pane">
+                    <List />
+                  </ReflexElement>
+                  <ReflexSplitter style={{ border: 'none' }} />
+                  <ReflexElement
+                    className="right-pane"
+                    minSize={400}
+                    maxSize={1000}
+                  >
+                    <ContentEditor showEditor={showEditor} />
+                  </ReflexElement>
+                </ReflexContainer>
+              </ResponsiveContainer>
+            ) : (
+              <ResponsiveContainer>
+                <List />
+                <ContentEditor showEditor={showEditor} />
+              </ResponsiveContainer>
+            )}
+          </>
+        ) : null}
+      </Wrapper>
     </>
   );
 }
