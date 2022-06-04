@@ -1,43 +1,71 @@
 import styled from 'styled-components';
 import { Editor } from '@toast-ui/react-editor';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { documentState } from '../atoms';
-import { DocumentData } from 'firebase/firestore';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { documentState, paramState, selectedDocumentState } from '../atoms';
+import { setDoc } from 'firebase/firestore';
+import { useGetDocRef } from '../hooks';
+import { useMemo } from 'react';
 
 interface IEditorProps {
   showEditor: boolean;
 }
 
 export default function ContentEditor({ showEditor }: IEditorProps) {
+  const [flag, setFlag] = useState(true);
+  const [timer, setTimer] = useState<NodeJS.Timeout>();
   const params = useParams();
-  const documents = useRecoilValue(documentState);
-  const [content, setContent] = useState<DocumentData>();
+  const editorRef = useMemo(() => React.createRef<Editor>(), []);
+  const docRef = useGetDocRef(params['id']);
+  const setParams = useSetRecoilState(paramState);
+  const setDocuments = useSetRecoilState(documentState);
+  const document = useRecoilValue(selectedDocumentState);
+
+  const onKeyDownEditor = () => {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    const newTimer = setTimeout(async () => {
+      const content = editorRef.current?.getInstance().getMarkdown();
+      setDocuments(document =>
+        document.map(value =>
+          value.id === params['id'] ? { ...value, content } : value,
+        ),
+      );
+      if (docRef) await setDoc(docRef, { content }, { merge: true });
+    }, 1000);
+    setTimer(newTimer);
+  };
 
   useEffect(() => {
-    const newContent = documents.find(doc => doc.id === params['id']);
-    setContent(newContent);
-  }, [documents, params]);
+    if (params['id']) {
+      setFlag(true);
+      setParams(params['id']);
+    }
+  }, [params, setParams]);
 
   useEffect(() => {
-    const el = document.querySelector('.toastui-editor-mode-switch');
-    if (el) (el as HTMLElement).style.display = 'none';
-  }, []);
+    if (flag && document) {
+      // 페이지 로드 & ID 파라미터가 바뀔때만 실행되게 분기처리
+      editorRef.current?.getInstance().setMarkdown(document?.content, false);
+      setFlag(false);
+    }
+  }, [document, editorRef, flag]);
 
   return (
     <Container className="show-editor-trigger" showEditor={showEditor}>
       {params['id'] ? (
         <>
           <HeaderContainer>
-            <EditorTitle>{content?.title}</EditorTitle>
+            <EditorTitle>{document?.title}</EditorTitle>
           </HeaderContainer>
           <EditorContainer>
             <Editor
-              previewStyle="vertical"
               height="100%"
               initialEditType="wysiwyg"
-              useCommandShortcut={true}
+              autofocus={false}
+              hideModeSwitch={true}
               toolbarItems={[
                 ['heading', 'bold', 'italic', 'strike'],
                 ['hr', 'quote'],
@@ -45,6 +73,8 @@ export default function ContentEditor({ showEditor }: IEditorProps) {
                 ['image', 'link'],
               ]}
               placeholder="설명"
+              ref={editorRef}
+              onKeyup={onKeyDownEditor}
             />
           </EditorContainer>
         </>
