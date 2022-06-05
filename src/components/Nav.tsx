@@ -6,6 +6,13 @@ import { useRecoilState } from 'recoil';
 import { dateState } from '../atoms';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase';
+import {
+  faAngleLeft,
+  faBars,
+  faAngleRight,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useNavigate } from 'react-router-dom';
 
 const dateVariants = {
   entry: (isBack: boolean) => ({
@@ -28,25 +35,29 @@ const dateVariants = {
 function Nav() {
   const [date, setDate] = useRecoilState(dateState);
   const [isBack, setIsBack] = useState(false);
+  const navigator = useNavigate();
   const onClickNext = () => {
     setIsBack(false);
     setDate(prev => prev.add(1, 'day'));
+    navigator('/main');
   };
   const onClickPrev = () => {
     setIsBack(true);
     setDate(prev => prev.add(-1, 'day'));
+    navigator('/main');
   };
   const onClickLogOut = async () => {
     await signOut(auth);
   };
   return (
     <Container>
-      <Menu className="fa-solid fa-bars"></Menu>
+      <Menu>
+        <FontAwesomeIcon icon={faBars} />
+      </Menu>
       <LogOut onClick={onClickLogOut}>LogOut</LogOut>
-      <PrevButton
-        className="fa-solid fa-angle-left"
-        onClick={onClickPrev}
-      ></PrevButton>
+      <PrevButton onClick={onClickPrev}>
+        <FontAwesomeIcon icon={faAngleLeft} />
+      </PrevButton>
       <AnimatePresence custom={isBack} initial={false}>
         <Today
           custom={isBack}
@@ -60,10 +71,9 @@ function Nav() {
           {date.format('M월 D일')}
         </Today>
       </AnimatePresence>
-      <NextButton
-        className="fa-solid fa-angle-right"
-        onClick={onClickNext}
-      ></NextButton>
+      <NextButton onClick={onClickNext}>
+        <FontAwesomeIcon icon={faAngleRight} />
+      </NextButton>
     </Container>
   );
 }
@@ -93,10 +103,12 @@ const Today = styled(motion.div)`
   font-family: ${props => props.theme.fontFamily.main};
 `;
 
-const Button = styled.i`
-  cursor: pointer;
-  color: white;
-  font-size: 30px;
+const Button = styled.div`
+  svg {
+    cursor: pointer;
+    color: white;
+    font-size: 30px;
+  }
 `;
 
 const PrevButton = styled(Button)`
