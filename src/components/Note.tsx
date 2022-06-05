@@ -7,6 +7,8 @@ import { documentState } from '../atoms';
 import { List, Title } from '../style/main-page';
 import ListMenu from './ListMenu';
 import { useGetDocRef } from '../hooks';
+import { faNoteSticky } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function Note({ note }: DocumentData) {
   const setDocument = useSetRecoilState(documentState);
@@ -32,7 +34,7 @@ export default function Note({ note }: DocumentData) {
   return (
     <List onClick={onClickList} className="show-editor-trigger">
       <IconContainer>
-        <i className="fa-solid fa-note-sticky"></i>
+        <FontAwesomeIcon icon={faNoteSticky} className="sub-icon" />
       </IconContainer>
       <Title
         defaultValue={note.title}
@@ -52,7 +54,7 @@ const IconContainer = styled.div`
   align-items: center;
   width: 30px;
   height: 30px;
-  i {
+  .sub-icon {
     color: rgba(0, 0, 0, 0.3);
     font-size: 20px;
   }

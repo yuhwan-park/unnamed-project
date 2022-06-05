@@ -5,7 +5,7 @@ import { Theme } from './theme';
 import { RecoilRoot } from 'recoil';
 import 'react-reflex/styles.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
-import { Helmet } from 'react-helmet';
+import './assets/fonts.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -76,16 +76,6 @@ a {
 root.render(
   <RecoilRoot>
     <ThemeProvider theme={Theme}>
-      <Helmet>
-        <style>
-          @import
-          url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Nanum+Gothic&display=swap');
-        </style>
-        <script
-          src="https://kit.fontawesome.com/b85839e547.js"
-          crossOrigin="anonymous"
-        ></script>
-      </Helmet>
       <GlobalStyle />
       <App />
     </ThemeProvider>
