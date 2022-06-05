@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { deleteDoc, DocumentData } from 'firebase/firestore';
+import { deleteDoc, DocumentData, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
@@ -17,11 +17,25 @@ export default function ListMenu({ document }: DocumentData) {
   const navigator = useNavigate();
   const docRef = useGetDocRef(document.id);
   const [menu, setMenu] = useState(false);
+
   const onClickDelete = async () => {
     setDocument(todos => todos.filter(todo => document.id !== todo.id));
     if (docRef) await deleteDoc(docRef);
     navigator('/main');
   };
+
+  const onClickConvert = async () => {
+    setDocument(docs =>
+      docs.map(value =>
+        value.id === document.id
+          ? { ...value, isNote: !document.isNote }
+          : value,
+      ),
+    );
+    if (docRef)
+      await setDoc(docRef, { isNote: !document.isNote }, { merge: true });
+  };
+
   const onMouseEnterIntoMenu = () => {
     setMenu(true);
   };
@@ -40,7 +54,7 @@ export default function ListMenu({ document }: DocumentData) {
             <FontAwesomeIcon icon={faTrashCan} className="sub-icon" />
             <span>삭제하기</span>
           </MenuButton>
-          <MenuButton>
+          <MenuButton onClick={onClickConvert}>
             <FontAwesomeIcon
               icon={faArrowRightArrowLeft}
               className="sub-icon"

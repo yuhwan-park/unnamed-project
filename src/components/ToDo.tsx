@@ -8,6 +8,8 @@ import { documentState } from '../atoms';
 import { useGetDocRef } from '../hooks';
 import { List, Title } from '../style/main-page';
 import ListMenu from './ListMenu';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function ToDo({ todo }: DocumentData) {
   const setDocument = useSetRecoilState(documentState);
@@ -49,7 +51,7 @@ function ToDo({ todo }: DocumentData) {
             onClick={onClickCheckBox}
             isDone={todo.isDone}
           >
-            {todo.isDone ? <i className="fa-solid fa-check"></i> : null}
+            {todo.isDone ? <FontAwesomeIcon icon={faCheck} inverse /> : null}
           </CheckBox>
         </CheckBoxContainer>
 
@@ -93,9 +95,6 @@ const CheckBox = styled.div<{ isDone: boolean }>`
     props.isDone ? 'rgba(0, 0, 0, 0.2)' : 'transparent'};
   &:hover {
     background-color: rgba(0, 0, 0, 0.3);
-  }
-  i {
-    color: white;
   }
 `;
 
