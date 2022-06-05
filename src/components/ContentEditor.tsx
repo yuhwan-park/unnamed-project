@@ -22,12 +22,12 @@ export default function ContentEditor({ showEditor }: IEditorProps) {
   const setDocuments = useSetRecoilState(documentState);
   const document = useRecoilValue(selectedDocumentState);
 
-  const onKeyDownEditor = () => {
+  const onKeyUpEditor = () => {
+    const content = editorRef.current?.getInstance().getMarkdown();
     if (timer) {
       clearTimeout(timer);
     }
     const newTimer = setTimeout(async () => {
-      const content = editorRef.current?.getInstance().getMarkdown();
       setDocuments(document =>
         document.map(value =>
           value.id === params['id'] ? { ...value, content } : value,
@@ -36,6 +36,18 @@ export default function ContentEditor({ showEditor }: IEditorProps) {
       if (docRef) await setDoc(docRef, { content }, { merge: true });
     }, 1000);
     setTimer(newTimer);
+  };
+
+  const onBlurEditor = () => {
+    const content = editorRef.current?.getInstance().getMarkdown();
+    setTimeout(async () => {
+      setDocuments(document =>
+        document.map(value =>
+          value.id === params['id'] ? { ...value, content } : value,
+        ),
+      );
+      if (docRef) await setDoc(docRef, { content }, { merge: true });
+    }, 100);
   };
 
   useEffect(() => {
@@ -74,7 +86,8 @@ export default function ContentEditor({ showEditor }: IEditorProps) {
               ]}
               placeholder="설명"
               ref={editorRef}
-              onKeyup={onKeyDownEditor}
+              onKeyup={onKeyUpEditor}
+              onBlur={onBlurEditor}
             />
           </EditorContainer>
         </>
