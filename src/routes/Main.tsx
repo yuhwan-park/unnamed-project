@@ -7,6 +7,7 @@ import List from '../components/List';
 import styled from 'styled-components';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import ContentEditor from '../components/ContentEditor';
+import MainMenu from '../components/MainMenu';
 
 function Main() {
   const [user, setUser] = useState<User>();
@@ -54,6 +55,7 @@ function Main() {
           <>
             {width > 1024 ? (
               <ResponsiveContainer>
+                <MainMenu />
                 <ReflexContainer orientation="vertical">
                   <ReflexElement className="left-pane">
                     <List />

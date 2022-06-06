@@ -12,6 +12,11 @@ export const dateState = atom<dayjs.Dayjs>({
   default: dayjs(),
 });
 
+export const toggleMenuState = atom({
+  key: 'toggleMenu',
+  default: true,
+});
+
 export const dateSelector = selector<string>({
   key: 'dateSelector',
   get: ({ get }) => get(dateState).format('YYYYMMDD'),

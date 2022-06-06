@@ -2,10 +2,8 @@ import React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useRecoilState } from 'recoil';
-import { dateState } from '../atoms';
-import { signOut } from 'firebase/auth';
-import { auth } from '../firebase';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { dateState, toggleMenuState } from '../atoms';
 import {
   faAngleLeft,
   faBars,
@@ -35,6 +33,7 @@ const dateVariants = {
 function Nav() {
   const [date, setDate] = useRecoilState(dateState);
   const [isBack, setIsBack] = useState(false);
+  const setToggleMenu = useSetRecoilState(toggleMenuState);
   const navigator = useNavigate();
   const onClickNext = () => {
     setIsBack(false);
@@ -46,15 +45,14 @@ function Nav() {
     setDate(prev => prev.add(-1, 'day'));
     navigator('/main');
   };
-  const onClickLogOut = async () => {
-    await signOut(auth);
+  const onClickMenuIcon = () => {
+    setToggleMenu(prev => !prev);
   };
   return (
-    <Container>
-      <Menu>
+    <Container onClick={onClickMenuIcon}>
+      <MenuIcon>
         <FontAwesomeIcon icon={faBars} />
-      </Menu>
-      <LogOut onClick={onClickLogOut}>LogOut</LogOut>
+      </MenuIcon>
       <PrevButton onClick={onClickPrev}>
         <FontAwesomeIcon icon={faAngleLeft} />
       </PrevButton>
@@ -79,11 +77,6 @@ function Nav() {
 }
 
 export default React.memo(Nav);
-
-const LogOut = styled.button`
-  position: absolute;
-  left: 100px;
-`;
 
 const Container = styled.div`
   display: flex;
@@ -122,7 +115,7 @@ const NextButton = styled(Button)`
   right: -100px;
 `;
 
-const Menu = styled(Button)`
+const MenuIcon = styled(Button)`
   position: absolute;
   left: 40px;
 `;
