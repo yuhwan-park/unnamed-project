@@ -68,7 +68,7 @@ function Main() {
           <>
             {width > 1024 ? (
               <ResponsiveContainer>
-                <MainMenu />
+                <MainMenu user={user} />
                 <ReflexContainer orientation="vertical">
                   <ReflexElement className="left-pane">
                     <List />
@@ -85,7 +85,7 @@ function Main() {
               </ResponsiveContainer>
             ) : (
               <ResponsiveContainer>
-                <MainMenu />
+                <MainMenu user={user} />
                 <List />
                 <AnimatePresence initial={false}>
                   {showEditor && (

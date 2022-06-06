@@ -49,8 +49,8 @@ function Nav() {
     setToggleMenu(prev => !prev);
   };
   return (
-    <Container onClick={onClickMenuIcon}>
-      <MenuIcon>
+    <Container>
+      <MenuIcon onClick={onClickMenuIcon}>
         <FontAwesomeIcon icon={faBars} />
       </MenuIcon>
       <PrevButton onClick={onClickPrev}>

@@ -47,7 +47,7 @@ export default function Note({ note }: DocumentData) {
           onChange,
         })}
       />
-      <ListMenu document={note} />
+      <ListMenu item={note} />
     </ListItemContainer>
   );
 }

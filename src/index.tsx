@@ -28,7 +28,7 @@ time, mark, audio, video {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
+  font-family: ${props => props.theme.fontFamily.main};
   vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */

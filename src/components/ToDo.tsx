@@ -65,7 +65,7 @@ function ToDo({ todo }: DocumentData) {
             onChange,
           })}
         />
-        <ListMenu document={todo} />
+        <ListMenu item={todo} />
       </ListItemContainer>
     </>
   );
