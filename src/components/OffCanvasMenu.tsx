@@ -4,7 +4,7 @@ import { User } from 'firebase/auth';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { toggleMenuState } from '../atoms';
+import { toggleMenuState } from 'atoms';
 import { useEffect, useRef, useState } from 'react';
 
 const menuVariants = {
@@ -22,11 +22,11 @@ const menuVariants = {
   },
 };
 
-interface IMainMenuProps {
+interface IOffCanvasMenuProps {
   user: User;
 }
 
-function MainMenu({ user }: IMainMenuProps) {
+function OffCanvasMenu({ user }: IOffCanvasMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
   const toggleMenu = useRecoilValue(toggleMenuState);
@@ -78,7 +78,7 @@ function MainMenu({ user }: IMainMenuProps) {
   );
 }
 
-export default MainMenu;
+export default OffCanvasMenu;
 
 const Container = styled(motion.div)`
   height: 100%;

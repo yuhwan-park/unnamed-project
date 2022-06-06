@@ -4,8 +4,8 @@ import {
   InputContainer,
   SubmitInput,
   TextInput,
-} from '../style/sign-page';
-import { IFormData } from '../types';
+} from 'style/sign-page';
+import { IFormData } from 'types';
 
 interface IAuthFormProps {
   isSignUp: boolean;

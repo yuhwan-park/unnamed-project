@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { dateState, toggleMenuState } from '../atoms';
+import { dateState, toggleMenuState } from 'atoms';
 import {
   faAngleLeft,
   faBars,

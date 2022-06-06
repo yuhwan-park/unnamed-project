@@ -1,8 +1,8 @@
 import { User } from 'firebase/auth';
 import { doc } from 'firebase/firestore';
 import { useRecoilValue } from 'recoil';
-import { dateSelector } from '../atoms';
-import { auth, db } from '../firebase';
+import { dateSelector } from 'atoms';
+import { auth, db } from 'firebase-source';
 
 function useGetDocRef(id: string | undefined) {
   const date = useRecoilValue(dateSelector);

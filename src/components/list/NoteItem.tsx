@@ -3,14 +3,14 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { documentState } from '../atoms';
-import { ListItemContainer, Title } from '../style/main-page';
+import { documentState } from 'atoms';
+import { ListItemContainer, Title } from 'style/main-page';
 import ListMenu from './ListMenu';
-import { useGetDocRef } from '../hooks';
 import { faNoteSticky } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useGetDocRef } from 'hooks';
 
-export default function Note({ note }: DocumentData) {
+export default function NoteItem({ note }: DocumentData) {
   const setDocument = useSetRecoilState(documentState);
   const docRef = useGetDocRef(note.id);
   const navigator = useNavigate();

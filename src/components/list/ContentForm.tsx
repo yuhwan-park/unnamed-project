@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { dateSelector, documentState } from '../atoms';
-import { auth, db } from '../firebase';
-import { ITaskFormData } from '../types';
+import { dateSelector, documentState } from 'atoms';
+import { auth, db } from 'firebase-source';
+import { ITaskFormData } from 'types';
 
 function ContentForm() {
   const date = useRecoilValue(dateSelector);

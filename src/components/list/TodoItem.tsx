@@ -4,14 +4,14 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { documentState } from '../atoms';
-import { useGetDocRef } from '../hooks';
-import { ListItemContainer, Title } from '../style/main-page';
+import { documentState } from 'atoms';
+import { useGetDocRef } from 'hooks';
+import { ListItemContainer, Title } from 'style/main-page';
 import ListMenu from './ListMenu';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-function ToDo({ todo }: DocumentData) {
+function TodoItem({ todo }: DocumentData) {
   const setDocument = useSetRecoilState(documentState);
   const docRef = useGetDocRef(todo.id);
   const navigator = useNavigate();
@@ -71,7 +71,7 @@ function ToDo({ todo }: DocumentData) {
   );
 }
 
-export default React.memo(ToDo);
+export default React.memo(TodoItem);
 
 const CheckBoxContainer = styled.div`
   display: flex;

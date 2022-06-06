@@ -2,8 +2,8 @@ import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import AuthForm from '../components/AuthForm';
-import SocialLogin from '../components/SocialLogin';
+import AuthForm from 'components/auth/AuthForm';
+import SocialLogin from 'components/auth/SocialLogin';
 import {
   Container,
   ErrorMessage,
@@ -13,9 +13,9 @@ import {
   LinkStyle,
   Logo,
   Message,
-} from '../style/sign-page';
-import { auth } from '../firebase';
-import { IFormData } from '../types';
+} from 'style/sign-page';
+import { auth } from 'firebase-source';
+import { IFormData } from 'types';
 
 function SignIn() {
   const [error, setError] = useState('');

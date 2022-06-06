@@ -13,9 +13,9 @@ import {
   Logo,
   SubmitInput,
   TextInput,
-} from '../style/sign-page';
-import { auth } from '../firebase';
-import { IUpdatePasswordFormData } from '../types';
+} from 'style/sign-page';
+import { auth } from 'firebase-source';
+import { IUpdatePasswordFormData } from 'types';
 
 function RequestUpdatePassword() {
   const [email, setEmail] = useState('');

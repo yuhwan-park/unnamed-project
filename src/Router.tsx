@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from './routes/Home';
-import Main from './routes/Main';
-import RequestUpdatePassword from './routes/RequestUpdatePassword';
-import SignIn from './routes/SignIn';
-import SignUp from './routes/SignUp';
+import Home from 'routes/Home';
+import Main from 'routes/Main';
+import RequestUpdatePassword from 'routes/RequestUpdatePassword';
+import SignIn from 'routes/SignIn';
+import SignUp from 'routes/SignUp';
 
 function Router() {
   return (

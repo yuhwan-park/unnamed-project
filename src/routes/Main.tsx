@@ -1,14 +1,14 @@
 import { onAuthStateChanged, User } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebase';
-import Nav from '../components/Nav';
-import List from '../components/List';
+import { auth } from 'firebase-source';
+import Nav from 'components/Nav';
+import List from 'components/List';
 import styled from 'styled-components';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
-import ContentEditor from '../components/ContentEditor';
-import MainMenu from '../components/MainMenu';
+import ContentEditor from 'components/ContentEditor';
 import { AnimatePresence, motion } from 'framer-motion';
+import OffCanvasMenu from 'components/OffCanvasMenu';
 
 const editorVariants = {
   initial: {
@@ -68,7 +68,7 @@ function Main() {
           <>
             {width > 1024 ? (
               <ResponsiveContainer>
-                <MainMenu user={user} />
+                <OffCanvasMenu user={user} />
                 <ReflexContainer orientation="vertical">
                   <ReflexElement className="left-pane">
                     <List />
@@ -85,7 +85,7 @@ function Main() {
               </ResponsiveContainer>
             ) : (
               <ResponsiveContainer>
-                <MainMenu user={user} />
+                <OffCanvasMenu user={user} />
                 <List />
                 <AnimatePresence initial={false}>
                   {showEditor && (

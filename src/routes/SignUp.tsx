@@ -6,10 +6,10 @@ import {
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import AuthForm from '../components/AuthForm';
-import { auth } from '../firebase';
-import { IFormData } from '../types';
-import SocialLogin from '../components/SocialLogin';
+import AuthForm from 'components/auth/AuthForm';
+import { auth } from 'firebase-source';
+import { IFormData } from 'types';
+import SocialLogin from 'components/auth/SocialLogin';
 import {
   Logo,
   Hr,
@@ -19,7 +19,7 @@ import {
   FormContainer,
   Message,
   Form,
-} from '../style/sign-page';
+} from 'style/sign-page';
 
 function SignUp() {
   const [error, setError] = useState('');

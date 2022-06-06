@@ -1,7 +1,7 @@
 import { GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
 import styled from 'styled-components';
-import { auth } from '../firebase';
-import GoogleLogo from '../assets/GoogleLogo.svg';
+import { auth } from 'firebase-source';
+import GoogleLogo from 'assets/GoogleLogo.svg';
 
 function SocialLogin() {
   const provider = new GoogleAuthProvider();

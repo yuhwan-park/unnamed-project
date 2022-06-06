@@ -1,11 +1,11 @@
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import App from 'App';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { Theme } from './theme';
+import { Theme } from 'theme';
 import { RecoilRoot } from 'recoil';
 import 'react-reflex/styles.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
-import './assets/fonts.css';
+import 'assets/fonts.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

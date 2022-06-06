@@ -15,11 +15,11 @@ import {
   doingTodoState,
   doneTodoState,
   noteState,
-} from '../atoms';
-import { auth, db } from '../firebase';
-import ContentForm from './ContentForm';
-import Note from './Note';
-import ToDo from './ToDo';
+} from 'atoms';
+import { auth, db } from 'firebase-source';
+import NoteItem from 'components/list/NoteItem';
+import TodoItem from 'components/list/TodoItem';
+import ContentForm from 'components/list/ContentForm';
 
 export default function List() {
   const date = useRecoilValue(dateSelector);
@@ -52,7 +52,7 @@ export default function List() {
           <ul>
             <Title>할일</Title>
             {doingTodo.map(todo => (
-              <ToDo key={todo.id} todo={todo} />
+              <TodoItem key={todo.id} todo={todo} />
             ))}
           </ul>
         ) : null}
@@ -61,7 +61,7 @@ export default function List() {
           <ul>
             <Title>완료</Title>
             {doneTodo.map(todo => (
-              <ToDo key={todo.id} todo={todo} />
+              <TodoItem key={todo.id} todo={todo} />
             ))}
           </ul>
         ) : null}
@@ -70,7 +70,7 @@ export default function List() {
           <ul>
             <Title>노트</Title>
             {notes.map(note => (
-              <Note key={note.id} note={note} />
+              <NoteItem key={note.id} note={note} />
             ))}
           </ul>
         ) : null}

@@ -3,9 +3,9 @@ import { Editor } from '@toast-ui/react-editor';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { documentState, paramState, selectedDocumentState } from '../atoms';
+import { documentState, paramState, selectedDocumentState } from 'atoms';
 import { setDoc } from 'firebase/firestore';
-import { useGetDocRef } from '../hooks';
+import { useGetDocRef } from 'hooks';
 import { useMemo } from 'react';
 
 export default function ContentEditor() {

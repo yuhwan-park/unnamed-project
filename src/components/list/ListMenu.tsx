@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { documentState } from '../atoms';
-import { useGetDocRef } from '../hooks';
+import { documentState } from 'atoms';
+import { useGetDocRef } from 'hooks';
 import {
   faTrashCan,
   faEllipsis,
