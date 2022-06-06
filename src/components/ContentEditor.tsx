@@ -62,7 +62,7 @@ export default function ContentEditor() {
   }, [document, editorRef, flag]);
 
   return (
-    <Container className="show-editor-trigger">
+    <Wrapper className="show-editor-trigger">
       {params['id'] ? (
         <>
           <HeaderContainer>
@@ -88,15 +88,21 @@ export default function ContentEditor() {
           </EditorContainer>
         </>
       ) : null}
-    </Container>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  background-color: white;
+  height: 100%;
+`;
 
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   height: 50px;
 `;
+
 const EditorContainer = styled.div`
   height: calc(100% - 50px);
 `;
@@ -105,9 +111,4 @@ const EditorTitle = styled.div`
   width: 100%;
   padding: 5px 10px;
   font-weight: 700;
-`;
-
-const Container = styled.div`
-  background-color: white;
-  height: 100%;
 `;

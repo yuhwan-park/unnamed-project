@@ -6,7 +6,7 @@ import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { documentState } from 'atoms';
 import { useGetDocRef } from 'hooks';
-import { ListItemContainer, Title } from 'style/main-page';
+import { IconContainer, ListItemContainer, Title } from 'style/main-page';
 import ListMenu from './ListMenu';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -45,7 +45,7 @@ function TodoItem({ todo }: DocumentData) {
   return (
     <>
       <ListItemContainer>
-        <CheckBoxContainer className="show-editor-trigger">
+        <IconContainer className="show-editor-trigger">
           <CheckBox
             className="check-box"
             onClick={onClickCheckBox}
@@ -53,7 +53,7 @@ function TodoItem({ todo }: DocumentData) {
           >
             {todo.isDone ? <FontAwesomeIcon icon={faCheck} inverse /> : null}
           </CheckBox>
-        </CheckBoxContainer>
+        </IconContainer>
         <ToDoTitle
           className="show-editor-trigger"
           type="text"
@@ -72,14 +72,6 @@ function TodoItem({ todo }: DocumentData) {
 }
 
 export default React.memo(TodoItem);
-
-const CheckBoxContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 30px;
-  height: 30px;
-`;
 
 const CheckBox = styled.div<{ isDone: boolean }>`
   display: flex;

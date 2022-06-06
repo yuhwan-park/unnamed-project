@@ -49,7 +49,7 @@ function Nav() {
     setToggleMenu(prev => !prev);
   };
   return (
-    <Container>
+    <Wrapper>
       <MenuIcon onClick={onClickMenuIcon}>
         <FontAwesomeIcon icon={faBars} />
       </MenuIcon>
@@ -72,13 +72,13 @@ function Nav() {
       <NextButton onClick={onClickNext}>
         <FontAwesomeIcon icon={faAngleRight} />
       </NextButton>
-    </Container>
+    </Wrapper>
   );
 }
 
 export default React.memo(Nav);
 
-const Container = styled.div`
+const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;

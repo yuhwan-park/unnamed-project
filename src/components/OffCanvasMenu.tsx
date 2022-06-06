@@ -6,6 +6,7 @@ import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { toggleMenuState } from 'atoms';
 import { useEffect, useRef, useState } from 'react';
+import { MenuButtonContainer, MenuContainer, MenuModal } from 'style/main-page';
 
 const menuVariants = {
   initial: {
@@ -50,7 +51,7 @@ function OffCanvasMenu({ user }: IOffCanvasMenuProps) {
   return (
     <AnimatePresence initial={false}>
       {toggleMenu && (
-        <Container
+        <Wrapper
           variants={menuVariants}
           initial="initial"
           animate="visible"
@@ -66,13 +67,13 @@ function OffCanvasMenu({ user }: IOffCanvasMenuProps) {
                 className="toggle-menu-icon"
               />
               {isOpen ? (
-                <Modal>
-                  <MenuButton></MenuButton>
-                </Modal>
+                <MenuModal>
+                  <MenuButtonContainer></MenuButtonContainer>
+                </MenuModal>
               ) : null}
             </MenuContainer>
           </AuthContainer>
-        </Container>
+        </Wrapper>
       )}
     </AnimatePresence>
   );
@@ -80,7 +81,7 @@ function OffCanvasMenu({ user }: IOffCanvasMenuProps) {
 
 export default OffCanvasMenu;
 
-const Container = styled(motion.div)`
+const Wrapper = styled(motion.div)`
   height: 100%;
   border-right: 1px solid #bbb;
 `;
@@ -101,48 +102,4 @@ const ProfileImage = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-`;
-
-const MenuContainer = styled.div`
-  position: absolute;
-  right: 0;
-  cursor: pointer;
-  .toggle-menu-icon {
-    padding: 0 20px;
-    opacity: 0;
-    color: rgba(0, 0, 0, 0.3);
-    &:hover {
-      color: rgba(0, 0, 0, 0.6);
-    }
-  }
-`;
-
-const MenuButton = styled.div`
-  display: flex;
-  align-items: center;
-  height: 40px;
-  padding: 10px;
-  cursor: pointer;
-  span {
-    font-size: ${props => props.theme.fontSize.medium};
-  }
-  .sub-icon {
-    color: #bbb;
-    width: 20px;
-    padding-right: 10px;
-  }
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
-  }
-`;
-
-const Modal = styled.div`
-  position: absolute;
-  right: -30px;
-  width: 200px;
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
-  z-index: 1;
-  cursor: auto;
 `;

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { documentState } from 'atoms';
-import { ListItemContainer, Title } from 'style/main-page';
+import { IconContainer, ListItemContainer, Title } from 'style/main-page';
 import ListMenu from './ListMenu';
 import { faNoteSticky } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -35,9 +35,9 @@ export default function NoteItem({ note }: DocumentData) {
   };
   return (
     <ListItemContainer>
-      <IconContainer onClick={onClickList} className="show-editor-trigger">
+      <NoteIconContainer onClick={onClickList} className="show-editor-trigger">
         <FontAwesomeIcon icon={faNoteSticky} className="sub-icon" />
-      </IconContainer>
+      </NoteIconContainer>
       <Title
         className="show-editor-trigger"
         defaultValue={note.title}
@@ -52,12 +52,7 @@ export default function NoteItem({ note }: DocumentData) {
   );
 }
 
-const IconContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 30px;
-  height: 30px;
+const NoteIconContainer = styled(IconContainer)`
   .sub-icon {
     color: rgba(0, 0, 0, 0.3);
     font-size: 20px;

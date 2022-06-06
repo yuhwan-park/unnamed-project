@@ -89,7 +89,7 @@ function Main() {
                 <List />
                 <AnimatePresence initial={false}>
                   {showEditor && (
-                    <AnimateEditor
+                    <EditorContainer
                       variants={editorVariants}
                       animate="visible"
                       initial="initial"
@@ -97,7 +97,7 @@ function Main() {
                       transition={{ type: 'tween' }}
                     >
                       <ContentEditor />
-                    </AnimateEditor>
+                    </EditorContainer>
                   )}
                 </AnimatePresence>
               </ResponsiveContainer>
@@ -120,7 +120,7 @@ const ResponsiveContainer = styled.div`
   height: 100%;
 `;
 
-const AnimateEditor = styled(motion.div)`
+const EditorContainer = styled(motion.div)`
   z-index: 4;
   width: 70%;
   position: absolute;
