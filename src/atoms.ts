@@ -1,6 +1,12 @@
 import dayjs from 'dayjs';
 import { DocumentData } from 'firebase/firestore';
 import { atom, selector } from 'recoil';
+import { IUserState } from 'types';
+
+export const userState = atom<IUserState | undefined>({
+  key: 'user',
+  default: undefined,
+});
 
 export const paramState = atom({
   key: 'param',

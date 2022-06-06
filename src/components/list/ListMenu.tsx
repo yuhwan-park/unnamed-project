@@ -49,7 +49,7 @@ export default function ListMenu({ item }: DocumentData) {
     };
     document.addEventListener('mousedown', handleClickOutSide);
     return () => document.removeEventListener('mousedown', handleClickOutSide);
-  });
+  }, []);
 
   return (
     <MenuContainer onClick={onClickMenu} ref={menuRef}>

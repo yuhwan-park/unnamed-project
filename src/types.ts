@@ -11,3 +11,10 @@ export interface IUpdatePasswordFormData {
 export interface ITaskFormData {
   title: string;
 }
+
+export interface IUserState {
+  displayName: string | null;
+  uid: string;
+  photoURL: string | null;
+  email: string | null;
+}

@@ -1,4 +1,4 @@
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from 'firebase-source';
@@ -9,6 +9,8 @@ import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import ContentEditor from 'components/ContentEditor';
 import { AnimatePresence, motion } from 'framer-motion';
 import OffCanvasMenu from 'components/OffCanvasMenu';
+import { useRecoilState } from 'recoil';
+import { userState } from 'atoms';
 
 const editorVariants = {
   initial: {
@@ -23,7 +25,7 @@ const editorVariants = {
 };
 
 function Main() {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useRecoilState(userState);
   const [showEditor, setShowEditor] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
   const navigator = useNavigate();
@@ -38,12 +40,14 @@ function Main() {
   useEffect(() => {
     onAuthStateChanged(auth, user => {
       if (!user) {
+        setUser(undefined);
         navigator('/');
       } else {
-        setUser(user);
+        const { displayName, email, uid, photoURL } = user;
+        setUser({ displayName, email, uid, photoURL });
       }
     });
-  }, [navigator]);
+  }, [navigator, setUser]);
 
   useEffect(() => {
     const handleWindowResize = () => setWidth(window.innerWidth);
@@ -68,7 +72,7 @@ function Main() {
           <>
             {width > 1024 ? (
               <ResponsiveContainer>
-                <OffCanvasMenu user={user} />
+                <OffCanvasMenu />
                 <ReflexContainer orientation="vertical">
                   <ReflexElement className="left-pane">
                     <List />
@@ -85,7 +89,7 @@ function Main() {
               </ResponsiveContainer>
             ) : (
               <ResponsiveContainer>
-                <OffCanvasMenu user={user} />
+                <OffCanvasMenu />
                 <List />
                 <AnimatePresence initial={false}>
                   {showEditor && (
