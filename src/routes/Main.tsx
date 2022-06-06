@@ -8,6 +8,19 @@ import styled from 'styled-components';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import ContentEditor from '../components/ContentEditor';
 import MainMenu from '../components/MainMenu';
+import { AnimatePresence, motion } from 'framer-motion';
+
+const editorVariants = {
+  initial: {
+    right: '-100%',
+  },
+  visible: {
+    right: 0,
+  },
+  exit: {
+    right: '-100%',
+  },
+};
 
 function Main() {
   const [user, setUser] = useState<User>();
@@ -66,14 +79,27 @@ function Main() {
                     minSize={400}
                     maxSize={1000}
                   >
-                    <ContentEditor showEditor={showEditor} />
+                    <ContentEditor />
                   </ReflexElement>
                 </ReflexContainer>
               </ResponsiveContainer>
             ) : (
               <ResponsiveContainer>
+                <MainMenu />
                 <List />
-                <ContentEditor showEditor={showEditor} />
+                <AnimatePresence initial={false}>
+                  {showEditor && (
+                    <AnimateEditor
+                      variants={editorVariants}
+                      animate="visible"
+                      initial="initial"
+                      exit="exit"
+                      transition={{ type: 'tween' }}
+                    >
+                      <ContentEditor />
+                    </AnimateEditor>
+                  )}
+                </AnimatePresence>
               </ResponsiveContainer>
             )}
           </>
@@ -92,4 +118,12 @@ const Wrapper = styled.div`
 const ResponsiveContainer = styled.div`
   display: flex;
   height: 100%;
+`;
+
+const AnimateEditor = styled(motion.div)`
+  z-index: 4;
+  width: 70%;
+  position: absolute;
+  height: calc(100% - 50px);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 15%);
 `;

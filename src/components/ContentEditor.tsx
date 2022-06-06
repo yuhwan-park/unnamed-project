@@ -8,11 +8,7 @@ import { setDoc } from 'firebase/firestore';
 import { useGetDocRef } from '../hooks';
 import { useMemo } from 'react';
 
-interface IEditorProps {
-  showEditor: boolean;
-}
-
-export default function ContentEditor({ showEditor }: IEditorProps) {
+export default function ContentEditor() {
   const [flag, setFlag] = useState(true);
   const [timer, setTimer] = useState<NodeJS.Timeout>();
   const params = useParams();
@@ -66,7 +62,7 @@ export default function ContentEditor({ showEditor }: IEditorProps) {
   }, [document, editorRef, flag]);
 
   return (
-    <Container className="show-editor-trigger" showEditor={showEditor}>
+    <Container className="show-editor-trigger">
       {params['id'] ? (
         <>
           <HeaderContainer>
@@ -111,16 +107,7 @@ const EditorTitle = styled.div`
   font-weight: 700;
 `;
 
-const Container = styled.div<IEditorProps>`
+const Container = styled.div`
   background-color: white;
   height: 100%;
-  @media (max-width: 1024px) {
-    z-index: 4;
-    width: 70%;
-    position: absolute;
-    height: calc(100% - 50px);
-    right: 0;
-    display: ${props => (props.showEditor ? 'block' : 'none')};
-    box-shadow: 0 6px 20px rgb(0 0 0 / 15%);
-  }
 `;

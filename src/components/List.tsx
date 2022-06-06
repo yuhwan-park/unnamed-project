@@ -67,14 +67,12 @@ export default function List() {
         ) : null}
 
         {notes.length ? (
-          <>
-            <ul>
-              <Title>노트</Title>
-              {notes.map(note => (
-                <Note key={note.id} note={note} />
-              ))}
-            </ul>
-          </>
+          <ul>
+            <Title>노트</Title>
+            {notes.map(note => (
+              <Note key={note.id} note={note} />
+            ))}
+          </ul>
         ) : null}
 
         {!documents.length && <h1>오늘은 할일이 없습니다!</h1>}

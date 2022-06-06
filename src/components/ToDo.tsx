@@ -6,7 +6,7 @@ import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { documentState } from '../atoms';
 import { useGetDocRef } from '../hooks';
-import { List, Title } from '../style/main-page';
+import { ListItemContainer, Title } from '../style/main-page';
 import ListMenu from './ListMenu';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -44,8 +44,8 @@ function ToDo({ todo }: DocumentData) {
   };
   return (
     <>
-      <List onClick={onClickList} className="show-editor-trigger">
-        <CheckBoxContainer>
+      <ListItemContainer>
+        <CheckBoxContainer className="show-editor-trigger">
           <CheckBox
             className="check-box"
             onClick={onClickCheckBox}
@@ -54,19 +54,19 @@ function ToDo({ todo }: DocumentData) {
             {todo.isDone ? <FontAwesomeIcon icon={faCheck} inverse /> : null}
           </CheckBox>
         </CheckBoxContainer>
-
         <ToDoTitle
+          className="show-editor-trigger"
           type="text"
           isDone={todo.isDone}
           defaultValue={todo.title}
+          onClick={onClickList}
           {...register(`todoTitle-${todo.id}`, {
             onBlur,
             onChange,
           })}
         />
-
         <ListMenu document={todo} />
-      </List>
+      </ListItemContainer>
     </>
   );
 }

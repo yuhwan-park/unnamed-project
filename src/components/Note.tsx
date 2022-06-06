@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { documentState } from '../atoms';
-import { List, Title } from '../style/main-page';
+import { ListItemContainer, Title } from '../style/main-page';
 import ListMenu from './ListMenu';
 import { useGetDocRef } from '../hooks';
 import { faNoteSticky } from '@fortawesome/free-solid-svg-icons';
@@ -15,9 +15,11 @@ export default function Note({ note }: DocumentData) {
   const docRef = useGetDocRef(note.id);
   const navigator = useNavigate();
   const { register } = useForm();
+
   const onClickList = () => {
     navigator(`/main/${note.id}`);
   };
+
   const onChange = (e: any) => {
     setDocument(notes =>
       notes.map(value =>
@@ -32,19 +34,21 @@ export default function Note({ note }: DocumentData) {
     }
   };
   return (
-    <List onClick={onClickList} className="show-editor-trigger">
-      <IconContainer>
+    <ListItemContainer>
+      <IconContainer onClick={onClickList} className="show-editor-trigger">
         <FontAwesomeIcon icon={faNoteSticky} className="sub-icon" />
       </IconContainer>
       <Title
+        className="show-editor-trigger"
         defaultValue={note.title}
+        onClick={onClickList}
         {...register('noteTitle', {
           onBlur,
           onChange,
         })}
       />
       <ListMenu document={note} />
-    </List>
+    </ListItemContainer>
   );
 }
 

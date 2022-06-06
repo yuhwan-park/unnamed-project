@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const List = styled.li`
+export const ListItemContainer = styled.li`
   position: relative;
   display: flex;
   align-items: center;
