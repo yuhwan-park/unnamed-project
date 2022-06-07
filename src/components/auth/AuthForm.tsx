@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import { useFormContext } from 'react-hook-form';
 import {
   ErrorMessage,
@@ -20,7 +22,7 @@ function AuthForm({ isSignUp }: IAuthFormProps) {
     <>
       {isSignUp ? (
         <InputContainer>
-          <i className="fa-solid fa-user"></i>
+          <FontAwesomeIcon icon={faUser} />
           <TextInput
             {...register('nickname')}
             type="text"
@@ -29,7 +31,7 @@ function AuthForm({ isSignUp }: IAuthFormProps) {
         </InputContainer>
       ) : null}
       <InputContainer>
-        <i className="fa-solid fa-envelope"></i>
+        <FontAwesomeIcon icon={faEnvelope} />
         <TextInput
           {...register('email', {
             required: {
@@ -49,7 +51,7 @@ function AuthForm({ isSignUp }: IAuthFormProps) {
         {errors.email?.message ? errors.email.message : null}
       </ErrorMessage>
       <InputContainer>
-        <i className="fa-solid fa-lock"></i>
+        <FontAwesomeIcon icon={faLock} />
         <TextInput
           {...register('password', {
             required: {

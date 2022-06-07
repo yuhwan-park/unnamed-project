@@ -3,9 +3,14 @@ import { DocumentData } from 'firebase/firestore';
 import { atom, selector } from 'recoil';
 import { IUserState } from 'types';
 
-export const userState = atom<IUserState | undefined>({
+export const userState = atom<IUserState>({
   key: 'user',
-  default: undefined,
+  default: {
+    displayName: '',
+    uid: '',
+    photoURL: '',
+    email: '',
+  },
 });
 
 export const paramState = atom({

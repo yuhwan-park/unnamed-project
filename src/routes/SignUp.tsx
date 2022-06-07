@@ -20,9 +20,12 @@ import {
   Message,
   Form,
 } from 'style/sign-page';
+import { useSetRecoilState } from 'recoil';
+import { userState } from 'atoms';
 
 function SignUp() {
   const [error, setError] = useState('');
+  const setUser = useSetRecoilState(userState);
   const navigator = useNavigate();
   const methods = useForm<IFormData>();
 
@@ -35,7 +38,9 @@ function SignUp() {
         password,
       );
       if (nickname) {
-        await updateProfile(userCredential.user, { displayName: nickname });
+        await updateProfile(userCredential.user, {
+          displayName: nickname,
+        });
       }
     } catch (err: any) {
       setError(err.message);

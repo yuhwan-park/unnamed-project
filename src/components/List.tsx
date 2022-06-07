@@ -30,17 +30,19 @@ export default function List() {
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
-      const docQurey = query(
-        collection(db, (user as User).uid, date, 'Document'),
-        orderBy('createdAt'),
-      );
-      const querySnapshot = await getDocs(docQurey);
+      if (user) {
+        const docQurey = query(
+          collection(db, (user as User).uid, date, 'Document'),
+          orderBy('createdAt'),
+        );
+        const querySnapshot = await getDocs(docQurey);
 
-      const tempArray: DocumentData[] = [];
-      querySnapshot.forEach(doc => {
-        tempArray.push(doc.data());
-      });
-      setDocuments(tempArray);
+        const tempArray: DocumentData[] = [];
+        querySnapshot.forEach(doc => {
+          tempArray.push(doc.data());
+        });
+        setDocuments(tempArray);
+      }
     });
   }, [date, setDocuments]);
   return (

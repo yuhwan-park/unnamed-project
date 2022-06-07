@@ -25,7 +25,7 @@ const editorVariants = {
 };
 
 function Main() {
-  const [user, setUser] = useRecoilState(userState);
+  const [userData, setUserData] = useRecoilState(userState);
   const [showEditor, setShowEditor] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
   const navigator = useNavigate();
@@ -40,14 +40,13 @@ function Main() {
   useEffect(() => {
     onAuthStateChanged(auth, user => {
       if (!user) {
-        setUser(undefined);
         navigator('/');
       } else {
         const { displayName, email, uid, photoURL } = user;
-        setUser({ displayName, email, uid, photoURL });
+        setUserData({ displayName, email, uid, photoURL });
       }
     });
-  }, [navigator, setUser]);
+  }, [navigator, setUserData]);
 
   useEffect(() => {
     const handleWindowResize = () => setWidth(window.innerWidth);
@@ -65,11 +64,10 @@ function Main() {
 
   return (
     <>
-      <Nav />
-
       <Wrapper onClick={onClickScreen}>
-        {user ? (
+        {userData ? (
           <>
+            <Nav />
             {width > 1024 ? (
               <ResponsiveContainer>
                 <OffCanvasMenu />

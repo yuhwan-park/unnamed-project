@@ -1,7 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear } from '@fortawesome/free-solid-svg-icons';
+import {
+  faGear,
+  faArrowRightFromBracket,
+} from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef, useState } from 'react';
 import { MenuButtonContainer, MenuContainer, MenuModal } from 'style/main-page';
+import { signOut } from 'firebase/auth';
+import { auth } from 'firebase-source';
 
 function UserAccountMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,6 +14,10 @@ function UserAccountMenu() {
 
   const onClickMenu = () => {
     setIsOpen(prev => !prev);
+  };
+
+  const onClickSignOut = async () => {
+    await signOut(auth);
   };
 
   useEffect(() => {
@@ -28,7 +37,13 @@ function UserAccountMenu() {
       <FontAwesomeIcon icon={faGear} className="toggle-menu-icon" />
       {isOpen ? (
         <MenuModal>
-          <MenuButtonContainer></MenuButtonContainer>
+          <MenuButtonContainer onClick={onClickSignOut}>
+            <FontAwesomeIcon
+              icon={faArrowRightFromBracket}
+              className="sub-icon"
+            />
+            <span>로그아웃</span>
+          </MenuButtonContainer>
         </MenuModal>
       ) : null}
     </MenuContainer>

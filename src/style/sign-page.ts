@@ -106,7 +106,7 @@ export const Form = styled.form`
 
 export const InputContainer = styled.div`
   position: relative;
-  i {
+  svg {
     position: absolute;
     top: 18px;
     left: 5px;
@@ -115,7 +115,7 @@ export const InputContainer = styled.div`
     transition: color 0.25s ease-in-out;
   }
   &:focus-within {
-    i {
+    svg {
       color: ${props => props.theme.dailColor.normal};
     }
   }
