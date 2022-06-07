@@ -7,9 +7,12 @@ import { useEffect, useRef, useState } from 'react';
 import { MenuButtonContainer, MenuContainer, MenuModal } from 'style/main-page';
 import { signOut } from 'firebase/auth';
 import { auth } from 'firebase-source';
+import { useSetRecoilState } from 'recoil';
+import { documentState } from 'atoms';
 
 function UserAccountMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const setDocuments = useSetRecoilState(documentState);
   const menuRef = useRef(null);
 
   const onClickMenu = () => {
@@ -18,6 +21,7 @@ function UserAccountMenu() {
 
   const onClickSignOut = async () => {
     await signOut(auth);
+    setDocuments([]);
   };
 
   useEffect(() => {

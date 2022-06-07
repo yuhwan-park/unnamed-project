@@ -1,4 +1,3 @@
-import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, doc, setDoc, Timestamp } from 'firebase/firestore';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -24,24 +23,23 @@ function ContentForm() {
     }
   };
 
-  const onToDoSubmit = ({ title }: ITaskFormData) => {
+  const onToDoSubmit = async ({ title }: ITaskFormData) => {
     setValue('title', '');
-    onAuthStateChanged(auth, async user => {
-      const docRef = doc(
-        collection(db, `${(user as User).uid}/${date}/Document`),
-      );
-      const data = {
-        id: docRef.id,
-        title,
-        content: '',
-        createdAt: Timestamp.fromDate(new Date()),
-        isDone: false,
-        isDeleted: false,
-        isNote,
-      };
-      setDocuments(prev => [...prev, data]);
-      await setDoc(docRef, data);
-    });
+    if (!auth.currentUser) return;
+    const docRef = doc(
+      collection(db, `${auth.currentUser.uid}/${date}/Document`),
+    );
+    const data = {
+      id: docRef.id,
+      title,
+      content: '',
+      createdAt: Timestamp.fromDate(new Date()),
+      isDone: false,
+      isDeleted: false,
+      isNote,
+    };
+    setDocuments(prev => [...prev, data]);
+    await setDoc(docRef, data);
   };
   return (
     <FormContainer onSubmit={handleSubmit(onToDoSubmit)}>

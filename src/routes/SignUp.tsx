@@ -20,12 +20,9 @@ import {
   Message,
   Form,
 } from 'style/sign-page';
-import { useSetRecoilState } from 'recoil';
-import { userState } from 'atoms';
 
 function SignUp() {
   const [error, setError] = useState('');
-  const setUser = useSetRecoilState(userState);
   const navigator = useNavigate();
   const methods = useForm<IFormData>();
 
