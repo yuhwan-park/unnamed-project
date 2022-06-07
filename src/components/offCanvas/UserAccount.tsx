@@ -4,11 +4,12 @@ import { userState } from 'atoms';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import UserAccountMenu from './UserAccountMenu';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { auth, storage } from 'firebase-source';
 import { v4 as uuidv4 } from 'uuid';
 import { updateProfile } from 'firebase/auth';
+import { FieldValues, useForm } from 'react-hook-form';
 
 const userIconStyle = {
   width: '25px',
@@ -21,10 +22,25 @@ const userIconStyle = {
 
 function UserAccount() {
   const fileRef = useRef<HTMLInputElement>(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [user, setUser] = useRecoilState(userState);
+  const { register, setFocus, handleSubmit } = useForm();
 
   const onClickProfileImage = () => {
     fileRef.current?.click();
+  };
+
+  const onClickDisplayName = () => {
+    setIsEditing(true);
+    setTimeout(() => setFocus('displayName'), 200);
+  };
+
+  const setDisplayName = async (value: string) => {
+    setUser(user => ({ ...user, displayName: value }));
+    setIsEditing(false);
+    if (auth.currentUser) {
+      await updateProfile(auth.currentUser, { displayName: value });
+    }
   };
 
   const storageImage = async (fileURL: string | ArrayBuffer) => {
@@ -52,6 +68,17 @@ function UserAccount() {
     };
     reader.readAsDataURL(file);
   };
+
+  const onBlurNameInput = async (e: any) => {
+    const value = e.target.value;
+    await setDisplayName(value);
+  };
+
+  const onSubmitNameInput = async (values: FieldValues) => {
+    const value = values.displayName;
+    await setDisplayName(value);
+  };
+
   return (
     <Wrapper>
       <ProfileImageContainer onClick={onClickProfileImage}>
@@ -68,7 +95,23 @@ function UserAccount() {
         ref={fileRef}
         onChange={onChangeFile}
       />
-      <UserName>{user?.displayName || user?.email || '익명'}</UserName>
+
+      {isEditing ? (
+        <form onSubmit={handleSubmit(onSubmitNameInput)}>
+          <DisplayNameInput
+            {...register('displayName', {
+              required: true,
+              onBlur: onBlurNameInput,
+            })}
+            defaultValue={user?.displayName || user?.email || '익명'}
+          />
+        </form>
+      ) : (
+        <UserName onClick={onClickDisplayName}>
+          {user?.displayName || user?.email || '익명'}
+        </UserName>
+      )}
+
       <UserAccountMenu />
     </Wrapper>
   );
@@ -115,10 +158,22 @@ const ProfileImageContainer = styled.div`
   }
 `;
 
+const DisplayNameInput = styled.input`
+  margin: 0 10px;
+  width: 60%;
+  background-color: rgb(244, 244, 244);
+  border: none;
+  border-bottom: 1px solid lightgray;
+  &:focus {
+    outline: none;
+  }
+`;
+
 const FileInput = styled.input`
   display: none;
 `;
 
 const UserName = styled.div`
+  cursor: pointer;
   padding: 0 10px;
 `;
