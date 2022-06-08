@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { DocumentData } from 'firebase/firestore';
+import { Params } from 'react-router-dom';
 import { atom, selector } from 'recoil';
 import { IMyList, IUserState } from 'types';
 
@@ -13,9 +14,9 @@ export const userState = atom<IUserState>({
   },
 });
 
-export const paramState = atom({
+export const paramState = atom<Params<string>>({
   key: 'param',
-  default: '',
+  default: {},
 });
 
 export const myListModalState = atom({
@@ -68,9 +69,19 @@ export const noteState = selector({
 export const selectedDocumentState = selector<DocumentData | undefined>({
   key: 'selectedDocumentSelector',
   get: ({ get }) => {
-    const id = get(paramState);
+    const params = get(paramState);
     const documents = get(documentState);
 
-    return documents.find(document => document.id === id);
+    return documents.find(document => document.id === params['id']);
+  },
+});
+
+export const selectedListState = selector({
+  key: 'selectedListSelector',
+  get: ({ get }) => {
+    const params = get(paramState);
+    const lists = get(myListsState);
+
+    return lists.find(list => list.id === params['listId']);
   },
 });

@@ -47,10 +47,8 @@ export default function ContentEditor() {
   };
 
   useEffect(() => {
-    if (params['id']) {
-      setFlag(true);
-      setParams(params['id']);
-    }
+    setFlag(true);
+    setParams(params);
   }, [params, setParams]);
 
   useEffect(() => {

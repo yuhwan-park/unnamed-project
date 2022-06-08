@@ -5,7 +5,6 @@ import { auth, db } from 'firebase-source';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import MyListItem from './MyListItem';
@@ -34,16 +33,12 @@ function MyList() {
     <>
       <MyListContainer>
         <MyListHeader>
-          <div>리스트</div>
+          <p>리스트</p>
           <FontAwesomeIcon icon={faPlus} onClick={onClickOpenModal} />
         </MyListHeader>
         <MyListContent>
           {myLists.length
-            ? myLists.map(list => (
-                <Link to={`/main/lists/${list.id}/tasks`} key={list.id}>
-                  <MyListItem list={list} />
-                </Link>
-              ))
+            ? myLists.map(list => <MyListItem key={list.id} list={list} />)
             : null}
         </MyListContent>
       </MyListContainer>
@@ -55,7 +50,7 @@ function MyList() {
 export default MyList;
 
 const MyListContainer = styled.div`
-  padding: 10px 0;
+  padding: 10px 20px;
 `;
 
 const MyListHeader = styled.div`
@@ -64,6 +59,7 @@ const MyListHeader = styled.div`
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
+  white-space: nowrap;
   &:hover {
     background-color: rgb(230, 230, 230);
     svg {
@@ -78,11 +74,14 @@ const MyListHeader = styled.div`
       color: rgba(0, 0, 0, 0.6);
     }
   }
+  p {
+    font-size: ${props => props.theme.fontSize.small};
+    font-weight: 600;
+  }
 `;
 
 const MyListContent = styled.div`
-  height: 300px;
-  padding: 0 20px;
+  height: fit-content;
   a {
     color: black;
   }

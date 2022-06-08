@@ -3,13 +3,20 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { dateSelector, documentState } from 'atoms';
+import {
+  dateSelector,
+  documentState,
+  paramState,
+  selectedListState,
+} from 'atoms';
 import { auth, db } from 'firebase-source';
 import { ITaskFormData } from 'types';
 
 function ContentForm() {
   const date = useRecoilValue(dateSelector);
   const setDocuments = useSetRecoilState(documentState);
+  const params = useRecoilValue(paramState);
+  const myList = useRecoilValue(selectedListState);
   const [isNote, setIsNote] = useState(false);
   const { register, handleSubmit, setValue } = useForm<ITaskFormData>();
 
@@ -46,7 +53,11 @@ function ContentForm() {
       <input
         type="text"
         {...register('title', { required: true })}
-        placeholder="할 일을 추가해보세요."
+        placeholder={
+          params['listId']
+            ? `"${myList?.title}"에 할 일을 추가해보세요`
+            : '할 일을 추가해보세요.'
+        }
       />
       <select onChange={onSelectChange}>
         <option value="toDo">할일</option>
