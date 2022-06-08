@@ -55,8 +55,8 @@ function ContentForm() {
         {...register('title', { required: true })}
         placeholder={
           params['listId']
-            ? `"${myList?.title}"에 할 일을 추가해보세요`
-            : '할 일을 추가해보세요.'
+            ? `"${myList?.title}"에 할 일 혹은 노트를 추가해보세요`
+            : '할 일 혹은 노트를 추가해보세요.'
         }
       />
       <select onChange={onSelectChange}>
