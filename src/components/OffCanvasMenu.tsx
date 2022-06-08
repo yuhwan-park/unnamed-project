@@ -3,21 +3,8 @@ import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { toggleMenuState } from 'atoms';
 import UserAccount from './offCanvas/UserAccount';
-
-const menuVariants = {
-  initial: {
-    width: 0,
-    opacity: 0,
-  },
-  visible: {
-    width: '400px',
-    opacity: 1,
-  },
-  exit: {
-    width: 0,
-    opacity: 0,
-  },
-};
+import { menuVariants } from 'variants';
+import MyList from './offCanvas/MyList';
 
 function OffCanvasMenu() {
   const toggleMenu = useRecoilValue(toggleMenuState);
@@ -26,6 +13,7 @@ function OffCanvasMenu() {
     <AnimatePresence initial={false}>
       {toggleMenu && (
         <Wrapper
+          key="offCanvas"
           variants={menuVariants}
           initial="initial"
           animate="visible"
@@ -33,6 +21,7 @@ function OffCanvasMenu() {
           transition={{ type: 'tween' }}
         >
           <UserAccount />
+          <MyList />
         </Wrapper>
       )}
     </AnimatePresence>

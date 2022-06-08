@@ -7,7 +7,7 @@ import UserAccountMenu from './UserAccountMenu';
 import { useRef, useState } from 'react';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { auth, storage } from 'firebase-source';
-import { v4 as uuidv4 } from 'uuid';
+import shortUUID from 'short-uuid';
 import { updateProfile } from 'firebase/auth';
 import { FieldValues, useForm } from 'react-hook-form';
 
@@ -44,7 +44,7 @@ function UserAccount() {
   };
 
   const storageImage = async (fileURL: string | ArrayBuffer) => {
-    const fileRef = ref(storage, `images/${uuidv4()}`);
+    const fileRef = ref(storage, `images/${shortUUID.generate()}`);
     await uploadString(fileRef, fileURL as string, 'data_url');
     const url = await getDownloadURL(fileRef);
     return url;
@@ -103,12 +103,12 @@ function UserAccount() {
               required: true,
               onBlur: onBlurNameInput,
             })}
-            defaultValue={user?.displayName || user?.email || '익명'}
+            defaultValue={user?.displayName || user?.email || ''}
           />
         </form>
       ) : (
         <UserName onClick={onClickDisplayName}>
-          {user?.displayName || user?.email || '익명'}
+          {user?.displayName || user?.email || ''}
         </UserName>
       )}
 

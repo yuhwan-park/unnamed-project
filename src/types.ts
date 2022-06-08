@@ -1,3 +1,5 @@
+import { Timestamp } from 'firebase/firestore';
+
 export interface IFormData {
   email: string;
   password: string;
@@ -17,4 +19,9 @@ export interface IUserState {
   uid: string;
   photoURL: string | null;
   email: string | null;
+}
+export interface IMyList {
+  title: string;
+  createdAt: Timestamp;
+  id: string;
 }

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { DocumentData } from 'firebase/firestore';
 import { atom, selector } from 'recoil';
-import { IUserState } from 'types';
+import { IMyList, IUserState } from 'types';
 
 export const userState = atom<IUserState>({
   key: 'user',
@@ -18,6 +18,11 @@ export const paramState = atom({
   default: '',
 });
 
+export const myListModalState = atom({
+  key: 'myListModal',
+  default: false,
+});
+
 export const dateState = atom<dayjs.Dayjs>({
   key: 'date',
   default: dayjs(),
@@ -26,6 +31,11 @@ export const dateState = atom<dayjs.Dayjs>({
 export const toggleMenuState = atom({
   key: 'toggleMenu',
   default: true,
+});
+
+export const myListsState = atom<IMyList[]>({
+  key: 'myLists',
+  default: [],
 });
 
 export const dateSelector = selector<string>({
