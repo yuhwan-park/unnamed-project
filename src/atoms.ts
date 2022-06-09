@@ -54,23 +54,6 @@ export const documentState = atom<DocumentData[]>({
   default: [],
 });
 
-export const doingTodoState = selector({
-  key: 'doingTodoSelector',
-  get: ({ get }) =>
-    get(documentState).filter(document => !document.isDone && !document.isNote),
-});
-
-export const doneTodoState = selector({
-  key: 'doneTodoSelector',
-  get: ({ get }) =>
-    get(documentState).filter(document => document.isDone && !document.isNote),
-});
-
-export const noteState = selector({
-  key: 'noteSelector',
-  get: ({ get }) => get(documentState).filter(document => document.isNote),
-});
-
 export const selectedDocumentState = selector<DocumentData | undefined>({
   key: 'selectedDocumentSelector',
   get: ({ get }) => {

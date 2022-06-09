@@ -11,7 +11,11 @@ import ListMenu from './ListMenu';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-function TodoItem({ todo }: DocumentData) {
+interface ITodoItemProps {
+  todo: DocumentData;
+}
+
+function TodoItem({ todo }: ITodoItemProps) {
   const setDocument = useSetRecoilState(documentState);
   const docRef = useGetDocRef(todo.id);
   const navigator = useNavigate();
