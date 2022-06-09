@@ -1,4 +1,4 @@
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import {
   collection,
   DocumentData,
@@ -9,7 +9,12 @@ import {
 import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { dateSelector, documentState, selectedListState } from 'atoms';
+import {
+  dateSelector,
+  documentState,
+  myListDocsState,
+  selectedListState,
+} from 'atoms';
 import { auth, db } from 'firebase-source';
 import ContentForm from 'components/list/ContentForm';
 import ListConstructor from './ListConstructor';
@@ -17,31 +22,52 @@ import ListConstructor from './ListConstructor';
 export default function List() {
   const date = useRecoilValue(dateSelector);
   const myLists = useRecoilValue(selectedListState);
+  const [myListDocs, setMyListDocs] = useRecoilState(myListDocsState);
   const [documents, setDocuments] = useRecoilState(documentState);
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
-      if (user) {
-        const docQurey = query(
-          collection(db, (user as User).uid, date, 'Document'),
-          orderBy('createdAt'),
-        );
-        const querySnapshot = await getDocs(docQurey);
+      if (!user) return;
+      const docQurey = query(
+        collection(db, user.uid, date, 'Document'),
+        orderBy('createdAt'),
+      );
+      const querySnapshot = await getDocs(docQurey);
 
-        const tempArray: DocumentData[] = [];
-        querySnapshot.forEach(doc => {
-          tempArray.push(doc.data());
-        });
-        setDocuments(tempArray);
-      }
+      const tempArray: DocumentData[] = [];
+      querySnapshot.forEach(doc => {
+        tempArray.push(doc.data());
+      });
+      setDocuments(tempArray);
     });
   }, [date, setDocuments]);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, async user => {
+      if (!user || !myLists) return;
+      const docQurey = query(
+        collection(db, user.uid, 'Lists', myLists.id),
+        orderBy('createdAt'),
+      );
+      const querySnapshot = await getDocs(docQurey);
+
+      const tempArray: DocumentData[] = [];
+      querySnapshot.forEach(doc => {
+        tempArray.push(doc.data());
+      });
+      setMyListDocs(tempArray);
+    });
+  }, [myLists, setMyListDocs]);
   return (
     <Wrapper>
       <ContentForm />
 
       <ListContainer>
-        <ListConstructor documentData={documents} />
+        {myLists ? (
+          <ListConstructor documentData={myListDocs} />
+        ) : (
+          <ListConstructor documentData={documents} />
+        )}
       </ListContainer>
     </Wrapper>
   );

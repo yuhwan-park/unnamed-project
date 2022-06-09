@@ -1,11 +1,11 @@
 import React from 'react';
-import { DocumentData, setDoc } from 'firebase/firestore';
+import { DocumentData, updateDoc } from 'firebase/firestore';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { documentState } from 'atoms';
-import { useGetDocRef } from 'hooks';
+import { selectedListState } from 'atoms';
+import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
 import { IconContainer, ListItemContainer, Title } from 'style/main-page';
 import ListMenu from './ListMenu';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
@@ -16,35 +16,40 @@ interface ITodoItemProps {
 }
 
 function TodoItem({ todo }: ITodoItemProps) {
-  const setDocument = useSetRecoilState(documentState);
+  const updator = useUpdateDocs();
+  const myList = useRecoilValue(selectedListState);
   const docRef = useGetDocRef(todo.id);
+  const ListDocRef = useGetListDocRef(myList?.id, todo.id);
   const navigator = useNavigate();
   const { register } = useForm();
 
   const onClickCheckBox = async () => {
-    setDocument(todos =>
-      todos.map(value =>
-        value.id === todo.id ? { ...value, isDone: !todo.isDone } : value,
-      ),
-    );
-    if (docRef) await setDoc(docRef, { isDone: !todo.isDone }, { merge: true });
+    updator(todo.id, 'isDone', !todo.isDone);
+    if (myList) {
+      if (ListDocRef) await updateDoc(ListDocRef, { isDone: !todo.isDone });
+    } else {
+      if (docRef) await updateDoc(docRef, { isDone: !todo.isDone });
+    }
   };
 
   const onClickList = () => {
-    navigator(`/main/${todo.id}`);
+    if (myList) {
+      navigator(`/main/lists/${myList.id}/tasks/${todo.id}`);
+    } else {
+      navigator(`/main/${todo.id}`);
+    }
   };
 
   const onChange = (e: any) => {
-    setDocument(todos =>
-      todos.map(value =>
-        value.id === todo.id ? { ...value, title: e.target.value } : value,
-      ),
-    );
+    updator(todo.id, 'title', e.target.value);
   };
 
   const onBlur = async (e: any) => {
-    if (docRef)
-      await setDoc(docRef, { title: e.target.value }, { merge: true });
+    if (myList) {
+      if (ListDocRef) await updateDoc(ListDocRef, { title: e.target.value });
+    } else {
+      if (docRef) await updateDoc(docRef, { title: e.target.value });
+    }
   };
   return (
     <>

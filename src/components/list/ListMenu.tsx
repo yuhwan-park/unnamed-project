@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { deleteDoc, DocumentData, setDoc } from 'firebase/firestore';
+import { deleteDoc, DocumentData, updateDoc } from 'firebase/firestore';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
-import { documentState } from 'atoms';
-import { useGetDocRef } from 'hooks';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { documentState, myListDocsState, selectedListState } from 'atoms';
+import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
 import {
   faTrashCan,
   faEllipsis,
@@ -13,29 +13,39 @@ import {
 import { MenuButtonContainer, MenuContainer, MenuModal } from 'style/main-page';
 
 export default function ListMenu({ item }: DocumentData) {
+  const [isOpen, setIsOpen] = useState(false);
   const setDocument = useSetRecoilState(documentState);
+  const setMyListDocs = useSetRecoilState(myListDocsState);
+  const myList = useRecoilValue(selectedListState);
   const navigator = useNavigate();
   const menuRef = useRef(null);
+  const updator = useUpdateDocs();
   const docRef = useGetDocRef(item.id);
-  const [isOpen, setIsOpen] = useState(false);
+  const ListDocRef = useGetListDocRef(myList?.id, item.id);
 
   const onClickMenu = () => {
     setIsOpen(prev => !prev);
   };
 
   const onClickDelete = async () => {
-    setDocument(todos => todos.filter(todo => item.id !== todo.id));
-    if (docRef) await deleteDoc(docRef);
-    navigator('/main');
+    setDocument(todos => todos.filter(todo => todo.id !== item.id));
+    setMyListDocs(docs => docs.filter(doc => doc.id !== item.id));
+    if (myList) {
+      if (ListDocRef) await deleteDoc(ListDocRef);
+      navigator(`/main/lists/${myList.id}/tasks`);
+    } else {
+      if (docRef) await deleteDoc(docRef);
+      navigator('/main');
+    }
   };
 
   const onClickConvert = async () => {
-    setDocument(docs =>
-      docs.map(value =>
-        value.id === item.id ? { ...value, isNote: !item.isNote } : value,
-      ),
-    );
-    if (docRef) await setDoc(docRef, { isNote: !item.isNote }, { merge: true });
+    updator(item.id, 'isNote', !item.isNote);
+    if (myList) {
+      if (ListDocRef) await updateDoc(ListDocRef, { isNote: !item.isNote });
+    } else {
+      if (docRef) await updateDoc(docRef, { isNote: !item.isNote });
+    }
   };
 
   useEffect(() => {

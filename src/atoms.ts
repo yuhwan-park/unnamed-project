@@ -29,9 +29,23 @@ export const dateState = atom<dayjs.Dayjs>({
   default: dayjs(),
 });
 
+export const dateSelector = selector<string>({
+  key: 'dateSelector',
+  get: ({ get }) => get(dateState).format('YYYYMMDD'),
+});
+
 export const toggleMenuState = atom({
   key: 'toggleMenu',
   default: true,
+});
+
+// ******************
+// * Document State *
+// ******************
+
+export const documentState = atom<DocumentData[]>({
+  key: 'todo',
+  default: [],
 });
 
 export const myListsState = atom<IMyList[]>({
@@ -44,22 +58,16 @@ export const myListDocsState = atom<DocumentData[]>({
   default: [],
 });
 
-export const dateSelector = selector<string>({
-  key: 'dateSelector',
-  get: ({ get }) => get(dateState).format('YYYYMMDD'),
-});
-
-export const documentState = atom<DocumentData[]>({
-  key: 'todo',
-  default: [],
-});
-
 export const selectedDocumentState = selector<DocumentData | undefined>({
   key: 'selectedDocumentSelector',
   get: ({ get }) => {
     const params = get(paramState);
     const documents = get(documentState);
+    const myListDocs = get(myListDocsState);
 
+    if (params['listId']) {
+      return myListDocs.find(document => document.id === params['id']);
+    }
     return documents.find(document => document.id === params['id']);
   },
 });

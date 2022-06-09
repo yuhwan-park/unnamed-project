@@ -3,20 +3,22 @@ import { Editor } from '@toast-ui/react-editor';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { documentState, paramState, selectedDocumentState } from 'atoms';
-import { setDoc } from 'firebase/firestore';
-import { useGetDocRef } from 'hooks';
+import { paramState, selectedDocumentState, selectedListState } from 'atoms';
+import { updateDoc } from 'firebase/firestore';
+import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
 import { useMemo } from 'react';
 
 export default function ContentEditor() {
   const [flag, setFlag] = useState(true);
   const [timer, setTimer] = useState<NodeJS.Timeout>();
+  const myList = useRecoilValue(selectedListState);
+  const setParams = useSetRecoilState(paramState);
+  const document = useRecoilValue(selectedDocumentState);
   const params = useParams();
+  const updator = useUpdateDocs();
   const editorRef = useMemo(() => React.createRef<Editor>(), []);
   const docRef = useGetDocRef(params['id']);
-  const setParams = useSetRecoilState(paramState);
-  const setDocuments = useSetRecoilState(documentState);
-  const document = useRecoilValue(selectedDocumentState);
+  const ListDocRef = useGetListDocRef(myList?.id, params['id']);
 
   const onKeyUpEditor = () => {
     const content = editorRef.current?.getInstance().getMarkdown();
@@ -24,12 +26,12 @@ export default function ContentEditor() {
       clearTimeout(timer);
     }
     const newTimer = setTimeout(async () => {
-      setDocuments(document =>
-        document.map(value =>
-          value.id === params['id'] ? { ...value, content } : value,
-        ),
-      );
-      if (docRef) await setDoc(docRef, { content }, { merge: true });
+      updator(params['id'], 'content', content);
+      if (myList) {
+        if (ListDocRef) await updateDoc(ListDocRef, { content });
+      } else {
+        if (docRef) await updateDoc(docRef, { content });
+      }
     }, 1000);
     setTimer(newTimer);
   };
@@ -37,12 +39,12 @@ export default function ContentEditor() {
   const onBlurEditor = () => {
     const content = editorRef.current?.getInstance().getMarkdown();
     setTimeout(async () => {
-      setDocuments(document =>
-        document.map(value =>
-          value.id === params['id'] ? { ...value, content } : value,
-        ),
-      );
-      if (docRef) await setDoc(docRef, { content }, { merge: true });
+      updator(params['id'], 'content', content);
+      if (myList) {
+        if (ListDocRef) await updateDoc(ListDocRef, { content });
+      } else {
+        if (docRef) await updateDoc(docRef, { content });
+      }
     }, 100);
   };
 
@@ -54,7 +56,7 @@ export default function ContentEditor() {
   useEffect(() => {
     if (flag && document) {
       // 페이지 로드 & ID 파라미터가 바뀔때만 실행되게 분기처리
-      editorRef.current?.getInstance().setMarkdown(document?.content, false);
+      editorRef.current?.getInstance().setMarkdown(document.content, false);
       setFlag(false);
     }
   }, [document, editorRef, flag]);
