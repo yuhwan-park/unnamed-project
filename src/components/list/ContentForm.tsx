@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import {
   dateSelector,
   documentState,
-  paramState,
+  myListDocsState,
   selectedListState,
 } from 'atoms';
 import { auth, db } from 'firebase-source';
@@ -15,7 +15,7 @@ import { ITaskFormData } from 'types';
 function ContentForm() {
   const date = useRecoilValue(dateSelector);
   const setDocuments = useSetRecoilState(documentState);
-  const params = useRecoilValue(paramState);
+  const setMyListDocs = useSetRecoilState(myListDocsState);
   const myList = useRecoilValue(selectedListState);
   const [isNote, setIsNote] = useState(false);
   const { register, handleSubmit, setValue } = useForm<ITaskFormData>();
@@ -33,9 +33,9 @@ function ContentForm() {
   const onToDoSubmit = async ({ title }: ITaskFormData) => {
     setValue('title', '');
     if (!auth.currentUser) return;
-    const docRef = doc(
-      collection(db, `${auth.currentUser.uid}/${date}/Document`),
-    );
+    const docRef = myList
+      ? doc(collection(db, `${auth.currentUser.uid}/Lists/${myList.id}`))
+      : doc(collection(db, `${auth.currentUser.uid}/${date}/Document`));
     const data = {
       id: docRef.id,
       title,
@@ -45,7 +45,11 @@ function ContentForm() {
       isDeleted: false,
       isNote,
     };
-    setDocuments(prev => [...prev, data]);
+    if (myList) {
+      setMyListDocs(prev => [...prev, data]);
+    } else {
+      setDocuments(prev => [...prev, data]);
+    }
     await setDoc(docRef, data);
   };
   return (
@@ -54,7 +58,7 @@ function ContentForm() {
         type="text"
         {...register('title', { required: true })}
         placeholder={
-          params['listId']
+          myList
             ? `"${myList?.title}"에 할 일 혹은 노트를 추가해보세요`
             : '할 일 혹은 노트를 추가해보세요.'
         }

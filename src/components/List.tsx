@@ -15,6 +15,7 @@ import {
   doingTodoState,
   doneTodoState,
   noteState,
+  selectedListState,
 } from 'atoms';
 import { auth, db } from 'firebase-source';
 import NoteItem from 'components/list/NoteItem';
@@ -26,8 +27,9 @@ export default function List() {
   const doingTodo = useRecoilValue(doingTodoState);
   const doneTodo = useRecoilValue(doneTodoState);
   const notes = useRecoilValue(noteState);
+  const myLists = useRecoilValue(selectedListState);
   const [documents, setDocuments] = useRecoilState(documentState);
-
+  console.log(myLists);
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
       if (user) {
@@ -50,32 +52,32 @@ export default function List() {
       <ContentForm />
 
       <ListContainer>
-        {doingTodo.length ? (
+        {Boolean(doingTodo.length) && (
           <ul>
             <Title>할일</Title>
             {doingTodo.map(todo => (
               <TodoItem key={todo.id} todo={todo} />
             ))}
           </ul>
-        ) : null}
+        )}
 
-        {doneTodo.length ? (
+        {Boolean(doneTodo.length) && (
           <ul>
             <Title>완료</Title>
             {doneTodo.map(todo => (
               <TodoItem key={todo.id} todo={todo} />
             ))}
           </ul>
-        ) : null}
+        )}
 
-        {notes.length ? (
+        {Boolean(notes.length) && (
           <ul>
             <Title>노트</Title>
             {notes.map(note => (
               <NoteItem key={note.id} note={note} />
             ))}
           </ul>
-        ) : null}
+        )}
 
         {!documents.length && <h1>오늘은 할일이 없습니다!</h1>}
       </ListContainer>

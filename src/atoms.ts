@@ -39,6 +39,11 @@ export const myListsState = atom<IMyList[]>({
   default: [],
 });
 
+export const myListDocsState = atom<DocumentData[]>({
+  key: 'myListDocs',
+  default: [],
+});
+
 export const dateSelector = selector<string>({
   key: 'dateSelector',
   get: ({ get }) => get(dateState).format('YYYYMMDD'),
