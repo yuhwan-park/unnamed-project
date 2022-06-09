@@ -2,8 +2,8 @@ import React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { dateState, toggleMenuState } from 'atoms';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { dateState, selectedListState, toggleMenuState } from 'atoms';
 import {
   faAngleLeft,
   faBars,
@@ -34,6 +34,7 @@ function Nav() {
   const [date, setDate] = useRecoilState(dateState);
   const [isBack, setIsBack] = useState(false);
   const setToggleMenu = useSetRecoilState(toggleMenuState);
+  const myList = useRecoilValue(selectedListState);
   const navigator = useNavigate();
   const onClickNext = () => {
     setIsBack(false);
@@ -53,25 +54,31 @@ function Nav() {
       <MenuIcon onClick={onClickMenuIcon}>
         <FontAwesomeIcon icon={faBars} />
       </MenuIcon>
-      <PrevButton onClick={onClickPrev}>
-        <FontAwesomeIcon icon={faAngleLeft} />
-      </PrevButton>
-      <AnimatePresence custom={isBack} initial={false}>
-        <Today
-          custom={isBack}
-          key={date.format('M/D')}
-          variants={dateVariants}
-          initial="entry"
-          animate="visible"
-          exit="exit"
-          transition={{ type: 'tween' }}
-        >
-          {date.format('M월 D일')}
-        </Today>
-      </AnimatePresence>
-      <NextButton onClick={onClickNext}>
-        <FontAwesomeIcon icon={faAngleRight} />
-      </NextButton>
+      {myList ? (
+        <Today>{myList.title}</Today>
+      ) : (
+        <>
+          <PrevButton onClick={onClickPrev}>
+            <FontAwesomeIcon icon={faAngleLeft} />
+          </PrevButton>
+          <AnimatePresence custom={isBack} initial={false}>
+            <Today
+              custom={isBack}
+              key={date.format('M/D')}
+              variants={dateVariants}
+              initial="entry"
+              animate="visible"
+              exit="exit"
+              transition={{ type: 'tween' }}
+            >
+              {date.format('M월 D일')}
+            </Today>
+          </AnimatePresence>
+          <NextButton onClick={onClickNext}>
+            <FontAwesomeIcon icon={faAngleRight} />
+          </NextButton>
+        </>
+      )}
     </Wrapper>
   );
 }
