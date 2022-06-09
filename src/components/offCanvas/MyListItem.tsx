@@ -1,9 +1,11 @@
 import styled from 'styled-components';
-import { faListUl, faEllipsis } from '@fortawesome/free-solid-svg-icons';
+import { faListUl } from '@fortawesome/free-solid-svg-icons';
 import { IMyList } from 'types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import MyListMenu from './MyListMenu';
+import { MenuIcon } from 'style/main-page';
 
 interface IMyListItemProps {
   list: IMyList;
@@ -13,15 +15,17 @@ function MyListItem({ list }: IMyListItemProps) {
   const navigator = useNavigate();
   const onClickListItem = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
-    if (target.classList.contains('menu-icon')) return;
+    if (target.classList.contains('toggle-menu-icon')) return;
     navigator(`/main/lists/${list.id}/tasks`);
   };
 
   return (
     <Wrapper onClick={onClickListItem}>
-      <FontAwesomeIcon icon={faListUl} />
+      <MenuIcon>
+        <FontAwesomeIcon icon={faListUl} />
+      </MenuIcon>
       <p>{list.title}</p>
-      <FontAwesomeIcon icon={faEllipsis} className="menu-icon" />
+      <MyListMenu list={list} />
     </Wrapper>
   );
 }
@@ -34,20 +38,8 @@ const Wrapper = styled.div`
   cursor: pointer;
   &:hover {
     background-color: rgb(230, 230, 230);
-    .menu-icon {
+    .toggle-menu-icon {
       opacity: 1;
-    }
-  }
-  svg {
-    color: rgba(0, 0, 0, 0.3);
-    padding: 0 10px;
-  }
-  .menu-icon {
-    opacity: 0;
-    position: absolute;
-    right: 0;
-    &:hover {
-      color: rgba(0, 0, 0, 0.8);
     }
   }
   p {

@@ -71,3 +71,10 @@ export const MenuModal = styled.div`
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
   z-index: 1;
 `;
+
+export const MenuIcon = styled.div`
+  svg {
+    color: rgba(0, 0, 0, 0.3);
+    padding: 0 10px;
+  }
+`;

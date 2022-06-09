@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { deleteDoc, DocumentData, updateDoc } from 'firebase/firestore';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { documentState, myListDocsState, selectedListState } from 'atoms';
@@ -18,7 +18,6 @@ export default function ListMenu({ item }: DocumentData) {
   const setMyListDocs = useSetRecoilState(myListDocsState);
   const myList = useRecoilValue(selectedListState);
   const navigator = useNavigate();
-  const menuRef = useRef(null);
   const updator = useUpdateDocs();
   const docRef = useGetDocRef(item.id);
   const ListDocRef = useGetListDocRef(myList?.id, item.id);
@@ -49,20 +48,15 @@ export default function ListMenu({ item }: DocumentData) {
   };
 
   useEffect(() => {
-    const handleClickOutSide = (e: any) => {
-      if (
-        menuRef.current &&
-        !(menuRef.current as HTMLDivElement).contains(e.target)
-      ) {
-        setIsOpen(false);
-      }
+    const handleClickOutSide = () => {
+      setIsOpen(false);
     };
     document.addEventListener('mousedown', handleClickOutSide);
     return () => document.removeEventListener('mousedown', handleClickOutSide);
   }, []);
 
   return (
-    <MenuContainer onClick={onClickMenu} ref={menuRef}>
+    <MenuContainer onClick={onClickMenu}>
       <FontAwesomeIcon icon={faEllipsis} className="toggle-menu-icon" />
       {isOpen ? (
         <MenuModal>
