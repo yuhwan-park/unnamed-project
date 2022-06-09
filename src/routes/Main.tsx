@@ -1,6 +1,6 @@
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { auth } from 'firebase-source';
 import Nav from 'components/Nav';
 import List from 'components/List';
@@ -9,8 +9,8 @@ import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import ContentEditor from 'components/ContentEditor';
 import { AnimatePresence, motion } from 'framer-motion';
 import OffCanvasMenu from 'components/OffCanvasMenu';
-import { useRecoilState } from 'recoil';
-import { userState } from 'atoms';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { paramState, userState } from 'atoms';
 
 const editorVariants = {
   initial: {
@@ -28,7 +28,9 @@ function Main() {
   const [userData, setUserData] = useRecoilState(userState);
   const [showEditor, setShowEditor] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
+  const setParams = useSetRecoilState(paramState);
   const navigator = useNavigate();
+  const params = useParams();
 
   const onClickScreen = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
@@ -36,6 +38,10 @@ function Main() {
     if (target.closest('.check-box')) return;
     setShowEditor(Boolean(target.closest('.show-editor-trigger')));
   };
+
+  useEffect(() => {
+    setParams(params);
+  }, [params, setParams]);
 
   useEffect(() => {
     onAuthStateChanged(auth, user => {
@@ -67,7 +73,7 @@ function Main() {
       <Wrapper onClick={onClickScreen}>
         {userData ? (
           <>
-            <Nav />
+            <Nav width={width} />
             {width > 1024 ? (
               <ResponsiveContainer>
                 <OffCanvasMenu />

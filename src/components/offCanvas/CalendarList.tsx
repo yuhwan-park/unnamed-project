@@ -27,6 +27,7 @@ const DateListContainer = styled.div`
   padding: 20px 10px;
   margin: 0 20px;
   border-radius: 4px;
+  white-space: nowrap;
   &:hover {
     background-color: rgb(230, 230, 230);
   }

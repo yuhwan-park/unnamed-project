@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import { Editor } from '@toast-ui/react-editor';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { paramState, selectedDocumentState, selectedListState } from 'atoms';
 import { updateDoc } from 'firebase/firestore';
 import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
@@ -12,9 +11,8 @@ export default function ContentEditor() {
   const [flag, setFlag] = useState(true);
   const [timer, setTimer] = useState<NodeJS.Timeout>();
   const myList = useRecoilValue(selectedListState);
-  const setParams = useSetRecoilState(paramState);
+  const params = useRecoilValue(paramState);
   const document = useRecoilValue(selectedDocumentState);
-  const params = useParams();
   const updator = useUpdateDocs();
   const editorRef = useMemo(() => React.createRef<Editor>(), []);
   const docRef = useGetDocRef(params['id']);
@@ -50,8 +48,7 @@ export default function ContentEditor() {
 
   useEffect(() => {
     setFlag(true);
-    setParams(params);
-  }, [params, setParams]);
+  }, [params]);
 
   useEffect(() => {
     if (flag && document) {

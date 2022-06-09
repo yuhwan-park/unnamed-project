@@ -75,6 +75,6 @@ export const MenuModal = styled.div`
 export const MenuIcon = styled.div`
   svg {
     color: rgba(0, 0, 0, 0.3);
-    padding: 0 10px;
+    padding-right: 10px;
   }
 `;

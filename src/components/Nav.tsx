@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -30,7 +30,7 @@ const dateVariants = {
   }),
 };
 
-function Nav() {
+function Nav({ width }: { width: number }) {
   const [date, setDate] = useRecoilState(dateState);
   const [isBack, setIsBack] = useState(false);
   const setToggleMenu = useSetRecoilState(toggleMenuState);
@@ -49,6 +49,15 @@ function Nav() {
   const onClickMenuIcon = () => {
     setToggleMenu(prev => !prev);
   };
+
+  useEffect(() => {
+    if (width < 1024) {
+      setToggleMenu(false);
+    } else {
+      setToggleMenu(true);
+    }
+  }, [setToggleMenu, width]);
+
   return (
     <Wrapper>
       <MenuIcon onClick={onClickMenuIcon}>
