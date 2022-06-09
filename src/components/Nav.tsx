@@ -30,7 +30,7 @@ const dateVariants = {
   }),
 };
 
-function Nav({ width }: { width: number }) {
+function Nav({ isWide }: { isWide: boolean }) {
   const [date, setDate] = useRecoilState(dateState);
   const [isBack, setIsBack] = useState(false);
   const setToggleMenu = useSetRecoilState(toggleMenuState);
@@ -51,12 +51,12 @@ function Nav({ width }: { width: number }) {
   };
 
   useEffect(() => {
-    if (width < 1024) {
-      setToggleMenu(false);
-    } else {
+    if (isWide) {
       setToggleMenu(true);
+    } else {
+      setToggleMenu(false);
     }
-  }, [setToggleMenu, width]);
+  }, [setToggleMenu, isWide]);
 
   return (
     <Wrapper>

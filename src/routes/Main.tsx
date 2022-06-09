@@ -27,14 +27,14 @@ const editorVariants = {
 function Main() {
   const [userData, setUserData] = useRecoilState(userState);
   const [showEditor, setShowEditor] = useState(false);
-  const [width, setWidth] = useState(window.innerWidth);
+  const [isWide, setIsWide] = useState(true);
   const setParams = useSetRecoilState(paramState);
   const navigator = useNavigate();
   const params = useParams();
 
   const onClickScreen = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
-    if (width > 1024) return;
+    if (isWide) return;
     if (target.closest('.check-box')) return;
     setShowEditor(Boolean(target.closest('.show-editor-trigger')));
   };
@@ -55,7 +55,13 @@ function Main() {
   }, [navigator, setUserData]);
 
   useEffect(() => {
-    const handleWindowResize = () => setWidth(window.innerWidth);
+    const handleWindowResize = () => {
+      if (window.innerWidth > 1024) {
+        setIsWide(true);
+      } else {
+        setIsWide(false);
+      }
+    };
     window.addEventListener('resize', handleWindowResize);
     return () => window.removeEventListener('resize', handleWindowResize);
   }, []);
@@ -73,8 +79,8 @@ function Main() {
       <Wrapper onClick={onClickScreen}>
         {userData ? (
           <>
-            <Nav width={width} />
-            {width > 1024 ? (
+            <Nav isWide={isWide} />
+            {isWide ? (
               <ResponsiveContainer>
                 <OffCanvasMenu />
                 <ReflexContainer orientation="vertical">
