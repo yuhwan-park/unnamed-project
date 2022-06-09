@@ -1,10 +1,17 @@
-import { myListModalState, myListsState } from 'atoms';
+import { myListModalSelector, myListModalState, myListsState } from 'atoms';
 import { auth, db } from 'firebase-source';
-import { arrayUnion, doc, setDoc, Timestamp } from 'firebase/firestore';
+import {
+  arrayRemove,
+  arrayUnion,
+  doc,
+  setDoc,
+  Timestamp,
+  updateDoc,
+} from 'firebase/firestore';
 import { motion } from 'framer-motion';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FieldValues, useForm } from 'react-hook-form';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import shortUUID from 'short-uuid';
 import { modalCoverVariants, modalVariants } from 'variants';
@@ -13,6 +20,7 @@ import { ErrorMessage } from 'style/sign-page';
 
 function MyListModal() {
   const setToggleModal = useSetRecoilState(myListModalState);
+  const modalKind = useRecoilValue(myListModalSelector);
   const [myLists, setMyLists] = useRecoilState(myListsState);
   const {
     register,
@@ -23,10 +31,10 @@ function MyListModal() {
   } = useForm();
 
   const onClickCloseModal = () => {
-    setToggleModal(false);
+    setToggleModal(null);
   };
 
-  const onSubmit = async ({ title }: FieldValues) => {
+  const createList = async ({ title }: FieldValues) => {
     const docRef = doc(db, `${auth.currentUser?.uid}/Lists`);
     const listsName = myLists.map(list => list.title);
     if (listsName.includes(title)) {
@@ -43,44 +51,88 @@ function MyListModal() {
       id: shortUUID.generate(),
     };
     setMyLists(prev => [...prev, listData]);
-    setToggleModal(false);
+    setToggleModal(null);
     await setDoc(docRef, { lists: arrayUnion(listData) }, { merge: true });
   };
 
+  const deleteList = async (id: string) => {
+    if (!auth.currentUser) return;
+    const docRef = doc(db, `${auth.currentUser.uid}/Lists`);
+    const needDeleteList = myLists.find(li => li.id === id);
+    setMyLists(lists => lists.filter(li => li.id !== id));
+    setToggleModal(null);
+    await updateDoc(docRef, { lists: arrayRemove(needDeleteList) });
+  };
+
   return (
-    <ListModalCover
-      key="listModal"
-      variants={modalCoverVariants}
-      initial="initial"
-      animate="visible"
-    >
-      <ListModal variants={modalVariants}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <ListModalHeader>
-            <h1>리스트 추가</h1>
-            <FontAwesomeIcon icon={faX} />
-          </ListModalHeader>
-          <ListModalBody>
-            <ListModalInput
-              type="text"
-              placeholder="리스트 이름을 적어주세요"
-              {...register('title', { required: '필수 항목입니다' })}
-            />
-            {errors.title && (
-              <ErrorMessage>{errors.title.message}</ErrorMessage>
+    <>
+      {modalKind && (
+        <ListModalCover
+          key="listModal"
+          variants={modalCoverVariants}
+          initial="initial"
+          animate="visible"
+        >
+          <ListModal variants={modalVariants}>
+            {(modalKind[0] === 'Create' || modalKind[0] === 'Edit') && (
+              <form onSubmit={handleSubmit(createList)}>
+                <ListModalHeader>
+                  <h1>리스트 추가</h1>
+                  <FontAwesomeIcon icon={faX} onClick={onClickCloseModal} />
+                </ListModalHeader>
+                <ListModalBody>
+                  <ListModalInput
+                    type="text"
+                    placeholder="리스트 이름을 적어주세요"
+                    {...register('title', { required: '필수 항목입니다' })}
+                  />
+                  {errors.title && (
+                    <ErrorMessage>{errors.title.message}</ErrorMessage>
+                  )}
+                </ListModalBody>
+                <ListModalFooter>
+                  <SubmitButton type="submit" value="확인" />
+                  <CancleButton
+                    type="button"
+                    value="취소"
+                    onClick={onClickCloseModal}
+                  />
+                </ListModalFooter>
+              </form>
             )}
-          </ListModalBody>
-          <ListModalFooter>
-            <SubmitButton type="submit" value="확인" />
-            <CancleButton
-              type="button"
-              value="취소"
-              onClick={onClickCloseModal}
-            />
-          </ListModalFooter>
-        </form>
-      </ListModal>
-    </ListModalCover>
+
+            {modalKind[0] === 'Delete' && (
+              <>
+                <ListModalHeader>
+                  <h1>리스트 삭제</h1>
+                  <FontAwesomeIcon icon={faX} onClick={onClickCloseModal} />
+                </ListModalHeader>
+                <ListModalBody>
+                  <p>
+                    리스트를 삭제할 시 이 리스트에 있는 모든 할 일은 삭제됩니다.
+                    정말 삭제하시겠습니까?
+                  </p>
+                </ListModalBody>
+                <ListModalFooter>
+                  <SubmitButton
+                    type="button"
+                    value="확인"
+                    onClick={() => {
+                      deleteList(modalKind[1]);
+                    }}
+                  />
+                  <CancleButton
+                    type="button"
+                    value="취소"
+                    onClick={onClickCloseModal}
+                  />
+                </ListModalFooter>
+              </>
+            )}
+          </ListModal>
+        </ListModalCover>
+      )}
+    </>
   );
 }
 

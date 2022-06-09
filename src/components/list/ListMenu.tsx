@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { deleteDoc, DocumentData, updateDoc } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { documentState, myListDocsState, selectedListState } from 'atoms';
@@ -20,6 +20,7 @@ export default function ListMenu({ item }: DocumentData) {
   const navigator = useNavigate();
   const updator = useUpdateDocs();
   const docRef = useGetDocRef(item.id);
+  const menuRef = useRef(null);
   const ListDocRef = useGetListDocRef(myList?.id, item.id);
 
   const onClickMenu = () => {
@@ -48,29 +49,34 @@ export default function ListMenu({ item }: DocumentData) {
   };
 
   useEffect(() => {
-    const handleClickOutSide = () => {
-      setIsOpen(false);
+    const handleClickOutSide = (e: any) => {
+      if (
+        menuRef.current &&
+        !(menuRef.current as HTMLDivElement).contains(e.target)
+      ) {
+        setIsOpen(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutSide);
     return () => document.removeEventListener('mousedown', handleClickOutSide);
   }, []);
 
   return (
-    <MenuContainer onClick={onClickMenu}>
+    <MenuContainer onClick={onClickMenu} ref={menuRef}>
       <FontAwesomeIcon icon={faEllipsis} className="toggle-menu-icon" />
       {isOpen ? (
         <MenuModal>
-          <MenuButtonContainer onClick={onClickDelete}>
-            <FontAwesomeIcon icon={faTrashCan} className="sub-icon" />
-            <span>삭제하기</span>
-          </MenuButtonContainer>
-
           <MenuButtonContainer onClick={onClickConvert}>
             <FontAwesomeIcon
               icon={faArrowRightArrowLeft}
               className="sub-icon"
             />
             <span>{item.isNote ? '할일로 변환' : '노트로 변환'}</span>
+          </MenuButtonContainer>
+
+          <MenuButtonContainer onClick={onClickDelete}>
+            <FontAwesomeIcon icon={faTrashCan} className="sub-icon" />
+            <span>삭제하기</span>
           </MenuButtonContainer>
         </MenuModal>
       ) : null}

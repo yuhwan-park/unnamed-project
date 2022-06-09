@@ -1,11 +1,17 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { myListModalState, myListsState } from 'atoms';
+import {
+  myListModalState,
+  myListsState,
+  paramState,
+  selectedListState,
+} from 'atoms';
 import { auth, db } from 'firebase-source';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import MyListItem from './MyListItem';
 import MyListModal from './MyListModal';
@@ -13,9 +19,12 @@ import MyListModal from './MyListModal';
 function MyList() {
   const [toggleModal, setToggleModal] = useRecoilState(myListModalState);
   const [myLists, setMyLists] = useRecoilState(myListsState);
+  const selectedList = useRecoilValue(selectedListState);
+  const params = useRecoilValue(paramState);
+  const navigator = useNavigate();
 
   const onClickOpenModal = () => {
-    setToggleModal(true);
+    setToggleModal('Create');
   };
 
   useEffect(() => {
@@ -29,6 +38,12 @@ function MyList() {
       }
     });
   }, [setMyLists]);
+
+  useEffect(() => {
+    if (params['listId'] && !selectedList) {
+      navigator('/main', { replace: true });
+    }
+  }, [navigator, params, selectedList]);
   return (
     <>
       <MyListContainer>

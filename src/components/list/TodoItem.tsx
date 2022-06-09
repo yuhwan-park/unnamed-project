@@ -69,6 +69,7 @@ function TodoItem({ todo }: ITodoItemProps) {
           isDone={todo.isDone}
           defaultValue={todo.title}
           onClick={onClickList}
+          spellCheck={false}
           {...register(`todoTitle-${todo.id}`, {
             onBlur,
             onChange,
