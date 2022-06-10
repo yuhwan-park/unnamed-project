@@ -3,15 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashArrowUp, faFilePen } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef, useState } from 'react';
 import { MenuButtonContainer, MenuContainer, MenuModal } from 'style/main-page';
-import { IMyList } from 'types';
 import { useSetRecoilState } from 'recoil';
 import { myListModalState } from 'atoms';
 
-interface IMyListMenuProps {
-  list: IMyList;
-}
-
-function MyListMenu({ list }: IMyListMenuProps) {
+function MyListMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const setToggleModal = useSetRecoilState(myListModalState);

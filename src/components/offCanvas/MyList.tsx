@@ -52,9 +52,13 @@ function MyList() {
           <FontAwesomeIcon icon={faPlus} onClick={onClickOpenModal} />
         </MyListHeader>
         <MyListContent>
-          {myLists.length
-            ? myLists.map(list => <MyListItem key={list.id} list={list} />)
-            : null}
+          {myLists.length ? (
+            myLists.map(list => <MyListItem key={list.id} list={list} />)
+          ) : (
+            <EmptyContent>
+              카테고리별로 리스트를 추가하여 할 일 혹은 노트를 관리해보세요!
+            </EmptyContent>
+          )}
         </MyListContent>
       </MyListContainer>
       {toggleModal && <MyListModal />}
@@ -100,4 +104,12 @@ const MyListContent = styled.div`
   a {
     color: black;
   }
+`;
+
+const EmptyContent = styled.div`
+  padding: 10px 20px;
+  background-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.4);
+  font-size: ${props => props.theme.fontSize.small};
+  line-height: 16px;
 `;

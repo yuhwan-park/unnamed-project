@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { faListUl } from '@fortawesome/free-solid-svg-icons';
 import { IMyList } from 'types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import MyListMenu from './MyListMenu';
 import { MenuIcon } from 'style/main-page';
@@ -23,7 +22,7 @@ function MyListItem({ list }: IMyListItemProps) {
         <FontAwesomeIcon icon={faListUl} />
       </MenuIcon>
       <p>{list.title}</p>
-      <MyListMenu list={list} />
+      <MyListMenu />
     </Wrapper>
   );
 }
