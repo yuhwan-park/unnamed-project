@@ -13,9 +13,7 @@ interface IMyListItemProps {
 
 function MyListItem({ list }: IMyListItemProps) {
   const navigator = useNavigate();
-  const onClickListItem = (e: React.MouseEvent<HTMLDivElement>) => {
-    const target = e.target as HTMLDivElement;
-    if (target.classList.contains('toggle-menu-icon')) return;
+  const onClickListItem = () => {
     navigator(`/main/lists/${list.id}/tasks`);
   };
 

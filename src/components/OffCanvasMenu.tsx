@@ -12,7 +12,7 @@ function OffCanvasMenu() {
   const toggleMenu = useRecoilValue(toggleMenuState);
 
   return (
-    <AnimatePresence initial={false}>
+    <AnimatePresence>
       {toggleMenu && (
         <Wrapper
           key="offCanvas"

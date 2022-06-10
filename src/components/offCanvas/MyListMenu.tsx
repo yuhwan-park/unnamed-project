@@ -21,7 +21,10 @@ function MyListMenu({ list }: IMyListMenuProps) {
   };
 
   const onClickDeleteList = () => {
-    setToggleModal(`Delete-${list.id}`);
+    setToggleModal(`Delete`);
+  };
+  const onClickEditList = () => {
+    setToggleModal(`Edit`);
   };
 
   useEffect(() => {
@@ -39,7 +42,7 @@ function MyListMenu({ list }: IMyListMenuProps) {
         <FontAwesomeIcon icon={faEllipsis} className="toggle-menu-icon" />
         {isOpen ? (
           <MenuModal>
-            <MenuButtonContainer>
+            <MenuButtonContainer onClick={onClickEditList}>
               <FontAwesomeIcon icon={faFilePen} className="sub-icon" />
               <span>리스트 편집</span>
             </MenuButtonContainer>

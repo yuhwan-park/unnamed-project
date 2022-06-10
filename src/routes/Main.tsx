@@ -27,7 +27,7 @@ const editorVariants = {
 function Main() {
   const [userData, setUserData] = useRecoilState(userState);
   const [showEditor, setShowEditor] = useState(false);
-  const [isWide, setIsWide] = useState(true);
+  const [isWide, setIsWide] = useState(window.innerWidth > 1024 ? true : false);
   const setParams = useSetRecoilState(paramState);
   const navigator = useNavigate();
   const params = useParams();

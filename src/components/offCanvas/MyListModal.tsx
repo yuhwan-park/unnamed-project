@@ -1,17 +1,16 @@
-import { myListModalSelector, myListModalState, myListsState } from 'atoms';
+import { myListModalState, myListsState, selectedListState } from 'atoms';
 import { auth, db } from 'firebase-source';
 import {
   arrayRemove,
   arrayUnion,
   doc,
-  setDoc,
   Timestamp,
   updateDoc,
 } from 'firebase/firestore';
 import { motion } from 'framer-motion';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FieldValues, useForm } from 'react-hook-form';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import shortUUID from 'short-uuid';
 import { modalCoverVariants, modalVariants } from 'variants';
@@ -19,8 +18,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ErrorMessage } from 'style/sign-page';
 
 function MyListModal() {
-  const setToggleModal = useSetRecoilState(myListModalState);
-  const modalKind = useRecoilValue(myListModalSelector);
+  const [toggleModal, setToggleModal] = useRecoilState(myListModalState);
+  const selectedList = useRecoilValue(selectedListState);
   const [myLists, setMyLists] = useRecoilState(myListsState);
   const {
     register,
@@ -34,16 +33,39 @@ function MyListModal() {
     setToggleModal(null);
   };
 
-  const createList = async ({ title }: FieldValues) => {
-    const docRef = doc(db, `${auth.currentUser?.uid}/Lists`);
+  const checkDuplicated = (title: string) => {
     const listsName = myLists.map(list => list.title);
     if (listsName.includes(title)) {
       setError('title', {
         type: 'value',
         message: '이미 존재하는 리스트입니다.',
       });
-      return;
+      return false;
     }
+    return true;
+  };
+
+  const editList = async ({ title }: FieldValues) => {
+    if (!auth.currentUser) return;
+    const isDuplicated = checkDuplicated(title);
+    if (!isDuplicated) return;
+
+    const docRef = doc(db, `${auth.currentUser?.uid}/Lists`);
+    const newLists = myLists.map(list =>
+      list.id === selectedList?.id ? { ...list, title } : list,
+    );
+    setMyLists(newLists);
+    setValue('title', '');
+    setToggleModal(null);
+    await updateDoc(docRef, { lists: newLists });
+  };
+
+  const createList = async ({ title }: FieldValues) => {
+    if (!auth.currentUser) return;
+    const isDuplicated = checkDuplicated(title);
+    if (!isDuplicated) return;
+
+    const docRef = doc(db, `${auth.currentUser?.uid}/Lists`);
     setValue('title', '');
     const listData = {
       title,
@@ -52,21 +74,21 @@ function MyListModal() {
     };
     setMyLists(prev => [...prev, listData]);
     setToggleModal(null);
-    await setDoc(docRef, { lists: arrayUnion(listData) }, { merge: true });
+    await updateDoc(docRef, { lists: arrayUnion(listData) });
   };
 
-  const deleteList = async (id: string) => {
+  const deleteList = async () => {
     if (!auth.currentUser) return;
     const docRef = doc(db, `${auth.currentUser.uid}/Lists`);
-    const needDeleteList = myLists.find(li => li.id === id);
-    setMyLists(lists => lists.filter(li => li.id !== id));
+    const needDeleteList = myLists.find(li => li.id === selectedList?.id);
+    setMyLists(lists => lists.filter(li => li.id !== selectedList?.id));
     setToggleModal(null);
     await updateDoc(docRef, { lists: arrayRemove(needDeleteList) });
   };
 
   return (
     <>
-      {modalKind && (
+      {toggleModal && (
         <ListModalCover
           key="listModal"
           variants={modalCoverVariants}
@@ -74,34 +96,7 @@ function MyListModal() {
           animate="visible"
         >
           <ListModal variants={modalVariants}>
-            {(modalKind[0] === 'Create' || modalKind[0] === 'Edit') && (
-              <form onSubmit={handleSubmit(createList)}>
-                <ListModalHeader>
-                  <h1>리스트 추가</h1>
-                  <FontAwesomeIcon icon={faX} onClick={onClickCloseModal} />
-                </ListModalHeader>
-                <ListModalBody>
-                  <ListModalInput
-                    type="text"
-                    placeholder="리스트 이름을 적어주세요"
-                    {...register('title', { required: '필수 항목입니다' })}
-                  />
-                  {errors.title && (
-                    <ErrorMessage>{errors.title.message}</ErrorMessage>
-                  )}
-                </ListModalBody>
-                <ListModalFooter>
-                  <SubmitButton type="submit" value="확인" />
-                  <CancleButton
-                    type="button"
-                    value="취소"
-                    onClick={onClickCloseModal}
-                  />
-                </ListModalFooter>
-              </form>
-            )}
-
-            {modalKind[0] === 'Delete' && (
+            {toggleModal === 'Delete' ? (
               <>
                 <ListModalHeader>
                   <h1>리스트 삭제</h1>
@@ -117,9 +112,7 @@ function MyListModal() {
                   <SubmitButton
                     type="button"
                     value="확인"
-                    onClick={() => {
-                      deleteList(modalKind[1]);
-                    }}
+                    onClick={deleteList}
                   />
                   <CancleButton
                     type="button"
@@ -128,6 +121,40 @@ function MyListModal() {
                   />
                 </ListModalFooter>
               </>
+            ) : (
+              <form
+                onSubmit={handleSubmit(
+                  toggleModal === 'Create' ? createList : editList,
+                )}
+              >
+                <ListModalHeader>
+                  <h1>
+                    {toggleModal === 'Create' ? '리스트 추가' : '리스트 편집'}
+                  </h1>
+                  <FontAwesomeIcon icon={faX} onClick={onClickCloseModal} />
+                </ListModalHeader>
+                <ListModalBody>
+                  <ListModalInput
+                    type="text"
+                    placeholder="리스트 이름을 적어주세요"
+                    defaultValue={
+                      toggleModal === 'Create' ? '' : selectedList?.title
+                    }
+                    {...register('title', { required: '필수 항목입니다' })}
+                  />
+                  {errors.title && (
+                    <ErrorMessage>{errors.title.message}</ErrorMessage>
+                  )}
+                </ListModalBody>
+                <ListModalFooter>
+                  <SubmitButton type="submit" value="확인" />
+                  <CancleButton
+                    type="button"
+                    value="취소"
+                    onClick={onClickCloseModal}
+                  />
+                </ListModalFooter>
+              </form>
             )}
           </ListModal>
         </ListModalCover>

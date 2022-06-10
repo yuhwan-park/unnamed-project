@@ -19,21 +19,21 @@ export const paramState = atom<Params<string>>({
   default: {},
 });
 
-export const myListModalState = atom<string | null>({
+export const myListModalState = atom<'Edit' | 'Create' | 'Delete' | null>({
   key: 'myListModal',
   default: null,
 });
 
-export const myListModalSelector = selector({
-  key: 'myListModalSelector',
-  get: ({ get }) => {
-    const modalTrigger = get(myListModalState);
-    if (!modalTrigger) return null;
-    const [key, id] = modalTrigger.split('-');
-    if (key === 'Create') return [key, ''];
-    if (key === 'Edit' || 'Delete') return [key, id];
-  },
-});
+// export const myListModalSelector = selector({
+//   key: 'myListModalSelector',
+//   get: ({ get }) => {
+//     const modalTrigger = get(myListModalState);
+//     if (!modalTrigger) return null;
+//     const [key, id] = modalTrigger.split('-');
+//     if (key === 'Create') return [key, ''];
+//     if (key === 'Edit' || 'Delete') return [key, id];
+//   },
+// });
 
 export const dateState = atom<dayjs.Dayjs>({
   key: 'date',
