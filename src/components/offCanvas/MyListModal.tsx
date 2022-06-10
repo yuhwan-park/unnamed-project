@@ -46,9 +46,8 @@ function MyListModal() {
   };
 
   const editList = async ({ title }: FieldValues) => {
-    if (!auth.currentUser) return;
     const isDuplicated = checkDuplicated(title);
-    if (!isDuplicated) return;
+    if (!auth.currentUser || !isDuplicated) return;
 
     const docRef = doc(db, `${auth.currentUser?.uid}/Lists`);
     const newLists = myLists.map(list =>
@@ -61,18 +60,17 @@ function MyListModal() {
   };
 
   const createList = async ({ title }: FieldValues) => {
-    if (!auth.currentUser) return;
     const isDuplicated = checkDuplicated(title);
-    if (!isDuplicated) return;
+    if (!auth.currentUser || !isDuplicated) return;
 
     const docRef = doc(db, `${auth.currentUser?.uid}/Lists`);
-    setValue('title', '');
     const listData = {
       title,
       createdAt: Timestamp.fromDate(new Date()),
       id: shortUUID.generate(),
     };
     setMyLists(prev => [...prev, listData]);
+    setValue('title', '');
     setToggleModal(null);
     await updateDoc(docRef, { lists: arrayUnion(listData) });
   };

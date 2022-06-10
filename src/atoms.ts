@@ -24,17 +24,6 @@ export const myListModalState = atom<'Edit' | 'Create' | 'Delete' | null>({
   default: null,
 });
 
-// export const myListModalSelector = selector({
-//   key: 'myListModalSelector',
-//   get: ({ get }) => {
-//     const modalTrigger = get(myListModalState);
-//     if (!modalTrigger) return null;
-//     const [key, id] = modalTrigger.split('-');
-//     if (key === 'Create') return [key, ''];
-//     if (key === 'Edit' || 'Delete') return [key, id];
-//   },
-// });
-
 export const dateState = atom<dayjs.Dayjs>({
   key: 'date',
   default: dayjs(),

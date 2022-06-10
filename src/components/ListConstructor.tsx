@@ -9,9 +9,9 @@ interface IListConstructorProps {
 }
 
 function ListConstructor({ documentData }: IListConstructorProps) {
-  const [doingTodo, setDoingTodo] = useState<DocumentData[]>();
-  const [doneTodo, setDoneTodo] = useState<DocumentData[]>();
-  const [notes, setNotes] = useState<DocumentData[]>();
+  const [doingTodo, setDoingTodo] = useState<DocumentData[]>([]);
+  const [doneTodo, setDoneTodo] = useState<DocumentData[]>([]);
+  const [notes, setNotes] = useState<DocumentData[]>([]);
 
   useEffect(() => {
     const doingTodosData = documentData.filter(
@@ -27,7 +27,7 @@ function ListConstructor({ documentData }: IListConstructorProps) {
   }, [documentData]);
   return (
     <>
-      {doingTodo && Boolean(doingTodo.length) && (
+      {Boolean(doingTodo.length) && (
         <ul>
           <Title>할일</Title>
           {doingTodo.map(todo => (
@@ -36,7 +36,7 @@ function ListConstructor({ documentData }: IListConstructorProps) {
         </ul>
       )}
 
-      {doneTodo && Boolean(doneTodo.length) && (
+      {Boolean(doneTodo.length) && (
         <ul>
           <Title>완료</Title>
           {doneTodo.map(todo => (
@@ -45,7 +45,7 @@ function ListConstructor({ documentData }: IListConstructorProps) {
         </ul>
       )}
 
-      {notes && Boolean(notes.length) && (
+      {Boolean(notes.length) && (
         <ul>
           <Title>노트</Title>
           {notes.map(note => (
