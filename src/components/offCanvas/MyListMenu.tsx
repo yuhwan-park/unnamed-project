@@ -13,23 +13,20 @@ interface IMyListMenuProps {
 
 function MyListMenu({ list }: IMyListMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const menuRef = useRef(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const setToggleModal = useSetRecoilState(myListModalState);
 
   const onClickMenu = () => {
     setIsOpen(prev => !prev);
   };
 
-  const onClickDeleteList = async () => {
+  const onClickDeleteList = () => {
     setToggleModal(`Delete-${list.id}`);
   };
 
   useEffect(() => {
     const handleClickOutSide = (e: any) => {
-      if (
-        menuRef.current &&
-        !(menuRef.current as HTMLDivElement).contains(e.target)
-      ) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
         setIsOpen(false);
       }
     };

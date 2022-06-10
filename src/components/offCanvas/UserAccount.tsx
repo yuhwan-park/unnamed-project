@@ -4,7 +4,7 @@ import { userState } from 'atoms';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import UserAccountMenu from './UserAccountMenu';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { auth, storage } from 'firebase-source';
 import shortUUID from 'short-uuid';
@@ -50,13 +50,14 @@ function UserAccount() {
     return url;
   };
 
-  const onChangeFile = (e: any) => {
-    const file = e.target.files[0];
+  const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.currentTarget.files) return;
+    const file = e.currentTarget.files[0];
     const reader = new FileReader();
     reader.onloadend = async event => {
       const resultURL = event.target?.result;
+      if (!resultURL) return;
       try {
-        if (!resultURL) return;
         const url = await storageImage(resultURL);
         setUser(user => ({ ...user, photoURL: url }));
         if (auth.currentUser) {
@@ -69,14 +70,13 @@ function UserAccount() {
     reader.readAsDataURL(file);
   };
 
-  const onBlurNameInput = async (e: any) => {
-    const value = e.target.value;
+  const onBlurNameInput = async (e: React.FormEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
     await setDisplayName(value);
   };
 
-  const onSubmitNameInput = async (values: FieldValues) => {
-    const value = values.displayName;
-    await setDisplayName(value);
+  const onSubmitNameInput = async ({ displayName }: FieldValues) => {
+    await setDisplayName(displayName);
   };
 
   return (

@@ -13,7 +13,7 @@ import { documentState } from 'atoms';
 function UserAccountMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const setDocuments = useSetRecoilState(documentState);
-  const menuRef = useRef(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const onClickMenu = () => {
     setIsOpen(prev => !prev);
@@ -26,10 +26,7 @@ function UserAccountMenu() {
 
   useEffect(() => {
     const handleClickOutSide = (e: any) => {
-      if (
-        menuRef.current &&
-        !(menuRef.current as HTMLDivElement).contains(e.target)
-      ) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
         setIsOpen(false);
       }
     };

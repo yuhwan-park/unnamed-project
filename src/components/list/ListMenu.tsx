@@ -20,7 +20,7 @@ export default function ListMenu({ item }: DocumentData) {
   const navigator = useNavigate();
   const updator = useUpdateDocs();
   const docRef = useGetDocRef(item.id);
-  const menuRef = useRef(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const ListDocRef = useGetListDocRef(myList?.id, item.id);
 
   const onClickMenu = () => {
@@ -50,10 +50,7 @@ export default function ListMenu({ item }: DocumentData) {
 
   useEffect(() => {
     const handleClickOutSide = (e: any) => {
-      if (
-        menuRef.current &&
-        !(menuRef.current as HTMLDivElement).contains(e.target)
-      ) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
         setIsOpen(false);
       }
     };

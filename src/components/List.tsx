@@ -21,7 +21,7 @@ import ListConstructor from './ListConstructor';
 
 export default function List() {
   const date = useRecoilValue(dateSelector);
-  const myLists = useRecoilValue(selectedListState);
+  const selectedList = useRecoilValue(selectedListState);
   const [myListDocs, setMyListDocs] = useRecoilState(myListDocsState);
   const [documents, setDocuments] = useRecoilState(documentState);
 
@@ -44,9 +44,9 @@ export default function List() {
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
-      if (!user || !myLists) return;
+      if (!user || !selectedList) return;
       const docQurey = query(
-        collection(db, user.uid, 'Lists', myLists.id),
+        collection(db, user.uid, 'Lists', selectedList.id),
         orderBy('createdAt'),
       );
       const querySnapshot = await getDocs(docQurey);
@@ -57,13 +57,13 @@ export default function List() {
       });
       setMyListDocs(tempArray);
     });
-  }, [myLists, setMyListDocs]);
+  }, [selectedList, setMyListDocs]);
   return (
     <Wrapper>
       <ContentForm />
 
       <ListContainer>
-        {myLists ? (
+        {selectedList ? (
           <ListConstructor documentData={myListDocs} />
         ) : (
           <ListConstructor documentData={documents} />

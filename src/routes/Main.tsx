@@ -91,7 +91,7 @@ function Main() {
                   <ReflexElement
                     className="right-pane"
                     minSize={400}
-                    maxSize={1000}
+                    maxSize={window.innerWidth / 2 + 100}
                   >
                     <ContentEditor />
                   </ReflexElement>
