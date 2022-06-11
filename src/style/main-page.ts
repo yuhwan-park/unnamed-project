@@ -14,7 +14,10 @@ export const ListItemContainer = styled.li`
 `;
 
 export const Title = styled.input`
+  position: absolute;
+  left: 0;
   width: 100%;
+  padding: 0 30px;
   border: none;
   &:focus {
     outline: none;

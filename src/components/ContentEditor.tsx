@@ -1,18 +1,19 @@
 import styled from 'styled-components';
 import { Editor } from '@toast-ui/react-editor';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { paramState, selectedDocumentState, selectedListState } from 'atoms';
 import { updateDoc } from 'firebase/firestore';
 import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
 import { useMemo } from 'react';
+import EditorHeader from './ContentEditor/EditorHeader';
 
 export default function ContentEditor() {
-  const [flag, setFlag] = useState(true);
   const [timer, setTimer] = useState<NodeJS.Timeout>();
   const myList = useRecoilValue(selectedListState);
   const params = useRecoilValue(paramState);
   const document = useRecoilValue(selectedDocumentState);
+  const flag = useRef(true);
   const updator = useUpdateDocs();
   const editorRef = useMemo(() => React.createRef<Editor>(), []);
   const docRef = useGetDocRef(params['id']);
@@ -47,14 +48,14 @@ export default function ContentEditor() {
   };
 
   useEffect(() => {
-    setFlag(true);
+    flag.current = true;
   }, [params]);
 
   useEffect(() => {
     if (flag && document) {
       // 페이지 로드 & ID 파라미터가 바뀔때만 실행되게 분기처리
       editorRef.current?.getInstance().setMarkdown(document.content, false);
-      setFlag(false);
+      flag.current = false;
     }
   }, [document, editorRef, flag]);
 
@@ -62,9 +63,7 @@ export default function ContentEditor() {
     <Wrapper className="show-editor-trigger">
       {params['id'] ? (
         <>
-          <HeaderContainer>
-            <EditorTitle>{document?.title}</EditorTitle>
-          </HeaderContainer>
+          <EditorHeader />
           <EditorContainer>
             <Editor
               height="100%"
@@ -94,18 +93,6 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const HeaderContainer = styled.div`
-  display: flex;
-  align-items: center;
-  height: 50px;
-`;
-
 const EditorContainer = styled.div`
   height: calc(100% - 50px);
-`;
-
-const EditorTitle = styled.div`
-  width: 100%;
-  padding: 5px 10px;
-  font-weight: 700;
 `;

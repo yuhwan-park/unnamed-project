@@ -21,7 +21,7 @@ function ListConstructor({ documentData }: IListConstructorProps) {
       document => document.isDone && !document.isNote,
     );
     const notesData = documentData.filter(document => document.isNote);
-    setDoingTodo(doingTodosData);
+    setDoingTodo(doingTodosData.sort((a, b) => a.priority - b.priority));
     setDoneTodo(doneTodosData);
     setNotes(notesData);
   }, [documentData]);

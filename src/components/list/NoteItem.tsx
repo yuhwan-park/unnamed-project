@@ -57,6 +57,7 @@ export default function NoteItem({ note }: DocumentData) {
 }
 
 const NoteIconContainer = styled(IconContainer)`
+  z-index: 1;
   .sub-icon {
     color: rgba(0, 0, 0, 0.3);
     font-size: 20px;

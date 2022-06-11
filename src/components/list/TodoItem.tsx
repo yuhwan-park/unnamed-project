@@ -59,6 +59,7 @@ function TodoItem({ todo }: ITodoItemProps) {
             className="check-box"
             onClick={onClickCheckBox}
             isDone={todo.isDone}
+            priority={todo.priority}
           >
             {todo.isDone ? <FontAwesomeIcon icon={faCheck} inverse /> : null}
           </CheckBox>
@@ -83,20 +84,29 @@ function TodoItem({ todo }: ITodoItemProps) {
 
 export default React.memo(TodoItem);
 
-const CheckBox = styled.div<{ isDone: boolean }>`
+const CheckBox = styled.div<{ isDone: boolean; priority: number }>`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 20px;
   height: 20px;
-  border: ${props => (props.isDone ? 'none' : '2px solid rgba(0,0,0,0.2)')};
+  border: ${props =>
+    props.isDone
+      ? 'none'
+      : props.priority === 1
+      ? '2px solid red'
+      : props.priority === 2
+      ? '2px solid blue'
+      : props.priority === 3
+      ? '2px solid green'
+      : '2px solid rgba(0, 0, 0, 0.1)'};
   z-index: 1;
   border-radius: 4px;
   cursor: pointer;
   background-color: ${props =>
     props.isDone ? 'rgba(0, 0, 0, 0.2)' : 'transparent'};
   &:hover {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.2);
   }
 `;
 

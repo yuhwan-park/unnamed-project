@@ -11,6 +11,7 @@ import {
   faArrowRightArrowLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import { MenuButtonContainer, MenuContainer, MenuModal } from 'style/main-page';
+import PriorityFlag from 'components/common/PriorityFlag';
 
 export default function ListMenu({ item }: DocumentData) {
   const [isOpen, setIsOpen] = useState(false);
@@ -63,6 +64,7 @@ export default function ListMenu({ item }: DocumentData) {
       <FontAwesomeIcon icon={faEllipsis} className="toggle-menu-icon" />
       {isOpen ? (
         <MenuModal>
+          {!item.isNote && <PriorityFlag todo={item} />}
           <MenuButtonContainer onClick={onClickConvert}>
             <FontAwesomeIcon
               icon={faArrowRightArrowLeft}

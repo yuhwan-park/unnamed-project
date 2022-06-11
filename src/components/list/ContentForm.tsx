@@ -16,7 +16,7 @@ function ContentForm() {
   const date = useRecoilValue(dateSelector);
   const setDocuments = useSetRecoilState(documentState);
   const setMyListDocs = useSetRecoilState(myListDocsState);
-  const myList = useRecoilValue(selectedListState);
+  const selectedList = useRecoilValue(selectedListState);
   const [isNote, setIsNote] = useState(false);
   const { register, handleSubmit, setValue } = useForm<ITaskFormData>();
 
@@ -33,8 +33,8 @@ function ContentForm() {
   const onToDoSubmit = async ({ title }: ITaskFormData) => {
     setValue('title', '');
     if (!auth.currentUser) return;
-    const docRef = myList
-      ? doc(collection(db, `${auth.currentUser.uid}/Lists/${myList.id}`))
+    const docRef = selectedList
+      ? doc(collection(db, `${auth.currentUser.uid}/Lists/${selectedList.id}`))
       : doc(collection(db, `${auth.currentUser.uid}/${date}/Document`));
     const data = {
       id: docRef.id,
@@ -44,8 +44,11 @@ function ContentForm() {
       isDone: false,
       isDeleted: false,
       isNote,
+      priority: 4,
+      date: selectedList ? '' : date,
+      listId: selectedList ? selectedList.id : '',
     };
-    if (myList) {
+    if (selectedList) {
       setMyListDocs(prev => [...prev, data]);
     } else {
       setDocuments(prev => [...prev, data]);
@@ -58,8 +61,8 @@ function ContentForm() {
         type="text"
         {...register('title', { required: true })}
         placeholder={
-          myList
-            ? `"${myList?.title}"에 할 일 혹은 노트를 추가해보세요`
+          selectedList
+            ? `"${selectedList?.title}"에 할 일 혹은 노트를 추가해보세요`
             : '할 일 혹은 노트를 추가해보세요.'
         }
       />
