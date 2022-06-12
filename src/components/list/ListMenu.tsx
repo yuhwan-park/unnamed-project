@@ -75,7 +75,7 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
       <ListMenuIconContainer isEditor={isEditor} onClick={onClickMenu}>
         <FontAwesomeIcon icon={faEllipsis} className="toggle-menu-icon" />
       </ListMenuIconContainer>
-      {isOpen ? (
+      {isOpen && (
         <MenuModal>
           {!item.isNote && <PriorityFlag todo={item} />}
 
@@ -98,7 +98,7 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
             <span>삭제하기</span>
           </MenuButtonContainer>
         </MenuModal>
-      ) : null}
+      )}
     </MenuContainer>
   );
 }

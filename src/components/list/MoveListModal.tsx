@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListUl, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { myListDocsState, myListsState } from 'atoms';
+import { myListDocsState, myListsState, paramState } from 'atoms';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { MenuIcon } from 'style/main-page';
@@ -8,6 +8,7 @@ import { deleteDoc, doc, setDoc } from 'firebase/firestore';
 import { IDocument, IMyList } from 'types';
 import { useUpdateDocs } from 'hooks';
 import { auth, db } from 'firebase-source';
+import { useNavigate } from 'react-router-dom';
 
 interface IMoveListModalProps {
   item: IDocument;
@@ -16,12 +17,18 @@ interface IMoveListModalProps {
 function MoveListModal({ item }: IMoveListModalProps) {
   const myLists = useRecoilValue(myListsState);
   const setMyListDocs = useSetRecoilState(myListDocsState);
+  const params = useRecoilValue(paramState);
+  const navigator = useNavigate();
   const updator = useUpdateDocs();
 
   const onClickMoveListItem = async (list: IMyList) => {
     if (item.list && item.list.id === list.id) return;
 
-    setMyListDocs(docs => docs.filter(doc => doc.id !== item.id));
+    if (params['listId']) {
+      setMyListDocs(docs => docs.filter(doc => doc.id !== item.id));
+      navigator(`/main/lists/${params['listId']}/tasks`);
+    }
+
     await updator(item, 'list', list, true);
 
     if (item.list) {

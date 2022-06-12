@@ -39,7 +39,7 @@ function MyListItem({ list }: IMyListItemProps) {
 const Wrapper = styled.div<{ isSelected: boolean }>`
   position: relative;
   display: flex;
-  padding: 10px 20px;
+  padding: 10px 0;
   border-radius: 4px;
   background-color: ${props =>
     props.isSelected ? 'rgb(210, 210, 210)' : 'transparent'};
@@ -55,6 +55,7 @@ const Wrapper = styled.div<{ isSelected: boolean }>`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    width: 100%;
   }
 `;
 

@@ -34,7 +34,6 @@ const Wrapper = styled.div`
 `;
 
 const FrontMenuContainer = styled.div`
-  padding: 0 5px 0 10px;
   border-right: 1px solid rgba(0, 0, 0, 0.2);
 `;
 

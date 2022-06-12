@@ -24,7 +24,7 @@ function CalendarList() {
 const DateListContainer = styled.div`
   display: flex;
   cursor: pointer;
-  padding: 20px 10px;
+  padding: 20px 0;
   margin: 0 20px;
   border-radius: 4px;
   white-space: nowrap;

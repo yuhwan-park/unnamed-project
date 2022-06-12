@@ -14,10 +14,7 @@ export const ListItemContainer = styled.li`
 `;
 
 export const Title = styled.input`
-  position: absolute;
-  left: 0;
   width: 100%;
-  padding: 0 30px;
   border: none;
   &:focus {
     outline: none;
@@ -25,12 +22,10 @@ export const Title = styled.input`
 `;
 
 export const MenuContainer = styled.div`
-  position: absolute;
-  right: 0;
+  position: relative;
   cursor: pointer;
   .toggle-menu-icon {
     padding: 0 10px;
-    opacity: 0;
     color: rgba(0, 0, 0, 0.3);
     &:hover {
       color: rgba(0, 0, 0, 0.6);
@@ -42,8 +37,8 @@ export const IconContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30px;
   height: 30px;
+  padding: 0 5px 0 10px;
 `;
 
 export const MenuButtonContainer = styled.div`
@@ -78,6 +73,6 @@ export const MenuModal = styled.div`
 export const MenuIcon = styled.div`
   svg {
     color: rgba(0, 0, 0, 0.3);
-    padding-right: 10px;
+    padding: 0 10px;
   }
 `;

@@ -104,6 +104,7 @@ function UserAccount() {
               onBlur: onBlurNameInput,
             })}
             defaultValue={user?.displayName || user?.email || ''}
+            spellCheck="false"
           />
         </form>
       ) : (
@@ -126,7 +127,6 @@ const Wrapper = styled.div`
   padding: 10px 0;
   margin: 0 20px;
   border-bottom: 1px solid rgba(24, 24, 24, 0.1);
-  white-space: nowrap;
   &:hover {
     .toggle-menu-icon {
       opacity: 1;
@@ -159,8 +159,8 @@ const ProfileImageContainer = styled.div`
 `;
 
 const DisplayNameInput = styled.input`
-  margin: 0 10px;
-  width: 60%;
+  padding: 5px 10px;
+  width: 100%;
   background-color: rgb(244, 244, 244);
   border: none;
   border-bottom: 1px solid lightgray;
@@ -176,4 +176,5 @@ const FileInput = styled.input`
 const UserName = styled.div`
   cursor: pointer;
   padding: 0 10px;
+  width: 100%;
 `;
