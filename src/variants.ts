@@ -32,3 +32,15 @@ export const menuVariants = {
     opacity: 0,
   },
 };
+
+export const editorVariants = {
+  initial: {
+    right: '-100%',
+  },
+  visible: {
+    right: 0,
+  },
+  exit: {
+    right: '-100%',
+  },
+};

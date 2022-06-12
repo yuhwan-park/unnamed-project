@@ -11,18 +11,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import OffCanvasMenu from 'components/OffCanvasMenu';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { paramState, userState } from 'atoms';
-
-const editorVariants = {
-  initial: {
-    right: '-100%',
-  },
-  visible: {
-    right: 0,
-  },
-  exit: {
-    right: '-100%',
-  },
-};
+import { editorVariants } from 'variants';
 
 function Main() {
   const [userData, setUserData] = useRecoilState(userState);

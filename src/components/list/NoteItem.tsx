@@ -10,6 +10,7 @@ import { faNoteSticky } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
 import { IDocument } from 'types';
+import ListIcons from './ListIcons';
 
 interface INoteItemProps {
   note: IDocument;
@@ -58,6 +59,7 @@ export default function NoteItem({ note }: INoteItemProps) {
           onChange,
         })}
       />
+      <ListIcons item={note} />
       <ListMenu item={note} isEditor={false} />
     </ListItemContainer>
   );

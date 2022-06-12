@@ -42,11 +42,11 @@ const CheckBoxContainer = styled.div<{ isDone: boolean; priority: number }>`
     props.isDone
       ? 'none'
       : props.priority === 1
-      ? '2px solid red'
+      ? '2px solid rgba(255,0,0,0.5)'
       : props.priority === 2
-      ? '2px solid blue'
+      ? '2px solid rgba(0,0,255,0.5)'
       : props.priority === 3
-      ? '2px solid green'
+      ? '2px solid rgba(0,153,76,0.5)'
       : '2px solid rgba(0, 0, 0, 0.1)'};
   z-index: 1;
   border-radius: 4px;

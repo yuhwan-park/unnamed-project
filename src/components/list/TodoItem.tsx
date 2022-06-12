@@ -10,6 +10,7 @@ import { ListItemContainer, Title } from 'style/main-page';
 import ListMenu from './ListMenu';
 import CheckBox from 'components/common/CheckBox';
 import { IDocument } from 'types';
+import ListIcons from './ListIcons';
 
 interface ITodoItemProps {
   todo: IDocument;
@@ -60,7 +61,7 @@ function TodoItem({ todo }: ITodoItemProps) {
             onChange,
           })}
         />
-        <div>ㅁㄴㅇㄴㅁㅁㄴㅇㅁㄴㅇㄴㅁ</div>
+        <ListIcons item={todo} />
         <ListMenu item={todo} isEditor={false} />
       </ListItemContainer>
     </>

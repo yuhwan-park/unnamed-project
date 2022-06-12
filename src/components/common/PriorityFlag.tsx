@@ -43,6 +43,7 @@ function PriorityFlag({ todo }: { todo: IDocument }) {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 `;
 
 const FlagContainer = styled.div`
