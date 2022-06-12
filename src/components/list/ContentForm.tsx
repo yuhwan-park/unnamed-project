@@ -61,7 +61,7 @@ function ContentForm() {
         type="text"
         {...register('title', { required: true })}
         placeholder={
-          selectedList
+          selectedList && selectedList.title.length < 15
             ? `"${selectedList?.title}"에 할 일 혹은 노트를 추가해보세요`
             : '할 일 혹은 노트를 추가해보세요.'
         }

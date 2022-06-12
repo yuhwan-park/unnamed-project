@@ -33,7 +33,7 @@ function MyListModal() {
     setToggleModal(null);
   };
 
-  const checkDuplicated = (title: string) => {
+  const checkError = (title: string) => {
     const listsName = myLists.map(list => list.title);
     if (listsName.includes(title)) {
       setError('title', {
@@ -42,12 +42,19 @@ function MyListModal() {
       });
       return false;
     }
+    if (title.length > 50) {
+      setError('title', {
+        type: 'value',
+        message: '리스트 제목은 50자 이하여야 합니다.',
+      });
+      return false;
+    }
     return true;
   };
 
   const editList = async ({ title }: FieldValues) => {
-    const isDuplicated = checkDuplicated(title);
-    if (!auth.currentUser || !isDuplicated) return;
+    const isError = checkError(title);
+    if (!auth.currentUser || !isError) return;
 
     const docRef = doc(db, `${auth.currentUser?.uid}/Lists`);
     const newLists = myLists.map(list =>
@@ -60,8 +67,8 @@ function MyListModal() {
   };
 
   const createList = async ({ title }: FieldValues) => {
-    const isDuplicated = checkDuplicated(title);
-    if (!auth.currentUser || !isDuplicated) return;
+    const isError = checkError(title);
+    if (!auth.currentUser || !isError) return;
 
     const docRef = doc(db, `${auth.currentUser?.uid}/Lists`);
     const listData = {

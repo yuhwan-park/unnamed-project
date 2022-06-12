@@ -105,7 +105,6 @@ const Wrapper = styled.div`
 const Today = styled(motion.div)`
   position: absolute;
   text-align: center;
-  width: 300px;
   padding: 0 55px;
   font-size: 18px;
   color: white;
@@ -133,5 +132,7 @@ const NextButton = styled(Button)`
 
 const MenuIcon = styled(Button)`
   position: absolute;
-  left: 40px;
+  left: 30px;
+  z-index: 10;
+  padding-right: 10px;
 `;
