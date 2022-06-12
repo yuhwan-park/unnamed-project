@@ -1,5 +1,5 @@
 import React from 'react';
-import { DocumentData, updateDoc } from 'firebase/firestore';
+import { updateDoc } from 'firebase/firestore';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
@@ -9,9 +9,10 @@ import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
 import { ListItemContainer, Title } from 'style/main-page';
 import ListMenu from './ListMenu';
 import CheckBox from 'components/common/CheckBox';
+import { IDocument } from 'types';
 
 interface ITodoItemProps {
-  todo: DocumentData;
+  todo: IDocument;
 }
 
 function TodoItem({ todo }: ITodoItemProps) {
@@ -30,15 +31,16 @@ function TodoItem({ todo }: ITodoItemProps) {
     }
   };
 
-  const onChange = (e: any) => {
-    updator(todo.id, 'title', e.target.value);
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updator(todo.id, 'title', e.currentTarget.value);
   };
 
-  const onBlur = async (e: any) => {
+  const onBlur = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (myList) {
-      if (ListDocRef) await updateDoc(ListDocRef, { title: e.target.value });
+      if (ListDocRef)
+        await updateDoc(ListDocRef, { title: e.currentTarget.value });
     } else {
-      if (docRef) await updateDoc(docRef, { title: e.target.value });
+      if (docRef) await updateDoc(docRef, { title: e.currentTarget.value });
     }
   };
   return (

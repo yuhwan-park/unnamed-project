@@ -1,8 +1,7 @@
 import dayjs from 'dayjs';
-import { DocumentData } from 'firebase/firestore';
 import { Params } from 'react-router-dom';
 import { atom, selector } from 'recoil';
-import { IMyList, IUserState } from 'types';
+import { IDocument, IMyList, IUserState } from 'types';
 
 export const userState = atom<IUserState>({
   key: 'user',
@@ -43,7 +42,7 @@ export const toggleMenuState = atom({
 // * Document State *
 // ******************
 
-export const documentState = atom<DocumentData[]>({
+export const documentState = atom<IDocument[]>({
   key: 'todo',
   default: [],
 });
@@ -53,12 +52,12 @@ export const myListsState = atom<IMyList[]>({
   default: [],
 });
 
-export const myListDocsState = atom<DocumentData[]>({
+export const myListDocsState = atom<IDocument[]>({
   key: 'myListDocs',
   default: [],
 });
 
-export const selectedDocumentState = selector<DocumentData | undefined>({
+export const selectedDocumentState = selector<IDocument | undefined>({
   key: 'selectedDocumentSelector',
   get: ({ get }) => {
     const params = get(paramState);

@@ -1,11 +1,5 @@
 import { onAuthStateChanged } from 'firebase/auth';
-import {
-  collection,
-  DocumentData,
-  getDocs,
-  orderBy,
-  query,
-} from 'firebase/firestore';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
@@ -34,7 +28,7 @@ export default function List() {
       );
       const querySnapshot = await getDocs(docQurey);
 
-      const tempArray: DocumentData[] = [];
+      const tempArray: any[] = [];
       querySnapshot.forEach(doc => {
         tempArray.push(doc.data());
       });
@@ -51,7 +45,7 @@ export default function List() {
       );
       const querySnapshot = await getDocs(docQurey);
 
-      const tempArray: DocumentData[] = [];
+      const tempArray: any[] = [];
       querySnapshot.forEach(doc => {
         tempArray.push(doc.data());
       });

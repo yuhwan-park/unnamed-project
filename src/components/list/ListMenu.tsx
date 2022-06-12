@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { deleteDoc, DocumentData, updateDoc } from 'firebase/firestore';
+import { deleteDoc, updateDoc } from 'firebase/firestore';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -15,9 +15,10 @@ import { MenuButtonContainer, MenuContainer, MenuModal } from 'style/main-page';
 import PriorityFlag from 'components/common/PriorityFlag';
 import styled from 'styled-components';
 import MoveListModal from './MoveListModal';
+import { IDocument } from 'types';
 
 interface IListMenu {
-  item: DocumentData;
+  item: IDocument;
   isEditor: boolean;
 }
 

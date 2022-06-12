@@ -1,14 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { DocumentData, updateDoc } from 'firebase/firestore';
+import { updateDoc } from 'firebase/firestore';
 import { IconContainer } from 'style/main-page';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
 import { selectedListState } from 'atoms';
+import { IDocument } from 'types';
 
 interface ICheckBoxProps {
-  todo: DocumentData;
+  todo: IDocument;
 }
 
 function CheckBox({ todo }: ICheckBoxProps) {

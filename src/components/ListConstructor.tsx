@@ -1,17 +1,17 @@
-import { DocumentData } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { IDocument } from 'types';
 import NoteItem from './list/NoteItem';
 import TodoItem from './list/TodoItem';
 
 interface IListConstructorProps {
-  documentData: DocumentData[];
+  documentData: IDocument[];
 }
 
 function ListConstructor({ documentData }: IListConstructorProps) {
-  const [doingTodo, setDoingTodo] = useState<DocumentData[]>([]);
-  const [doneTodo, setDoneTodo] = useState<DocumentData[]>([]);
-  const [notes, setNotes] = useState<DocumentData[]>([]);
+  const [doingTodo, setDoingTodo] = useState<IDocument[]>([]);
+  const [doneTodo, setDoneTodo] = useState<IDocument[]>([]);
+  const [notes, setNotes] = useState<IDocument[]>([]);
 
   useEffect(() => {
     const doingTodosData = documentData.filter(

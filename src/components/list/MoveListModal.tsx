@@ -4,19 +4,13 @@ import { myListDocsState, myListsState } from 'atoms';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { MenuIcon } from 'style/main-page';
-import {
-  deleteDoc,
-  doc,
-  DocumentData,
-  setDoc,
-  updateDoc,
-} from 'firebase/firestore';
-import { IMyList } from 'types';
+import { deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
+import { IDocument, IMyList } from 'types';
 import { useGetDocRef, useUpdateDocs } from 'hooks';
 import { auth, db } from 'firebase-source';
 
 interface IMoveListModalProps {
-  item: DocumentData;
+  item: IDocument;
 }
 
 function MoveListModal({ item }: IMoveListModalProps) {
