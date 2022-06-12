@@ -46,7 +46,7 @@ function ContentForm() {
       isNote,
       priority: 4,
       date: selectedList ? '' : date,
-      listId: selectedList ? selectedList.id : '',
+      list: selectedList ? selectedList : null,
     };
     if (selectedList) {
       setMyListDocs(prev => [...prev, data]);

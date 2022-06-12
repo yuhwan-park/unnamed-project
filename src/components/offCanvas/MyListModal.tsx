@@ -4,6 +4,7 @@ import {
   arrayRemove,
   arrayUnion,
   doc,
+  setDoc,
   Timestamp,
   updateDoc,
 } from 'firebase/firestore';
@@ -79,7 +80,7 @@ function MyListModal() {
     setMyLists(prev => [...prev, listData]);
     setValue('title', '');
     setToggleModal(null);
-    await updateDoc(docRef, { lists: arrayUnion(listData) });
+    await setDoc(docRef, { lists: arrayUnion(listData) }, { merge: true });
   };
 
   const deleteList = async () => {

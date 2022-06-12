@@ -24,7 +24,7 @@ export const menuVariants = {
     opacity: 0,
   },
   visible: {
-    width: '400px',
+    width: '350px',
     opacity: 1,
   },
   exit: {

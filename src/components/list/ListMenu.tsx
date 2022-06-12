@@ -9,10 +9,12 @@ import {
   faTrashCan,
   faEllipsis,
   faArrowRightArrowLeft,
+  faListUl,
 } from '@fortawesome/free-solid-svg-icons';
 import { MenuButtonContainer, MenuContainer, MenuModal } from 'style/main-page';
 import PriorityFlag from 'components/common/PriorityFlag';
 import styled from 'styled-components';
+import MoveListModal from './MoveListModal';
 
 interface IListMenu {
   item: DocumentData;
@@ -21,6 +23,7 @@ interface IListMenu {
 
 export default function ListMenu({ item, isEditor }: IListMenu) {
   const [isOpen, setIsOpen] = useState(false);
+  const [moveListFlag, setMoveListFlag] = useState(false);
   const setDocument = useSetRecoilState(documentState);
   const setMyListDocs = useSetRecoilState(myListDocsState);
   const myList = useRecoilValue(selectedListState);
@@ -55,6 +58,10 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
     }
   };
 
+  const onClickMoveList = () => {
+    setMoveListFlag(prev => !prev);
+  };
+
   useEffect(() => {
     const handleClickOutSide = (e: any) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -66,13 +73,20 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
   }, []);
 
   return (
-    <MenuContainer onClick={onClickMenu} ref={menuRef}>
-      <ListMenuIconContainer isEditor={isEditor}>
+    <MenuContainer ref={menuRef}>
+      <ListMenuIconContainer isEditor={isEditor} onClick={onClickMenu}>
         <FontAwesomeIcon icon={faEllipsis} className="toggle-menu-icon" />
       </ListMenuIconContainer>
       {isOpen ? (
         <MenuModal>
           {!item.isNote && <PriorityFlag todo={item} />}
+
+          {moveListFlag && <MoveListModal item={item} />}
+          <MenuButtonContainer onClick={onClickMoveList}>
+            <FontAwesomeIcon icon={faListUl} className="sub-icon" />
+            <span>리스트 이동</span>
+          </MenuButtonContainer>
+
           <MenuButtonContainer onClick={onClickConvert}>
             <FontAwesomeIcon
               icon={faArrowRightArrowLeft}

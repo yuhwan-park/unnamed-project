@@ -6,13 +6,13 @@ import styled from 'styled-components';
 
 function PriorityFlag({ todo }: { todo: DocumentData }) {
   const updator = useUpdateDocs();
-  const listDocRef = useGetListDocRef(todo.listId, todo.id);
+  const listDocRef = useGetListDocRef(todo.list?.id, todo.id);
   const docRef = useGetDocRef(todo.id, todo.date);
 
   const onClickFlag = async (priority: number) => {
     updator(todo.id, 'priority', priority);
     if (docRef && todo.date) await updateDoc(docRef, { priority });
-    if (listDocRef && todo.listId) {
+    if (listDocRef && todo.list.id) {
       await updateDoc(listDocRef, { priority });
     }
   };
