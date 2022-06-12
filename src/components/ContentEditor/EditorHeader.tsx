@@ -1,4 +1,5 @@
 import { selectedDocumentState } from 'atoms';
+import CheckBox from 'components/common/CheckBox';
 import ListMenu from 'components/list/ListMenu';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
@@ -8,11 +9,18 @@ function EditorHeader() {
 
   return (
     <Wrapper>
-      <EditorTitle>{document?.title}</EditorTitle>
+      {document && (
+        <>
+          <FrontMenuContainer>
+            {!document.isNote && <CheckBox todo={document} />}
+          </FrontMenuContainer>
+          <EditorTitle>{document?.title}</EditorTitle>
 
-      <MenuContainer>
-        {document && <ListMenu item={document} isEditor={true} />}
-      </MenuContainer>
+          <BackMenuContainer>
+            <ListMenu item={document} isEditor={true} />
+          </BackMenuContainer>
+        </>
+      )}
     </Wrapper>
   );
 }
@@ -25,7 +33,12 @@ const Wrapper = styled.div`
   height: 50px;
 `;
 
-const MenuContainer = styled.div`
+const FrontMenuContainer = styled.div`
+  padding: 0 5px 0 10px;
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+`;
+
+const BackMenuContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;
@@ -34,6 +47,6 @@ const MenuContainer = styled.div`
 
 const EditorTitle = styled.div`
   width: 100%;
-  padding: 5px 10px;
+  padding: 5px 10px 5px 5px;
   font-weight: 700;
 `;
