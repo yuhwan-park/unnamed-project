@@ -7,7 +7,7 @@ export const ListItemContainer = styled.li`
   background-color: white;
   margin-bottom: 6px;
   &:hover {
-    .fa-ellipsis {
+    .toggle-menu-icon {
       opacity: 1;
     }
   }
@@ -67,12 +67,12 @@ export const MenuButtonContainer = styled.div`
 
 export const MenuModal = styled.div`
   position: absolute;
-  right: -30px;
+  right: 0px;
   width: 200px;
   background-color: white;
   border-radius: 5px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
-  z-index: 1;
+  z-index: 9999;
 `;
 
 export const MenuIcon = styled.div`

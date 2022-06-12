@@ -76,7 +76,7 @@ function TodoItem({ todo }: ITodoItemProps) {
             onChange,
           })}
         />
-        <ListMenu item={todo} />
+        <ListMenu item={todo} isEditor={false} />
       </ListItemContainer>
     </>
   );

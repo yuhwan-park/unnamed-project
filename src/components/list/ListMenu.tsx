@@ -12,8 +12,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { MenuButtonContainer, MenuContainer, MenuModal } from 'style/main-page';
 import PriorityFlag from 'components/common/PriorityFlag';
+import styled from 'styled-components';
 
-export default function ListMenu({ item }: DocumentData) {
+interface IListMenu {
+  item: DocumentData;
+  isEditor: boolean;
+}
+
+export default function ListMenu({ item, isEditor }: IListMenu) {
   const [isOpen, setIsOpen] = useState(false);
   const setDocument = useSetRecoilState(documentState);
   const setMyListDocs = useSetRecoilState(myListDocsState);
@@ -61,7 +67,9 @@ export default function ListMenu({ item }: DocumentData) {
 
   return (
     <MenuContainer onClick={onClickMenu} ref={menuRef}>
-      <FontAwesomeIcon icon={faEllipsis} className="toggle-menu-icon" />
+      <ListMenuIconContainer isEditor={isEditor}>
+        <FontAwesomeIcon icon={faEllipsis} className="toggle-menu-icon" />
+      </ListMenuIconContainer>
       {isOpen ? (
         <MenuModal>
           {!item.isNote && <PriorityFlag todo={item} />}
@@ -82,3 +90,9 @@ export default function ListMenu({ item }: DocumentData) {
     </MenuContainer>
   );
 }
+
+const ListMenuIconContainer = styled.div<{ isEditor: boolean }>`
+  .toggle-menu-icon {
+    opacity: ${props => (props.isEditor ? 1 : 0)};
+  }
+`;

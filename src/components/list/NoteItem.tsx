@@ -51,7 +51,7 @@ export default function NoteItem({ note }: DocumentData) {
           onChange,
         })}
       />
-      <ListMenu item={note} />
+      <ListMenu item={note} isEditor={false} />
     </ListItemContainer>
   );
 }
