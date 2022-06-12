@@ -1,19 +1,10 @@
 import { doc } from 'firebase/firestore';
-import { useRecoilValue } from 'recoil';
-import { dateSelector } from 'atoms';
 import { auth, db } from 'firebase-source';
+import { IDocument } from 'types';
 
-function useGetDocRef(id: string | undefined, createdDate?: string) {
-  const date = useRecoilValue(dateSelector);
-  if (!auth.currentUser) return;
-  return id
-    ? doc(
-        db,
-        `${auth.currentUser.uid}/${
-          createdDate ? createdDate : date
-        }/Document/${id}`,
-      )
-    : null;
+function useGetDocRef(item: IDocument) {
+  if (!auth.currentUser || !item.date) return null;
+  return doc(db, `${auth.currentUser.uid}/${item.date}/Document/${item.id}`);
 }
 
 export { useGetDocRef };

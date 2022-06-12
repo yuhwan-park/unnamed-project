@@ -4,9 +4,9 @@ import { myListDocsState, myListsState } from 'atoms';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { MenuIcon } from 'style/main-page';
-import { deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
+import { deleteDoc, doc, setDoc } from 'firebase/firestore';
 import { IDocument, IMyList } from 'types';
-import { useGetDocRef, useUpdateDocs } from 'hooks';
+import { useUpdateDocs } from 'hooks';
 import { auth, db } from 'firebase-source';
 
 interface IMoveListModalProps {
@@ -16,20 +16,14 @@ interface IMoveListModalProps {
 function MoveListModal({ item }: IMoveListModalProps) {
   const myLists = useRecoilValue(myListsState);
   const setMyListDocs = useSetRecoilState(myListDocsState);
-  const docRef = useGetDocRef(item.id, item.date);
   const updator = useUpdateDocs();
 
   const onClickMoveListItem = async (list: IMyList) => {
     if (item.list && item.list.id === list.id) return;
-    const newMyListDocRef = doc(
-      db,
-      `${auth.currentUser?.uid}/Lists/${list.id}/${item.id}`,
-    );
-    const newItem = { ...item, list };
 
-    updator(item.id, 'list', list);
-    if (item.date && docRef) await updateDoc(docRef, { list });
     setMyListDocs(docs => docs.filter(doc => doc.id !== item.id));
+    await updator(item, 'list', list, true);
+
     if (item.list) {
       const oldMyListDocRef = doc(
         db,
@@ -37,6 +31,12 @@ function MoveListModal({ item }: IMoveListModalProps) {
       );
       await deleteDoc(oldMyListDocRef);
     }
+
+    const newMyListDocRef = doc(
+      db,
+      `${auth.currentUser?.uid}/Lists/${list.id}/${item.id}`,
+    );
+    const newItem = { ...item, list };
     await setDoc(newMyListDocRef, newItem);
   };
 

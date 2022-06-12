@@ -20,8 +20,8 @@ export default function NoteItem({ note }: INoteItemProps) {
   const updator = useUpdateDocs();
   const { register } = useForm();
   const myList = useRecoilValue(selectedListState);
-  const docRef = useGetDocRef(note.id);
-  const ListDocRef = useGetListDocRef(myList?.id, note.id);
+  const docRef = useGetDocRef(note);
+  const ListDocRef = useGetListDocRef(note);
 
   const onClickList = () => {
     if (myList) {
@@ -32,15 +32,16 @@ export default function NoteItem({ note }: INoteItemProps) {
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updator(note.id, 'title', e.currentTarget.value);
+    updator(note, 'title', e.currentTarget.value, false);
   };
 
   const onBlur = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (myList) {
-      if (ListDocRef)
-        await updateDoc(ListDocRef, { title: e.currentTarget.value });
-    } else {
-      if (docRef) await updateDoc(docRef, { title: e.currentTarget.value });
+    const title = e.currentTarget.value;
+    if (ListDocRef) {
+      await updateDoc(ListDocRef, { title });
+    }
+    if (docRef) {
+      await updateDoc(docRef, { title });
     }
   };
   return (

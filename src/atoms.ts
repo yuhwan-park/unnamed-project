@@ -57,7 +57,7 @@ export const myListDocsState = atom<IDocument[]>({
   default: [],
 });
 
-export const selectedDocumentState = selector<IDocument | undefined>({
+export const selectedDocumentState = selector({
   key: 'selectedDocumentSelector',
   get: ({ get }) => {
     const params = get(paramState);

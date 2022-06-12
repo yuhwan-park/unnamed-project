@@ -1,21 +1,14 @@
 import { faFlag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { updateDoc } from 'firebase/firestore';
-import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
+import { useUpdateDocs } from 'hooks';
 import styled from 'styled-components';
 import { IDocument } from 'types';
 
 function PriorityFlag({ todo }: { todo: IDocument }) {
   const updator = useUpdateDocs();
-  const listDocRef = useGetListDocRef(todo.list?.id, todo.id);
-  const docRef = useGetDocRef(todo.id, todo.date);
 
   const onClickFlag = async (priority: number) => {
-    updator(todo.id, 'priority', priority);
-    if (docRef && todo.date) await updateDoc(docRef, { priority });
-    if (listDocRef && todo.list?.id) {
-      await updateDoc(listDocRef, { priority });
-    }
+    await updator(todo, 'priority', priority, true);
   };
 
   return (

@@ -1,11 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { updateDoc } from 'firebase/firestore';
 import { IconContainer } from 'style/main-page';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
-import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
-import { selectedListState } from 'atoms';
+import { useUpdateDocs } from 'hooks';
 import { IDocument } from 'types';
 
 interface ICheckBoxProps {
@@ -14,17 +11,9 @@ interface ICheckBoxProps {
 
 function CheckBox({ todo }: ICheckBoxProps) {
   const updator = useUpdateDocs();
-  const myList = useRecoilValue(selectedListState);
-  const docRef = useGetDocRef(todo.id);
-  const ListDocRef = useGetListDocRef(myList?.id, todo.id);
 
   const onClickCheckBox = async () => {
-    updator(todo.id, 'isDone', !todo.isDone);
-    if (myList) {
-      if (ListDocRef) await updateDoc(ListDocRef, { isDone: !todo.isDone });
-    } else {
-      if (docRef) await updateDoc(docRef, { isDone: !todo.isDone });
-    }
+    updator(todo, 'isDone', !todo.isDone, true);
   };
 
   return (

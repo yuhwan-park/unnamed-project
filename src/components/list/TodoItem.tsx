@@ -18,8 +18,8 @@ interface ITodoItemProps {
 function TodoItem({ todo }: ITodoItemProps) {
   const updator = useUpdateDocs();
   const myList = useRecoilValue(selectedListState);
-  const docRef = useGetDocRef(todo.id);
-  const ListDocRef = useGetListDocRef(myList?.id, todo.id);
+  const docRef = useGetDocRef(todo);
+  const ListDocRef = useGetListDocRef(todo);
   const navigator = useNavigate();
   const { register } = useForm();
 
@@ -32,15 +32,16 @@ function TodoItem({ todo }: ITodoItemProps) {
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updator(todo.id, 'title', e.currentTarget.value);
+    updator(todo, 'title', e.currentTarget.value, false);
   };
 
   const onBlur = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (myList) {
-      if (ListDocRef)
-        await updateDoc(ListDocRef, { title: e.currentTarget.value });
-    } else {
-      if (docRef) await updateDoc(docRef, { title: e.currentTarget.value });
+    const title = e.currentTarget.value;
+    if (ListDocRef) {
+      await updateDoc(ListDocRef, { title });
+    }
+    if (docRef) {
+      await updateDoc(docRef, { title });
     }
   };
   return (

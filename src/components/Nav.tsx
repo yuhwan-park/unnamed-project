@@ -36,16 +36,19 @@ function Nav({ isWide }: { isWide: boolean }) {
   const setToggleMenu = useSetRecoilState(toggleMenuState);
   const myList = useRecoilValue(selectedListState);
   const navigator = useNavigate();
+
   const onClickNext = () => {
     setIsBack(false);
     setDate(prev => prev.add(1, 'day'));
     navigator('/main');
   };
+
   const onClickPrev = () => {
     setIsBack(true);
     setDate(prev => prev.add(-1, 'day'));
     navigator('/main');
   };
+
   const onClickMenuIcon = () => {
     setToggleMenu(prev => !prev);
   };

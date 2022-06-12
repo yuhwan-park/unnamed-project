@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { deleteDoc, updateDoc } from 'firebase/firestore';
+import { deleteDoc } from 'firebase/firestore';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -27,12 +27,12 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
   const [moveListFlag, setMoveListFlag] = useState(false);
   const setDocument = useSetRecoilState(documentState);
   const setMyListDocs = useSetRecoilState(myListDocsState);
-  const myList = useRecoilValue(selectedListState);
+  const selectedList = useRecoilValue(selectedListState);
   const navigator = useNavigate();
   const updator = useUpdateDocs();
-  const docRef = useGetDocRef(item.id);
   const menuRef = useRef<HTMLDivElement>(null);
-  const ListDocRef = useGetListDocRef(myList?.id, item.id);
+  const docRef = useGetDocRef(item);
+  const ListDocRef = useGetListDocRef(item);
 
   const onClickMenu = () => {
     setIsOpen(prev => !prev);
@@ -41,22 +41,19 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
   const onClickDelete = async () => {
     setDocument(todos => todos.filter(todo => todo.id !== item.id));
     setMyListDocs(docs => docs.filter(doc => doc.id !== item.id));
-    if (myList) {
-      if (ListDocRef) await deleteDoc(ListDocRef);
-      navigator(`/main/lists/${myList.id}/tasks`);
+
+    if (ListDocRef) await deleteDoc(ListDocRef);
+    if (docRef) await deleteDoc(docRef);
+
+    if (selectedList) {
+      navigator(`/main/lists/${selectedList.id}/tasks`);
     } else {
-      if (docRef) await deleteDoc(docRef);
       navigator('/main');
     }
   };
 
   const onClickConvert = async () => {
-    updator(item.id, 'isNote', !item.isNote);
-    if (myList) {
-      if (ListDocRef) await updateDoc(ListDocRef, { isNote: !item.isNote });
-    } else {
-      if (docRef) await updateDoc(docRef, { isNote: !item.isNote });
-    }
+    await updator(item, 'isNote', !item.isNote, true);
   };
 
   const onClickMoveList = () => {
