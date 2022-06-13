@@ -1,7 +1,7 @@
 import React from 'react';
 import { setDoc, updateDoc } from 'firebase/firestore';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   useGetAllDocRef,
@@ -31,10 +31,13 @@ function TodoItem({ todo }: ITodoItemProps) {
   const { register } = useForm();
   const selectedList = useRecoilValue(selectedListState);
   const setDate = useSetRecoilState(dateState);
+  const { pathname } = useLocation();
 
   const onClickList = () => {
     if (todo.list && selectedList) {
       navigator(`/main/lists/${todo.list.id}/tasks/${todo.id}`);
+    } else if (pathname.includes('all')) {
+      navigator(`/main/all/tasks/${todo.id}`);
     } else {
       setDate(dayjs(todo.date));
       navigator(`/main/${todo.id}`);

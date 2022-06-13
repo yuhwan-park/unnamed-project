@@ -34,7 +34,7 @@ function ListIcons({ item }: IListIconsProps) {
       )}
       {item.date && (params['listId'] || pathname.includes('all')) && (
         <ListItemText onClick={onClickDate}>
-          {dayjs(item.date).format('M월DD일')}
+          {dayjs(item.date).format('M월D일')}
         </ListItemText>
       )}
       {item.content && (

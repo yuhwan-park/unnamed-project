@@ -77,7 +77,7 @@ function EditorHeader() {
               <FontAwesomeIcon icon={faCalendarDays} size="lg" />
               <span>
                 {selectedDoc.date
-                  ? dayjs(selectedDoc.date).format('M월DD일')
+                  ? dayjs(selectedDoc.date).format('M월D일')
                   : '없음'}
               </span>
             </CalendarIconContainer>

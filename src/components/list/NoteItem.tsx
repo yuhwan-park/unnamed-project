@@ -1,6 +1,6 @@
 import { setDoc, updateDoc } from 'firebase/firestore';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { dateState, selectedListState } from 'atoms';
@@ -31,10 +31,13 @@ export default function NoteItem({ note }: INoteItemProps) {
   const docRef = useGetDocRef(note);
   const ListDocRef = useGetListDocRef(note);
   const allDocRef = useGetAllDocRef();
+  const { pathname } = useLocation();
 
   const onClickList = () => {
     if (note.list && myList) {
       navigator(`/main/lists/${myList.id}/tasks/${note.id}`);
+    } else if (pathname.includes('all')) {
+      navigator(`/main/all/tasks/${note.id}`);
     } else {
       setDate(dayjs(note.date));
       navigator(`/main/${note.id}`);

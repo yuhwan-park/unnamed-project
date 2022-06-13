@@ -86,13 +86,13 @@ export const selectedDocumentState = selector({
   key: 'selectedDocumentSelector',
   get: ({ get }) => {
     const params = get(paramState);
-    const documents = get(documentState);
     const myListDocs = get(myListDocsState);
+    const allDocs = get(allDocumentSelector);
 
     if (params['listId']) {
       return myListDocs.find(document => document.id === params['id']);
     }
-    return documents.find(document => document.id === params['id']);
+    return allDocs.find(document => document.id === params['id']);
   },
 });
 
