@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import {
+  allDocumentState,
   dateSelector,
   documentState,
   myListDocsState,
@@ -16,6 +17,7 @@ function ContentForm() {
   const date = useRecoilValue(dateSelector);
   const setDocuments = useSetRecoilState(documentState);
   const setMyListDocs = useSetRecoilState(myListDocsState);
+  const setAllDocument = useSetRecoilState(allDocumentState);
   const selectedList = useRecoilValue(selectedListState);
   const [isNote, setIsNote] = useState(false);
   const { register, handleSubmit, setValue } = useForm<ITaskFormData>();
@@ -53,11 +55,13 @@ function ContentForm() {
     } else {
       setDocuments(prev => [...prev, data]);
     }
-    const allDocRef = doc(
-      db,
-      `${auth.currentUser.uid}/All/Documents/${data.id}`,
+    setAllDocument(docs => ({ ...docs, [data.id]: data }));
+
+    await setDoc(
+      doc(db, `${auth.currentUser.uid}/All`),
+      { docMap: { [data.id]: data } },
+      { merge: true },
     );
-    await setDoc(allDocRef, data);
     await setDoc(docRef, data);
   };
   return (

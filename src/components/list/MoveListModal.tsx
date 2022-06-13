@@ -49,22 +49,26 @@ function MoveListModal({ item }: IMoveListModalProps) {
 
   return (
     <Wrapper>
-      {myLists.map(list => (
-        <MyListContainer
-          key={list.id}
-          onClick={() => onClickMoveListItem(list)}
-        >
-          <MenuIcon>
-            <FontAwesomeIcon icon={faListUl} />
-          </MenuIcon>
-          <MyListTitle>{list.title}</MyListTitle>
-          {list.id === item.list?.id && (
-            <CheckIconContainer>
-              <FontAwesomeIcon icon={faCheck} />
-            </CheckIconContainer>
-          )}
-        </MyListContainer>
-      ))}
+      {myLists.length ? (
+        myLists.map(list => (
+          <MyListContainer
+            key={list.id}
+            onClick={() => onClickMoveListItem(list)}
+          >
+            <MenuIcon>
+              <FontAwesomeIcon icon={faListUl} />
+            </MenuIcon>
+            <MyListTitle>{list.title}</MyListTitle>
+            {list.id === item.list?.id && (
+              <CheckIconContainer>
+                <FontAwesomeIcon icon={faCheck} />
+              </CheckIconContainer>
+            )}
+          </MyListContainer>
+        ))
+      ) : (
+        <NoListMessage>리스트가 없습니다.</NoListMessage>
+      )}
     </Wrapper>
   );
 }
@@ -87,6 +91,13 @@ const MyListContainer = styled.li`
   &:hover {
     background-color: rgb(240, 240, 240);
   }
+`;
+
+const NoListMessage = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
 `;
 
 const MyListTitle = styled.p`

@@ -1,6 +1,6 @@
 import { allDocumentState, documentState, myListDocsState } from 'atoms';
 import { auth, db } from 'firebase-source';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, setDoc, updateDoc } from 'firebase/firestore';
 import { useSetRecoilState } from 'recoil';
 import { IDocument } from 'types';
 
@@ -18,30 +18,27 @@ function useUpdateDocs() {
   ) => {
     if (!auth.currentUser) return;
 
+    const newDoc = { ...document, [key]: value };
     setDocument(docs =>
-      docs.map(doc =>
-        doc.id === document.id ? { ...doc, [key]: value } : doc,
-      ),
+      docs.map(doc => (doc.id === document.id ? newDoc : doc)),
     );
     setMyListDocs(docs =>
-      docs.map(doc =>
-        doc.id === document.id ? { ...doc, [key]: value } : doc,
-      ),
+      docs.map(doc => (doc.id === document.id ? newDoc : doc)),
     );
-    setAllDocument(docs =>
-      docs.map(doc =>
-        doc.id === document.id ? { ...doc, [key]: value } : doc,
-      ),
+
+    setAllDocument(docs => ({
+      ...docs,
+      [document.id]: newDoc,
+    }));
+
+    const allDocRef = doc(db, `${auth.currentUser.uid}/All`);
+    await setDoc(
+      allDocRef,
+      { docMap: { [document.id]: newDoc } },
+      { merge: true },
     );
 
     if (!needDbUpdate) return;
-
-    const allDocRef = doc(
-      db,
-      `${auth.currentUser.uid}/All/Documents/${document.id}`,
-    );
-    await updateDoc(allDocRef, { [key]: value });
-
     if (document.date) {
       const docRef = doc(
         db,
@@ -61,11 +58,3 @@ function useUpdateDocs() {
 }
 
 export { useUpdateDocs };
-
-//contentEditor
-// checkbox
-// flag
-// listmenu
-// movelistmodal
-// noteitem
-// todoitem

@@ -1,9 +1,17 @@
 import { onAuthStateChanged } from 'firebase/auth';
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+} from 'firebase/firestore';
 import { useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import {
+  allDocumentSelector,
   allDocumentState,
   dateSelector,
   documentState,
@@ -18,7 +26,8 @@ import { useLocation } from 'react-router-dom';
 export default function List() {
   const date = useRecoilValue(dateSelector);
   const selectedList = useRecoilValue(selectedListState);
-  const [allDocuments, setAllDocuments] = useRecoilState(allDocumentState);
+  const setAllDocuments = useSetRecoilState(allDocumentState);
+  const allDocuments = useRecoilValue(allDocumentSelector);
   const [myListDocs, setMyListDocs] = useRecoilState(myListDocsState);
   const [documents, setDocuments] = useRecoilState(documentState);
   const { pathname } = useLocation();
@@ -26,17 +35,12 @@ export default function List() {
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
       if (!user || !pathname.includes('all')) return;
-      const docQurey = query(
-        collection(db, user.uid, 'All', 'Documents'),
-        orderBy('date'),
-      );
-      const querySnapshot = await getDocs(docQurey);
+      const docRef = doc(db, user.uid, 'All');
+      const docSnap = await getDoc(docRef);
 
-      const tempArray: any[] = [];
-      querySnapshot.forEach(doc => {
-        tempArray.push(doc.data());
-      });
-      setAllDocuments(tempArray);
+      if (docSnap.exists()) {
+        setAllDocuments(docSnap.data().docMap);
+      }
     });
   }, [pathname, setAllDocuments]);
 

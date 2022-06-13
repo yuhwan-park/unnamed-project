@@ -1,5 +1,5 @@
 import React from 'react';
-import { updateDoc } from 'firebase/firestore';
+import { setDoc, updateDoc } from 'firebase/firestore';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -14,8 +14,8 @@ import ListMenu from './ListMenu';
 import CheckBox from 'components/common/CheckBox';
 import { IDocument } from 'types';
 import ListIcons from './ListIcons';
-import { useSetRecoilState } from 'recoil';
-import { dateState } from 'atoms';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { dateState, selectedListState } from 'atoms';
 import dayjs from 'dayjs';
 
 interface ITodoItemProps {
@@ -26,13 +26,14 @@ function TodoItem({ todo }: ITodoItemProps) {
   const updator = useUpdateDocs();
   const docRef = useGetDocRef(todo);
   const ListDocRef = useGetListDocRef(todo);
-  const allDocRef = useGetAllDocRef(todo.id);
+  const allDocRef = useGetAllDocRef();
   const navigator = useNavigate();
   const { register } = useForm();
+  const selectedList = useRecoilValue(selectedListState);
   const setDate = useSetRecoilState(dateState);
 
   const onClickList = () => {
-    if (!todo.date && todo.list) {
+    if (todo.list && selectedList) {
       navigator(`/main/lists/${todo.list.id}/tasks/${todo.id}`);
     } else {
       setDate(dayjs(todo.date));
@@ -53,7 +54,11 @@ function TodoItem({ todo }: ITodoItemProps) {
       await updateDoc(docRef, { title });
     }
     if (allDocRef) {
-      await updateDoc(allDocRef, { title });
+      await setDoc(
+        allDocRef,
+        { docMap: { [todo.id]: { ...todo, title } } },
+        { merge: true },
+      );
     }
   };
   return (

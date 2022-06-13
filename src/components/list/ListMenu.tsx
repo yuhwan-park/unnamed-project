@@ -1,20 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { deleteDoc } from 'firebase/firestore';
+import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   allDocumentState,
   documentState,
   myListDocsState,
   selectedListState,
 } from 'atoms';
-import {
-  useGetAllDocRef,
-  useGetDocRef,
-  useGetListDocRef,
-  useUpdateDocs,
-} from 'hooks';
+import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
 import {
   faTrashCan,
   faEllipsis,
@@ -26,6 +21,7 @@ import PriorityFlag from 'components/common/PriorityFlag';
 import styled from 'styled-components';
 import MoveListModal from './MoveListModal';
 import { IDocument } from 'types';
+import { auth, db } from 'firebase-source';
 
 interface IListMenu {
   item: IDocument;
@@ -37,14 +33,13 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
   const [moveListFlag, setMoveListFlag] = useState(false);
   const setDocument = useSetRecoilState(documentState);
   const setMyListDocs = useSetRecoilState(myListDocsState);
-  const setAllDocument = useSetRecoilState(allDocumentState);
+  const [allDocument, setAllDocument] = useRecoilState(allDocumentState);
   const selectedList = useRecoilValue(selectedListState);
   const navigator = useNavigate();
   const updator = useUpdateDocs();
   const menuRef = useRef<HTMLDivElement>(null);
   const docRef = useGetDocRef(item);
   const ListDocRef = useGetListDocRef(item);
-  const allDocRef = useGetAllDocRef(item.id);
   const { pathname } = useLocation();
 
   const onClickMenu = () => {
@@ -54,11 +49,16 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
   const onClickDelete = async () => {
     setDocument(todos => todos.filter(todo => todo.id !== item.id));
     setMyListDocs(docs => docs.filter(doc => doc.id !== item.id));
-    setAllDocument(docs => docs.filter(doc => doc.id !== item.id));
+
+    const newAllDocument = { ...allDocument };
+    delete newAllDocument[item.id];
+    setAllDocument(newAllDocument);
 
     if (ListDocRef) await deleteDoc(ListDocRef);
     if (docRef) await deleteDoc(docRef);
-    if (allDocRef) await deleteDoc(allDocRef);
+
+    const allDocRef = doc(db, `${auth.currentUser?.uid}/All`);
+    if (allDocRef) await updateDoc(allDocRef, { docMap: newAllDocument });
 
     if (pathname.includes('all')) return;
 

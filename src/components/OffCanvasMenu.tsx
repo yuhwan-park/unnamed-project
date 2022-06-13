@@ -7,6 +7,7 @@ import { menuVariants } from 'variants';
 import MyList from './offCanvas/MyList';
 import CalendarList from './offCanvas/CalendarList';
 import ShowAllList from './offCanvas/ShowAllList';
+import React from 'react';
 
 function OffCanvasMenu() {
   const toggleMenu = useRecoilValue(toggleMenuState);
@@ -34,12 +35,11 @@ function OffCanvasMenu() {
   );
 }
 
-export default OffCanvasMenu;
+export default React.memo(OffCanvasMenu);
 
 const Wrapper = styled(motion.div)`
   height: 100%;
   background-color: rgb(244, 244, 244);
-  min-width: 350px;
   max-width: 350px;
 `;
 

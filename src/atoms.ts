@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { Params } from 'react-router-dom';
 import { atom, selector } from 'recoil';
-import { IDocument, IMyList, IUserState } from 'types';
+import { IAllDocumentState, IDocument, IMyList, IUserState } from 'types';
 
 export const userState = atom<IUserState>({
   key: 'user',
@@ -42,9 +42,20 @@ export const toggleMenuState = atom({
 // * Document State *
 // ******************
 
-export const allDocumentState = atom<IDocument[]>({
+export const allDocumentState = atom<IAllDocumentState>({
   key: 'allDocument',
-  default: [],
+  default: {},
+});
+
+export const allDocumentSelector = selector({
+  key: 'allDocumentSelector',
+  get: ({ get }) => {
+    const allDocuments = get(allDocumentState);
+    const sorted = Object.values(allDocuments).sort(
+      (a, b) => Number(a.date) - Number(b.date),
+    );
+    return sorted;
+  },
 });
 
 export const documentState = atom<IDocument[]>({
