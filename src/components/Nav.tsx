@@ -8,9 +8,12 @@ import {
   faAngleLeft,
   faBars,
   faAngleRight,
+  faCalendarDays,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
+import CalendarView from './common/CalendarView';
+import dayjs from 'dayjs';
 
 const dateVariants = {
   entry: (isBack: boolean) => ({
@@ -33,6 +36,8 @@ const dateVariants = {
 function Nav({ isWide }: { isWide: boolean }) {
   const [date, setDate] = useRecoilState(dateState);
   const [isBack, setIsBack] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [toggleCalendar, setToggleCalendar] = useState(false);
   const setToggleMenu = useSetRecoilState(toggleMenuState);
   const myList = useRecoilValue(selectedListState);
   const navigator = useNavigate();
@@ -51,6 +56,22 @@ function Nav({ isWide }: { isWide: boolean }) {
 
   const onClickMenuIcon = () => {
     setToggleMenu(prev => !prev);
+  };
+
+  const onMouseEnterToday = () => {
+    setIsHovered(true);
+  };
+  const onMouseLeaveToday = () => {
+    setIsHovered(false);
+  };
+
+  const onClickCalendar = () => {
+    setToggleCalendar(prev => !prev);
+  };
+
+  const onClickDay = (value: Date) => {
+    setDate(dayjs(value));
+    setToggleCalendar(false);
   };
 
   useEffect(() => {
@@ -82,13 +103,30 @@ function Nav({ isWide }: { isWide: boolean }) {
               animate="visible"
               exit="exit"
               transition={{ type: 'tween' }}
+              onMouseEnter={onMouseEnterToday}
+              onMouseLeave={onMouseLeaveToday}
             >
-              {date.format('M월 D일')}
+              {isHovered ? (
+                <Button>
+                  <FontAwesomeIcon
+                    icon={faCalendarDays}
+                    onClick={onClickCalendar}
+                  />
+                </Button>
+              ) : (
+                <div>{date.format('M월 D일')}</div>
+              )}
             </Today>
           </AnimatePresence>
           <NextButton onClick={onClickNext}>
             <FontAwesomeIcon icon={faAngleRight} />
           </NextButton>
+
+          {toggleCalendar && (
+            <CalendarContainer>
+              <CalendarView value={date.toDate()} onClickDay={onClickDay} />
+            </CalendarContainer>
+          )}
         </>
       )}
     </Wrapper>
@@ -112,6 +150,13 @@ const Today = styled(motion.div)`
   font-size: 18px;
   color: white;
   font-family: ${props => props.theme.fontFamily.main};
+`;
+
+const CalendarContainer = styled.div`
+  position: absolute;
+  top: 40px;
+  z-index: 300;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 `;
 
 const Button = styled.div`
