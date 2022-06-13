@@ -23,8 +23,10 @@ function OffCanvasMenu() {
           transition={{ type: 'tween' }}
         >
           <UserAccount />
-          <ShowAllList />
-          <CalendarList />
+          <MainMenuContainer>
+            <ShowAllList />
+            <CalendarList />
+          </MainMenuContainer>
           <MyList />
         </Wrapper>
       )}
@@ -37,4 +39,12 @@ export default OffCanvasMenu;
 const Wrapper = styled(motion.div)`
   height: 100%;
   background-color: rgb(244, 244, 244);
+  min-width: 350px;
+  max-width: 350px;
+`;
+
+const MainMenuContainer = styled.div`
+  padding: 10px 0;
+  margin: 0 20px;
+  border-bottom: 1px solid rgba(24, 24, 24, 0.1);
 `;

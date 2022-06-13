@@ -19,7 +19,7 @@ function ShowAllList() {
       <MenuIcon>
         <FontAwesomeIcon icon={faFolderOpen} />
       </MenuIcon>
-      <p>모두</p>
+      <p>모두 보기</p>
     </OffCanvasMenuContainer>
   );
 }

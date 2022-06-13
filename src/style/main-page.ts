@@ -106,7 +106,6 @@ export const OffCanvasMenuContainer = styled.div<{ isSelected: boolean }>`
   background-color: ${props =>
     props.isSelected ? 'rgb(210, 210, 210)' : 'transparent'};
   padding: 20px 0;
-  margin: 0 20px;
   border-radius: 4px;
   white-space: nowrap;
   &:hover {

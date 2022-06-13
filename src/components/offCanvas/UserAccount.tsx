@@ -97,7 +97,10 @@ function UserAccount() {
       />
 
       {isEditing ? (
-        <form onSubmit={handleSubmit(onSubmitNameInput)}>
+        <form
+          onSubmit={handleSubmit(onSubmitNameInput)}
+          style={{ width: '100%' }}
+        >
           <DisplayNameInput
             {...register('displayName', {
               required: true,
@@ -159,7 +162,7 @@ const ProfileImageContainer = styled.div`
 `;
 
 const DisplayNameInput = styled.input`
-  padding: 5px 10px;
+  padding: 0 10px;
   width: 100%;
   background-color: rgb(244, 244, 244);
   border: none;

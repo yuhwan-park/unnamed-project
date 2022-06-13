@@ -55,7 +55,7 @@ function MyList() {
 export default MyList;
 
 const MyListContainer = styled.div`
-  padding: 0 20px;
+  padding: 10px 20px;
 `;
 
 const MyListHeader = styled.div`
