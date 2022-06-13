@@ -17,6 +17,7 @@ import shortUUID from 'short-uuid';
 import { modalCoverVariants, modalVariants } from 'variants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ErrorMessage } from 'style/sign-page';
+import { CancleButton, SubmitButton } from 'style/main-page';
 
 function MyListModal() {
   const [toggleModal, setToggleModal] = useRecoilState(myListModalState);
@@ -229,26 +230,4 @@ const ListModalFooter = styled.div`
   padding: 30px 20px;
   display: flex;
   justify-content: flex-end;
-`;
-
-const ModalButton = styled.input`
-  border: none;
-  width: 100px;
-  height: 40px;
-  border-radius: 6px;
-  margin-right: 10px;
-  cursor: pointer;
-`;
-
-const CancleButton = styled(ModalButton)`
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-  }
-`;
-const SubmitButton = styled(ModalButton)`
-  color: white;
-  background-color: ${props => props.theme.dailColor.lighter};
-  &:hover {
-    background-color: ${props => props.theme.dailColor.normal};
-  }
 `;

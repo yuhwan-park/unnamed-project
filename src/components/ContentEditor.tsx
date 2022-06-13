@@ -48,27 +48,25 @@ function ContentEditor() {
   return (
     <Wrapper className="show-editor-trigger">
       {params['id'] ? (
-        <>
+        <EditorContainer>
           <EditorHeader />
-          <EditorContainer>
-            <Editor
-              height="100%"
-              initialEditType="wysiwyg"
-              autofocus={false}
-              hideModeSwitch={true}
-              toolbarItems={[
-                ['heading', 'bold', 'italic', 'strike'],
-                ['hr', 'quote'],
-                ['ul', 'ol', 'task'],
-                ['image', 'link'],
-              ]}
-              placeholder="설명"
-              ref={editorRef}
-              onKeyup={onKeyUpEditor}
-              onBlur={onBlurEditor}
-            />
-          </EditorContainer>
-        </>
+          <Editor
+            height="100%"
+            initialEditType="wysiwyg"
+            autofocus={false}
+            hideModeSwitch={true}
+            toolbarItems={[
+              ['heading', 'bold', 'italic', 'strike'],
+              ['hr', 'quote'],
+              ['ul', 'ol', 'task'],
+              ['image', 'link'],
+            ]}
+            placeholder="설명"
+            ref={editorRef}
+            onKeyup={onKeyUpEditor}
+            onBlur={onBlurEditor}
+          />
+        </EditorContainer>
       ) : null}
     </Wrapper>
   );
@@ -82,5 +80,5 @@ const Wrapper = styled.div`
 `;
 
 const EditorContainer = styled.div`
-  height: calc(100% - 50px);
+  height: calc(100% - 80px);
 `;

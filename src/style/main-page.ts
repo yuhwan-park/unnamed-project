@@ -76,3 +76,25 @@ export const MenuIcon = styled.div`
     padding: 0 10px;
   }
 `;
+
+export const ModalButton = styled.input`
+  border: none;
+  width: 100px;
+  height: 40px;
+  border-radius: 6px;
+  margin-right: 10px;
+  cursor: pointer;
+`;
+
+export const CancleButton = styled(ModalButton)`
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+`;
+export const SubmitButton = styled(ModalButton)`
+  color: white;
+  background-color: ${props => props.theme.dailColor.lighter};
+  &:hover {
+    background-color: ${props => props.theme.dailColor.normal};
+  }
+`;
