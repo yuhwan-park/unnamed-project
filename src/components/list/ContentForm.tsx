@@ -53,6 +53,11 @@ function ContentForm() {
     } else {
       setDocuments(prev => [...prev, data]);
     }
+    const allDocRef = doc(
+      db,
+      `${auth.currentUser.uid}/All/Documents/${data.id}`,
+    );
+    await setDoc(allDocRef, data);
     await setDoc(docRef, data);
   };
   return (

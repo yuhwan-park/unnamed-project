@@ -5,7 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { selectedListState } from 'atoms';
-import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
+import {
+  useGetAllDocRef,
+  useGetDocRef,
+  useGetListDocRef,
+  useUpdateDocs,
+} from 'hooks';
 import { ListItemContainer, Title } from 'style/main-page';
 import ListMenu from './ListMenu';
 import CheckBox from 'components/common/CheckBox';
@@ -21,6 +26,7 @@ function TodoItem({ todo }: ITodoItemProps) {
   const myList = useRecoilValue(selectedListState);
   const docRef = useGetDocRef(todo);
   const ListDocRef = useGetListDocRef(todo);
+  const allDocRef = useGetAllDocRef(todo.id);
   const navigator = useNavigate();
   const { register } = useForm();
 
@@ -43,6 +49,9 @@ function TodoItem({ todo }: ITodoItemProps) {
     }
     if (docRef) {
       await updateDoc(docRef, { title });
+    }
+    if (allDocRef) {
+      await updateDoc(allDocRef, { title });
     }
   };
   return (

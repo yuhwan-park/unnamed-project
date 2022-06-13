@@ -8,7 +8,12 @@ import { IconContainer, ListItemContainer, Title } from 'style/main-page';
 import ListMenu from './ListMenu';
 import { faNoteSticky } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
+import {
+  useGetAllDocRef,
+  useGetDocRef,
+  useGetListDocRef,
+  useUpdateDocs,
+} from 'hooks';
 import { IDocument } from 'types';
 import ListIcons from './ListIcons';
 
@@ -23,6 +28,7 @@ export default function NoteItem({ note }: INoteItemProps) {
   const myList = useRecoilValue(selectedListState);
   const docRef = useGetDocRef(note);
   const ListDocRef = useGetListDocRef(note);
+  const allDocRef = useGetAllDocRef(note.id);
 
   const onClickList = () => {
     if (myList) {
@@ -43,6 +49,9 @@ export default function NoteItem({ note }: INoteItemProps) {
     }
     if (docRef) {
       await updateDoc(docRef, { title });
+    }
+    if (allDocRef) {
+      await updateDoc(allDocRef, { title });
     }
   };
   return (

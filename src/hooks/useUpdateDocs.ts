@@ -16,6 +16,7 @@ function useUpdateDocs() {
     needDbUpdate: boolean,
   ) => {
     if (!auth.currentUser) return;
+
     setDocument(docs =>
       docs.map(doc =>
         doc.id === document.id ? { ...doc, [key]: value } : doc,
@@ -28,6 +29,12 @@ function useUpdateDocs() {
     );
 
     if (!needDbUpdate) return;
+
+    const allDocRef = doc(
+      db,
+      `${auth.currentUser.uid}/All/Documents/${document.id}`,
+    );
+    await updateDoc(allDocRef, { [key]: value });
 
     if (document.date) {
       const docRef = doc(
