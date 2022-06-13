@@ -1,10 +1,20 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { deleteDoc } from 'firebase/firestore';
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { documentState, myListDocsState, selectedListState } from 'atoms';
-import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
+import {
+  allDocumentState,
+  documentState,
+  myListDocsState,
+  selectedListState,
+} from 'atoms';
+import {
+  useGetAllDocRef,
+  useGetDocRef,
+  useGetListDocRef,
+  useUpdateDocs,
+} from 'hooks';
 import {
   faTrashCan,
   faEllipsis,
@@ -27,12 +37,15 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
   const [moveListFlag, setMoveListFlag] = useState(false);
   const setDocument = useSetRecoilState(documentState);
   const setMyListDocs = useSetRecoilState(myListDocsState);
+  const setAllDocument = useSetRecoilState(allDocumentState);
   const selectedList = useRecoilValue(selectedListState);
   const navigator = useNavigate();
   const updator = useUpdateDocs();
   const menuRef = useRef<HTMLDivElement>(null);
   const docRef = useGetDocRef(item);
   const ListDocRef = useGetListDocRef(item);
+  const allDocRef = useGetAllDocRef(item.id);
+  const { pathname } = useLocation();
 
   const onClickMenu = () => {
     setIsOpen(prev => !prev);
@@ -41,9 +54,13 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
   const onClickDelete = async () => {
     setDocument(todos => todos.filter(todo => todo.id !== item.id));
     setMyListDocs(docs => docs.filter(doc => doc.id !== item.id));
+    setAllDocument(docs => docs.filter(doc => doc.id !== item.id));
 
     if (ListDocRef) await deleteDoc(ListDocRef);
     if (docRef) await deleteDoc(docRef);
+    if (allDocRef) await deleteDoc(allDocRef);
+
+    if (pathname.includes('all')) return;
 
     if (selectedList) {
       navigator(`/main/lists/${selectedList.id}/tasks`);
