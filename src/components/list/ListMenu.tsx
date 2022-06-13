@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
@@ -23,6 +23,7 @@ import MoveListModal from './MoveListModal';
 import { IDocument } from 'types';
 import { auth, db } from 'firebase-source';
 import { useSetDocCount } from 'hooks/useSetDocCount';
+import { useDetectClickOutside } from 'hooks/useDetectClickOutside';
 
 interface IListMenu {
   item: IDocument;
@@ -39,10 +40,13 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
   const selectedList = useRecoilValue(selectedListState);
   const navigator = useNavigate();
   const updator = useUpdateDocs();
-  const menuRef = useRef<HTMLDivElement>(null);
   const docRef = useGetDocRef(item);
   const ListDocRef = useGetListDocRef(item);
   const { pathname } = useLocation();
+  const CloseDropdownMenu = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+  const ref = useDetectClickOutside({ onTriggered: CloseDropdownMenu });
 
   const onClickMenu = () => {
     setIsOpen(prev => !prev);
@@ -80,18 +84,8 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
     setMoveListFlag(prev => !prev);
   };
 
-  useEffect(() => {
-    const handleClickOutSide = (e: any) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutSide);
-    return () => document.removeEventListener('mousedown', handleClickOutSide);
-  }, []);
-
   return (
-    <MenuContainer ref={menuRef}>
+    <MenuContainer ref={ref}>
       <ListMenuIconContainer isEditor={isEditor} onClick={onClickMenu}>
         <FontAwesomeIcon icon={faEllipsis} className="toggle-menu-icon" />
       </ListMenuIconContainer>

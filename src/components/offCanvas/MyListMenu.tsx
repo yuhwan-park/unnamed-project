@@ -1,14 +1,19 @@
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashArrowUp, faFilePen } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { MenuButtonContainer, MenuContainer, MenuModal } from 'style/main-page';
 import { useSetRecoilState } from 'recoil';
 import { myListModalState } from 'atoms';
+import { useDetectClickOutside } from 'hooks/useDetectClickOutside';
 
 function MyListMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const CloseDropdownMenu = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+  const ref = useDetectClickOutside({ onTriggered: CloseDropdownMenu });
+
   const setToggleModal = useSetRecoilState(myListModalState);
 
   const onClickMenu = () => {
@@ -22,18 +27,9 @@ function MyListMenu() {
     setToggleModal(`Edit`);
   };
 
-  useEffect(() => {
-    const handleClickOutSide = (e: any) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutSide);
-    return () => document.removeEventListener('mousedown', handleClickOutSide);
-  }, []);
   return (
     <>
-      <MenuContainer onClick={onClickMenu} ref={menuRef}>
+      <MenuContainer onClick={onClickMenu} ref={ref}>
         <FontAwesomeIcon icon={faEllipsis} className="toggle-menu-icon" />
         {isOpen ? (
           <MenuModal>

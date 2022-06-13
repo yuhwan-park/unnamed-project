@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,10 +11,11 @@ import {
   faCalendarDays,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import CalendarView from './common/CalendarView';
 import dayjs from 'dayjs';
 import { dateVariants } from 'variants';
+import { useDetectClickOutside } from 'hooks/useDetectClickOutside';
 
 function Nav({ isWide }: { isWide: boolean }) {
   const [date, setDate] = useRecoilState(dateState);
@@ -23,7 +24,12 @@ function Nav({ isWide }: { isWide: boolean }) {
   const [toggleCalendar, setToggleCalendar] = useState(false);
   const setToggleMenu = useSetRecoilState(toggleMenuState);
   const myList = useRecoilValue(selectedListState);
+  const { pathname } = useLocation();
   const navigator = useNavigate();
+  const CloseDropdownMenu = useCallback(() => {
+    setToggleCalendar(false);
+  }, []);
+  const ref = useDetectClickOutside({ onTriggered: CloseDropdownMenu });
 
   const onClickNext = () => {
     setIsBack(false);
@@ -66,12 +72,14 @@ function Nav({ isWide }: { isWide: boolean }) {
   }, [setToggleMenu, isWide]);
 
   return (
-    <Wrapper>
+    <Wrapper ref={ref}>
       <MenuIcon onClick={onClickMenuIcon}>
         <FontAwesomeIcon icon={faBars} />
       </MenuIcon>
       {myList ? (
         <Today>{myList.title}</Today>
+      ) : pathname.includes('all') ? (
+        <Today>모두 보기</Today>
       ) : (
         <>
           <PrevButton onClick={onClickPrev}>

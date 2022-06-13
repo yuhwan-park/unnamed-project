@@ -94,79 +94,71 @@ function MyListModal() {
   };
 
   return (
-    <>
-      {toggleModal && (
-        <ListModalCover
-          key="listModal"
-          variants={modalCoverVariants}
-          initial="initial"
-          animate="visible"
-        >
-          <ListModal variants={modalVariants}>
-            {toggleModal === 'Delete' ? (
-              <>
-                <ListModalHeader>
-                  <h1>리스트 삭제</h1>
-                  <FontAwesomeIcon icon={faX} onClick={onClickCloseModal} />
-                </ListModalHeader>
-                <ListModalBody>
-                  <p>
-                    리스트를 삭제할 시 이 리스트에 있는 모든 할 일은 삭제됩니다.
-                    정말 삭제하시겠습니까?
-                  </p>
-                </ListModalBody>
-                <ListModalFooter>
-                  <SubmitButton
-                    type="button"
-                    value="확인"
-                    onClick={deleteList}
-                  />
-                  <CancleButton
-                    type="button"
-                    value="취소"
-                    onClick={onClickCloseModal}
-                  />
-                </ListModalFooter>
-              </>
-            ) : (
-              <form
-                onSubmit={handleSubmit(
-                  toggleModal === 'Create' ? createList : editList,
-                )}
-              >
-                <ListModalHeader>
-                  <h1>
-                    {toggleModal === 'Create' ? '리스트 추가' : '리스트 편집'}
-                  </h1>
-                  <FontAwesomeIcon icon={faX} onClick={onClickCloseModal} />
-                </ListModalHeader>
-                <ListModalBody>
-                  <ListModalInput
-                    type="text"
-                    placeholder="리스트 이름을 적어주세요"
-                    defaultValue={
-                      toggleModal === 'Create' ? '' : selectedList?.title
-                    }
-                    {...register('title', { required: '필수 항목입니다' })}
-                  />
-                  {errors.title && (
-                    <ErrorMessage>{errors.title.message}</ErrorMessage>
-                  )}
-                </ListModalBody>
-                <ListModalFooter>
-                  <SubmitButton type="submit" value="확인" />
-                  <CancleButton
-                    type="button"
-                    value="취소"
-                    onClick={onClickCloseModal}
-                  />
-                </ListModalFooter>
-              </form>
+    <ListModalCover
+      key="listModal"
+      variants={modalCoverVariants}
+      initial="initial"
+      animate="visible"
+    >
+      <ListModal variants={modalVariants}>
+        {toggleModal === 'Delete' ? (
+          <>
+            <ListModalHeader>
+              <h1>리스트 삭제</h1>
+              <FontAwesomeIcon icon={faX} onClick={onClickCloseModal} />
+            </ListModalHeader>
+            <ListModalBody>
+              <p>
+                리스트를 삭제할 시 이 리스트에 있는 모든 할 일은 삭제됩니다.
+                정말 삭제하시겠습니까?
+              </p>
+            </ListModalBody>
+            <ListModalFooter>
+              <SubmitButton type="button" value="확인" onClick={deleteList} />
+              <CancleButton
+                type="button"
+                value="취소"
+                onClick={onClickCloseModal}
+              />
+            </ListModalFooter>
+          </>
+        ) : (
+          <form
+            onSubmit={handleSubmit(
+              toggleModal === 'Create' ? createList : editList,
             )}
-          </ListModal>
-        </ListModalCover>
-      )}
-    </>
+          >
+            <ListModalHeader>
+              <h1>
+                {toggleModal === 'Create' ? '리스트 추가' : '리스트 편집'}
+              </h1>
+              <FontAwesomeIcon icon={faX} onClick={onClickCloseModal} />
+            </ListModalHeader>
+            <ListModalBody>
+              <ListModalInput
+                type="text"
+                placeholder="리스트 이름을 적어주세요"
+                defaultValue={
+                  toggleModal === 'Create' ? '' : selectedList?.title
+                }
+                {...register('title', { required: '필수 항목입니다' })}
+              />
+              {errors.title && (
+                <ErrorMessage>{errors.title.message}</ErrorMessage>
+              )}
+            </ListModalBody>
+            <ListModalFooter>
+              <SubmitButton type="submit" value="확인" />
+              <CancleButton
+                type="button"
+                value="취소"
+                onClick={onClickCloseModal}
+              />
+            </ListModalFooter>
+          </form>
+        )}
+      </ListModal>
+    </ListModalCover>
   );
 }
 
