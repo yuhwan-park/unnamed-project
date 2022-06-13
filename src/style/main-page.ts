@@ -99,3 +99,18 @@ export const SubmitButton = styled(ModalButton)`
     background-color: ${props => props.theme.dailColor.normal};
   }
 `;
+
+export const OffCanvasMenuContainer = styled.div<{ isSelected: boolean }>`
+  display: flex;
+  cursor: pointer;
+  background-color: ${props =>
+    props.isSelected ? 'rgb(210, 210, 210)' : 'transparent'};
+  padding: 20px 0;
+  margin: 0 20px;
+  border-radius: 4px;
+  white-space: nowrap;
+  &:hover {
+    background-color: ${props =>
+      props.isSelected ? 'rgb(210, 210, 210)' : 'rgb(230, 230, 230)'};
+  }
+`;

@@ -1,30 +1,27 @@
-import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { paramState } from 'atoms';
+import { faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 import { MenuIcon, OffCanvasMenuContainer } from 'style/main-page';
 
-function CalendarList() {
-  const params = useRecoilValue(paramState);
+function ShowAllList() {
   const { pathname } = useLocation();
   const navigator = useNavigate();
 
   const onClickDateList = () => {
-    navigator('/main');
+    navigator('/main/all/tasks');
   };
 
   return (
     <OffCanvasMenuContainer
-      isSelected={!params['listId'] && !pathname.includes('all')}
+      isSelected={pathname.includes('all')}
       onClick={onClickDateList}
     >
       <MenuIcon>
-        <FontAwesomeIcon icon={faCalendarDays} />
+        <FontAwesomeIcon icon={faFolderOpen} />
       </MenuIcon>
-      <p>날짜별로 보기</p>
+      <p>모두</p>
     </OffCanvasMenuContainer>
   );
 }
 
-export default CalendarList;
+export default ShowAllList;

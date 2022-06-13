@@ -1,4 +1,4 @@
-import { documentState, myListDocsState } from 'atoms';
+import { allDocumentState, documentState, myListDocsState } from 'atoms';
 import { auth, db } from 'firebase-source';
 import { doc, updateDoc } from 'firebase/firestore';
 import { useSetRecoilState } from 'recoil';
@@ -8,6 +8,7 @@ function useUpdateDocs() {
   // 클라이언트단 & DB단의 Document 데이터 필드값을 수정하는 Hook
   const setDocument = useSetRecoilState(documentState);
   const setMyListDocs = useSetRecoilState(myListDocsState);
+  const setAllDocument = useSetRecoilState(allDocumentState);
 
   return async (
     document: IDocument,
@@ -23,6 +24,11 @@ function useUpdateDocs() {
       ),
     );
     setMyListDocs(docs =>
+      docs.map(doc =>
+        doc.id === document.id ? { ...doc, [key]: value } : doc,
+      ),
+    );
+    setAllDocument(docs =>
       docs.map(doc =>
         doc.id === document.id ? { ...doc, [key]: value } : doc,
       ),

@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import {
+  allDocumentState,
   dateSelector,
   documentState,
   myListDocsState,
@@ -12,12 +13,32 @@ import {
 import { auth, db } from 'firebase-source';
 import ContentForm from 'components/list/ContentForm';
 import ListConstructor from './ListConstructor';
+import { useLocation } from 'react-router-dom';
 
 export default function List() {
   const date = useRecoilValue(dateSelector);
   const selectedList = useRecoilValue(selectedListState);
+  const [allDocuments, setAllDocuments] = useRecoilState(allDocumentState);
   const [myListDocs, setMyListDocs] = useRecoilState(myListDocsState);
   const [documents, setDocuments] = useRecoilState(documentState);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, async user => {
+      if (!user || !pathname.includes('all')) return;
+      const docQurey = query(
+        collection(db, user.uid, 'All', 'Documents'),
+        orderBy('date'),
+      );
+      const querySnapshot = await getDocs(docQurey);
+
+      const tempArray: any[] = [];
+      querySnapshot.forEach(doc => {
+        tempArray.push(doc.data());
+      });
+      setAllDocuments(tempArray);
+    });
+  }, [pathname, setAllDocuments]);
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
@@ -54,11 +75,13 @@ export default function List() {
   }, [selectedList, setMyListDocs]);
   return (
     <Wrapper>
-      <ContentForm />
+      {!pathname.includes('all') && <ContentForm />}
 
       <ListContainer>
         {selectedList ? (
           <ListConstructor documentData={myListDocs} />
+        ) : pathname.includes('all') ? (
+          <ListConstructor documentData={allDocuments} />
         ) : (
           <ListConstructor documentData={documents} />
         )}

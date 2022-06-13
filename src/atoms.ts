@@ -42,6 +42,11 @@ export const toggleMenuState = atom({
 // * Document State *
 // ******************
 
+export const allDocumentState = atom<IDocument[]>({
+  key: 'allDocument',
+  default: [],
+});
+
 export const documentState = atom<IDocument[]>({
   key: 'todo',
   default: [],

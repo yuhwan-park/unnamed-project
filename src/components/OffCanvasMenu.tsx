@@ -1,14 +1,14 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { paramState, toggleMenuState } from 'atoms';
+import { toggleMenuState } from 'atoms';
 import UserAccount from './offCanvas/UserAccount';
 import { menuVariants } from 'variants';
 import MyList from './offCanvas/MyList';
 import CalendarList from './offCanvas/CalendarList';
+import ShowAllList from './offCanvas/ShowAllList';
 
 function OffCanvasMenu() {
-  const params = useRecoilValue(paramState);
   const toggleMenu = useRecoilValue(toggleMenuState);
 
   return (
@@ -23,7 +23,8 @@ function OffCanvasMenu() {
           transition={{ type: 'tween' }}
         >
           <UserAccount />
-          {params['listId'] && <CalendarList />}
+          <ShowAllList />
+          <CalendarList />
           <MyList />
         </Wrapper>
       )}

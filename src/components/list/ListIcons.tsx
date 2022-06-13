@@ -2,7 +2,7 @@ import { faSquarePollHorizontal } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { dateState, paramState } from 'atoms';
 import dayjs from 'dayjs';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { IDocument } from 'types';
@@ -15,6 +15,7 @@ function ListIcons({ item }: IListIconsProps) {
   const navigator = useNavigate();
   const setDate = useSetRecoilState(dateState);
   const params = useRecoilValue(paramState);
+  const { pathname } = useLocation();
 
   const onClickListTitle = () => {
     navigator(`/main/lists/${item.list?.id}/tasks`);
@@ -31,7 +32,7 @@ function ListIcons({ item }: IListIconsProps) {
           {item.list.title}
         </ListItemText>
       )}
-      {item.date && params['listId'] && (
+      {item.date && (params['listId'] || pathname.includes('all')) && (
         <ListItemText onClick={onClickDate}>
           {dayjs(item.date).format('M월DD일')}
         </ListItemText>
@@ -56,7 +57,8 @@ const ListItemText = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  width: 15%;
+  width: fit-content;
+  min-width: 60px;
   max-width: 100px;
   padding: 0 5px;
   cursor: pointer;
