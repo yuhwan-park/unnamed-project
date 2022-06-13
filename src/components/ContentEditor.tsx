@@ -47,7 +47,7 @@ function ContentEditor() {
 
   return (
     <Wrapper className="show-editor-trigger">
-      {params['id'] ? (
+      {params['id'] && document ? (
         <EditorContainer>
           <EditorHeader />
           <Editor

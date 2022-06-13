@@ -26,6 +26,7 @@ export const MenuContainer = styled.div`
   cursor: pointer;
   .toggle-menu-icon {
     padding: 0 10px 0 5px;
+    opacity: 0;
     color: rgba(0, 0, 0, 0.3);
     &:hover {
       color: rgba(0, 0, 0, 0.6);

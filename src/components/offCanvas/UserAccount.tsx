@@ -177,4 +177,7 @@ const UserName = styled.div`
   cursor: pointer;
   padding: 0 10px;
   width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
