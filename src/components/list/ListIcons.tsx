@@ -1,8 +1,9 @@
 import { faSquarePollHorizontal } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { paramState } from 'atoms';
+import { dateState, paramState } from 'atoms';
+import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { IDocument } from 'types';
 
@@ -12,16 +13,28 @@ interface IListIconsProps {
 
 function ListIcons({ item }: IListIconsProps) {
   const navigator = useNavigate();
+  const setDate = useSetRecoilState(dateState);
   const params = useRecoilValue(paramState);
 
   const onClickListTitle = () => {
     navigator(`/main/lists/${item.list?.id}/tasks`);
   };
+  const onClickDate = () => {
+    setDate(dayjs(item.date));
+    navigator(`/main`);
+  };
 
   return (
     <>
       {item.list && !params['listId'] && (
-        <MyListTitle onClick={onClickListTitle}>{item.list.title}</MyListTitle>
+        <ListItemText onClick={onClickListTitle}>
+          {item.list.title}
+        </ListItemText>
+      )}
+      {item.date && params['listId'] && (
+        <ListItemText onClick={onClickDate}>
+          {dayjs(item.date).format('M월DD일')}
+        </ListItemText>
       )}
       {item.content && (
         <FontAwesomeIcon
@@ -36,7 +49,7 @@ function ListIcons({ item }: IListIconsProps) {
 
 export default ListIcons;
 
-const MyListTitle = styled.div`
+const ListItemText = styled.div`
   text-align: right;
   font-size: ${props => props.theme.fontSize.small};
   color: rgba(0, 0, 0, 0.4);

@@ -32,7 +32,8 @@ function EditorHeader() {
   const onClickConfirmToUpdateDate = async () => {
     if (!selectedDoc || !newDate || newDate === selectedDoc.date) return;
 
-    await updator(selectedDoc, 'date', newDate, true);
+    setShowCalendar(false);
+    updator(selectedDoc, 'date', newDate, true);
 
     if (selectedDoc.date) {
       const oldDocRef = doc(
@@ -49,7 +50,6 @@ function EditorHeader() {
     const newItem = { ...selectedDoc, date: newDate };
     await setDoc(newMyListDocRef, newItem);
     setDate(dayjs(newDate));
-    setShowCalendar(false);
   };
 
   useEffect(() => {
@@ -69,12 +69,13 @@ function EditorHeader() {
             <FrontMenuContainer>
               {!selectedDoc.isNote && <CheckBox todo={selectedDoc} />}
             </FrontMenuContainer>
-            <CalendarIconContainer>
-              <FontAwesomeIcon
-                icon={faCalendarDays}
-                onClick={onClickToggleCalendar}
-                size="lg"
-              />
+            <CalendarIconContainer onClick={onClickToggleCalendar}>
+              <FontAwesomeIcon icon={faCalendarDays} size="lg" />
+              <span>
+                {selectedDoc.date
+                  ? dayjs(selectedDoc.date).format('M월DD일')
+                  : '없음'}
+              </span>
             </CalendarIconContainer>
             {showCalendar && (
               <CalendarContainer ref={calendarRef}>
@@ -167,10 +168,18 @@ const EditorTitle = styled.div`
 `;
 
 const CalendarIconContainer = styled.div`
-  color: #bbb;
-  padding: 0 10px;
+  padding: 5px 10px;
+  margin-left: 5px;
   cursor: pointer;
-  &:hover {
+  border-radius: 4px;
+  svg {
     color: rgba(0, 0, 0, 0.5);
+  }
+  span {
+    padding: 0 5px;
+    font-size: ${props => props.theme.fontSize.medium};
+  }
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
   }
 `;
