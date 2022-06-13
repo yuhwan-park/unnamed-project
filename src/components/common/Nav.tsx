@@ -12,7 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLocation, useNavigate } from 'react-router-dom';
-import CalendarView from './common/CalendarView';
+import CalendarView from './CalendarView';
 import dayjs from 'dayjs';
 import { dateVariants } from 'variants';
 import { useDetectClickOutside } from 'hooks/useDetectClickOutside';

@@ -1,17 +1,18 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { myListModalState, myListsState } from 'atoms';
+import { loadingState, myListModalState, myListsState } from 'atoms';
 import { auth, db } from 'firebase-source';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import MyListItem from './MyListItem';
 import MyListModal from './MyListModal';
 
 function MyList() {
   const [toggleModal, setToggleModal] = useRecoilState(myListModalState);
+  const setIsLoading = useSetRecoilState(loadingState);
   const [myLists, setMyLists] = useRecoilState(myListsState);
 
   const onClickOpenModal = () => {
@@ -26,9 +27,10 @@ function MyList() {
         if (docSnap.exists()) {
           setMyLists(docSnap.data().lists);
         }
+        setIsLoading(obj => ({ ...obj, myLists: true }));
       }
     });
-  }, [setMyLists]);
+  }, [setIsLoading, setMyLists]);
 
   return (
     <>

@@ -13,6 +13,23 @@ export const userState = atom<IUserState>({
   },
 });
 
+export const loadingState = atom({
+  key: 'loading',
+  default: {
+    allDoc: false,
+    doc: false,
+    myLists: false,
+  },
+});
+
+export const loadingSelector = selector({
+  key: 'loadingSelector',
+  get: ({ get }) => {
+    const loading = get(loadingState);
+    return Boolean(Object.values(loading).filter(val => !val).length);
+  },
+});
+
 export const paramState = atom<Params<string>>({
   key: 'param',
   default: {},

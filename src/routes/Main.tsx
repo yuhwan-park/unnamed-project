@@ -2,21 +2,23 @@ import { onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { auth } from 'firebase-source';
-import Nav from 'components/Nav';
+import Nav from 'components/common/Nav';
 import List from 'components/List';
 import styled from 'styled-components';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import ContentEditor from 'components/ContentEditor';
 import { AnimatePresence, motion } from 'framer-motion';
 import OffCanvasMenu from 'components/OffCanvasMenu';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { paramState, userState } from 'atoms';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { loadingSelector, paramState, userState } from 'atoms';
 import { editorVariants } from 'variants';
+import Loading from 'components/common/Loading';
 
 function Main() {
   const [userData, setUserData] = useRecoilState(userState);
   const [showEditor, setShowEditor] = useState(false);
   const [isWide, setIsWide] = useState(window.innerWidth > 1024 ? true : false);
+  const isLoading = useRecoilValue(loadingSelector);
   const setParams = useSetRecoilState(paramState);
   const navigator = useNavigate();
   const params = useParams();
@@ -65,6 +67,7 @@ function Main() {
 
   return (
     <>
+      {isLoading && <Loading />}
       <Wrapper onClick={onClickScreen}>
         {userData ? (
           <>

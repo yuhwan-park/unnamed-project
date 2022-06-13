@@ -16,6 +16,7 @@ import {
   dateSelector,
   documentCountByDateState,
   documentState,
+  loadingState,
   myListDocsState,
   selectedListState,
 } from 'atoms';
@@ -29,6 +30,7 @@ export default function List() {
   const selectedList = useRecoilValue(selectedListState);
   const setAllDocuments = useSetRecoilState(allDocumentState);
   const setDocumentCount = useSetRecoilState(documentCountByDateState);
+  const setIsLoading = useSetRecoilState(loadingState);
   const allDocuments = useRecoilValue(allDocumentSelector);
   const [myListDocs, setMyListDocs] = useRecoilState(myListDocsState);
   const [documents, setDocuments] = useRecoilState(documentState);
@@ -43,8 +45,9 @@ export default function List() {
         setAllDocuments(allDocSnap.data().docMap);
         setDocumentCount(allDocSnap.data().docCount);
       }
+      setIsLoading(obj => ({ ...obj, allDoc: true }));
     });
-  }, [setAllDocuments, setDocumentCount]);
+  }, [setAllDocuments, setDocumentCount, setIsLoading]);
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
@@ -60,8 +63,9 @@ export default function List() {
         tempArray.push(doc.data());
       });
       setDocuments(tempArray);
+      setIsLoading(obj => ({ ...obj, doc: true }));
     });
-  }, [date, setDocuments]);
+  }, [date, setDocuments, setIsLoading]);
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
