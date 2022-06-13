@@ -22,6 +22,7 @@ import styled from 'styled-components';
 import MoveListModal from './MoveListModal';
 import { IDocument } from 'types';
 import { auth, db } from 'firebase-source';
+import { useSetDocCount } from 'hooks/useSetDocCount';
 
 interface IListMenu {
   item: IDocument;
@@ -33,6 +34,7 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
   const [moveListFlag, setMoveListFlag] = useState(false);
   const setDocument = useSetRecoilState(documentState);
   const setMyListDocs = useSetRecoilState(myListDocsState);
+  const setDocCount = useSetDocCount();
   const [allDocument, setAllDocument] = useRecoilState(allDocumentState);
   const selectedList = useRecoilValue(selectedListState);
   const navigator = useNavigate();
@@ -58,7 +60,8 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
     if (docRef) await deleteDoc(docRef);
 
     const allDocRef = doc(db, `${auth.currentUser?.uid}/All`);
-    if (allDocRef) await updateDoc(allDocRef, { docMap: newAllDocument });
+    await updateDoc(allDocRef, { docMap: newAllDocument });
+    await setDocCount(item.date, false);
 
     if (pathname.includes('all')) return;
 

@@ -14,24 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
 import CalendarView from './common/CalendarView';
 import dayjs from 'dayjs';
-
-const dateVariants = {
-  entry: (isBack: boolean) => ({
-    x: isBack ? -100 : 100,
-    opacity: 0,
-    scale: 0,
-  }),
-  visible: {
-    x: 0,
-    opacity: 1,
-    scale: 1,
-  },
-  exit: (isBack: boolean) => ({
-    x: isBack ? 100 : -100,
-    opacity: 0,
-    scale: 0,
-  }),
-};
+import { dateVariants } from 'variants';
 
 function Nav({ isWide }: { isWide: boolean }) {
   const [date, setDate] = useRecoilState(dateState);

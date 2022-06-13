@@ -12,12 +12,14 @@ import {
 } from 'atoms';
 import { auth, db } from 'firebase-source';
 import { ITaskFormData } from 'types';
+import { useSetDocCount } from 'hooks/useSetDocCount';
 
 function ContentForm() {
   const date = useRecoilValue(dateSelector);
   const setDocuments = useSetRecoilState(documentState);
   const setMyListDocs = useSetRecoilState(myListDocsState);
   const setAllDocument = useSetRecoilState(allDocumentState);
+  const setDocCount = useSetDocCount();
   const selectedList = useRecoilValue(selectedListState);
   const [isNote, setIsNote] = useState(false);
   const { register, handleSubmit, setValue } = useForm<ITaskFormData>();
@@ -38,6 +40,7 @@ function ContentForm() {
     const docRef = selectedList
       ? doc(collection(db, `${auth.currentUser.uid}/Lists/${selectedList.id}`))
       : doc(collection(db, `${auth.currentUser.uid}/${date}/Document`));
+    const allDocRef = doc(db, `${auth.currentUser.uid}/All`);
     const data = {
       id: docRef.id,
       title,
@@ -54,14 +57,11 @@ function ContentForm() {
       setMyListDocs(prev => [...prev, data]);
     } else {
       setDocuments(prev => [...prev, data]);
+      await setDocCount(date, true);
     }
     setAllDocument(docs => ({ ...docs, [data.id]: data }));
 
-    await setDoc(
-      doc(db, `${auth.currentUser.uid}/All`),
-      { docMap: { [data.id]: data } },
-      { merge: true },
-    );
+    await setDoc(allDocRef, { docMap: { [data.id]: data } }, { merge: true });
     await setDoc(docRef, data);
   };
   return (

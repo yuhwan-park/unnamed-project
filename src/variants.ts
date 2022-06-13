@@ -1,3 +1,21 @@
+export const dateVariants = {
+  entry: (isBack: boolean) => ({
+    x: isBack ? -100 : 100,
+    opacity: 0,
+    scale: 0,
+  }),
+  visible: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+  },
+  exit: (isBack: boolean) => ({
+    x: isBack ? 100 : -100,
+    opacity: 0,
+    scale: 0,
+  }),
+};
+
 export const modalCoverVariants = {
   initial: {
     opacity: 0,

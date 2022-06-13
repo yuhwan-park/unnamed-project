@@ -14,6 +14,7 @@ import {
   allDocumentSelector,
   allDocumentState,
   dateSelector,
+  documentCountByDateState,
   documentState,
   myListDocsState,
   selectedListState,
@@ -27,6 +28,7 @@ export default function List() {
   const date = useRecoilValue(dateSelector);
   const selectedList = useRecoilValue(selectedListState);
   const setAllDocuments = useSetRecoilState(allDocumentState);
+  const setDocumentCount = useSetRecoilState(documentCountByDateState);
   const allDocuments = useRecoilValue(allDocumentSelector);
   const [myListDocs, setMyListDocs] = useRecoilState(myListDocsState);
   const [documents, setDocuments] = useRecoilState(documentState);
@@ -34,15 +36,15 @@ export default function List() {
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
-      if (!user || !pathname.includes('all')) return;
-      const docRef = doc(db, user.uid, 'All');
-      const docSnap = await getDoc(docRef);
+      if (!user) return;
+      const allDocSnap = await getDoc(doc(db, user.uid, 'All'));
 
-      if (docSnap.exists()) {
-        setAllDocuments(docSnap.data().docMap);
+      if (allDocSnap.exists()) {
+        setAllDocuments(allDocSnap.data().docMap);
+        setDocumentCount(allDocSnap.data().docCount);
       }
     });
-  }, [pathname, setAllDocuments]);
+  }, [setAllDocuments, setDocumentCount]);
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {

@@ -58,6 +58,15 @@ export const allDocumentSelector = selector({
   },
 });
 
+interface IdocumentCountByDateState {
+  [key: string]: number;
+}
+
+export const documentCountByDateState = atom<IdocumentCountByDateState>({
+  key: 'documentCount',
+  default: {},
+});
+
 export const documentState = atom<IDocument[]>({
   key: 'todo',
   default: [],

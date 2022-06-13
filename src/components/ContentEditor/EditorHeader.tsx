@@ -12,12 +12,14 @@ import { useUpdateDocs } from 'hooks';
 import { deleteDoc, doc, setDoc } from 'firebase/firestore';
 import { auth, db } from 'firebase-source';
 import CalendarView from 'components/common/CalendarView';
+import { useSetDocCount } from 'hooks/useSetDocCount';
 
 function EditorHeader() {
   const selectedDoc = useRecoilValue(selectedDocumentState);
   const setDate = useSetRecoilState(dateState);
   const [showCalendar, setShowCalendar] = useState(false);
   const [newDate, setNewDate] = useState('');
+  const setDocCount = useSetDocCount();
   const updator = useUpdateDocs();
   const calendarRef = useRef<HTMLDivElement>(null);
 
@@ -40,15 +42,17 @@ function EditorHeader() {
         db,
         `${auth.currentUser?.uid}/${selectedDoc.date}/Document/${selectedDoc.id}`,
       );
+      await setDocCount(selectedDoc.date, false);
       await deleteDoc(oldDocRef);
     }
+    await setDocCount(newDate, true);
 
-    const newMyListDocRef = doc(
+    const newDocRef = doc(
       db,
       `${auth.currentUser?.uid}/${newDate}/Document/${selectedDoc.id}`,
     );
     const newItem = { ...selectedDoc, date: newDate };
-    await setDoc(newMyListDocRef, newItem);
+    await setDoc(newDocRef, newItem);
     setDate(dayjs(newDate));
   };
 
