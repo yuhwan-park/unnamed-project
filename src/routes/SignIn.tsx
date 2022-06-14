@@ -26,7 +26,11 @@ function SignIn() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (err: any) {
-      setError(err.message);
+      if (err.code === 'auth/user-not-found') {
+        setError('등록되지 않은 이메일입니다.');
+      } else if (err.code === 'auth/wrong-password') {
+        setError('잘못된 비밀번호를 입력하였습니다.');
+      }
     }
   };
 

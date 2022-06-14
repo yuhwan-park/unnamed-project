@@ -40,7 +40,9 @@ function SignUp() {
         });
       }
     } catch (err: any) {
-      setError(err.message);
+      if (err.code === 'auth/email-already-in-use') {
+        setError('이미 등록된 이메일입니다.');
+      }
     }
   };
   useEffect(() => {
