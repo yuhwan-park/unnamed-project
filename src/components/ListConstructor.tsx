@@ -5,6 +5,7 @@ import { IDocument } from 'types';
 import NoteItem from './list/NoteItem';
 import TodoItem from './list/TodoItem';
 import { ListHeader } from 'style/main-page';
+import styled from 'styled-components';
 
 interface IListConstructorProps {
   documentData: IDocument[];
@@ -47,7 +48,7 @@ function ListConstructor({ documentData }: IListConstructorProps) {
     setNotes(notesData);
   }, [documentData]);
   return (
-    <>
+    <Wrapper>
       {Boolean(doingTodo.length) && (
         <ul>
           <ListHeader
@@ -101,9 +102,32 @@ function ListConstructor({ documentData }: IListConstructorProps) {
             notes.map(note => <NoteItem key={note.id} note={note} />)}
         </ul>
       )}
-      {!documentData.length && <h1>오늘은 할일이 없습니다!</h1>}
-    </>
+      {!documentData.length && (
+        <EmptyContent>
+          <h1>할 일이 없어요 😗</h1>
+          <div>해야할 일을 추가하거나 일기를 기록해 보세요!</div>
+        </EmptyContent>
+      )}
+    </Wrapper>
   );
 }
 
 export default ListConstructor;
+
+const Wrapper = styled.div`
+  height: 100%;
+`;
+const EmptyContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  h1 {
+    font-size: 24px;
+    padding: 20px 0;
+  }
+  div {
+    font-size: ${props => props.theme.fontSize.medium};
+  }
+`;

@@ -1,5 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faListUl, faCheck } from '@fortawesome/free-solid-svg-icons';
+import {
+  faListUl,
+  faCheck,
+  faCircleXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { myListDocsState, myListsState, paramState } from 'atoms';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -47,28 +51,48 @@ function MoveListModal({ item }: IMoveListModalProps) {
     await setDoc(newMyListDocRef, newItem);
   };
 
+  const onClickDeleteList = async () => {
+    if (!item.list) return;
+    setMyListDocs(docs => docs.filter(doc => doc.id !== item.id));
+
+    await updator(item, 'list', null, true);
+    await deleteDoc(
+      doc(db, `${auth.currentUser?.uid}/Lists/${item.list.id}/${item.id}`),
+    );
+  };
+
   return (
     <Wrapper>
-      {myLists.length ? (
-        myLists.map(list => (
-          <MyListContainer
-            key={list.id}
-            onClick={() => onClickMoveListItem(list)}
-          >
-            <MenuIcon>
-              <FontAwesomeIcon icon={faListUl} />
-            </MenuIcon>
-            <MyListTitle>{list.title}</MyListTitle>
-            {list.id === item.list?.id && (
-              <CheckIconContainer>
-                <FontAwesomeIcon icon={faCheck} />
-              </CheckIconContainer>
-            )}
-          </MyListContainer>
-        ))
-      ) : (
-        <NoListMessage>리스트가 없습니다.</NoListMessage>
-      )}
+      <MyListContainer onClick={onClickDeleteList}>
+        <MenuIcon>
+          <FontAwesomeIcon icon={faCircleXmark} />
+        </MenuIcon>
+        <MyListTitle>없음</MyListTitle>
+        {!item.list && (
+          <CheckIconContainer>
+            <FontAwesomeIcon icon={faCheck} />
+          </CheckIconContainer>
+        )}
+      </MyListContainer>
+
+      {myLists.length
+        ? myLists.map(list => (
+            <MyListContainer
+              key={list.id}
+              onClick={() => onClickMoveListItem(list)}
+            >
+              <MenuIcon>
+                <FontAwesomeIcon icon={faListUl} />
+              </MenuIcon>
+              <MyListTitle>{list.title}</MyListTitle>
+              {list.id === item.list?.id && (
+                <CheckIconContainer>
+                  <FontAwesomeIcon icon={faCheck} />
+                </CheckIconContainer>
+              )}
+            </MyListContainer>
+          ))
+        : null}
     </Wrapper>
   );
 }
@@ -87,17 +111,10 @@ const Wrapper = styled.ul`
 
 const MyListContainer = styled.li`
   display: flex;
-  padding: 8px 10px;
+  padding: 8px 0;
   &:hover {
     background-color: rgb(240, 240, 240);
   }
-`;
-
-const NoListMessage = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
 `;
 
 const MyListTitle = styled.p`
@@ -111,5 +128,6 @@ const MyListTitle = styled.p`
 const CheckIconContainer = styled.div`
   position: relative;
   right: 0;
+  padding: 0 8px;
   color: #bbb;
 `;

@@ -47,7 +47,7 @@ function ContentEditor() {
 
   return (
     <Wrapper className="show-editor-trigger">
-      {params['id'] && document ? (
+      {params['id'] && document && (
         <EditorContainer>
           <EditorHeader />
           <Editor
@@ -67,7 +67,7 @@ function ContentEditor() {
             onBlur={onBlurEditor}
           />
         </EditorContainer>
-      ) : null}
+      )}
     </Wrapper>
   );
 }

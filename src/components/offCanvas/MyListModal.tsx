@@ -1,8 +1,14 @@
-import { myListModalState, myListsState, selectedListState } from 'atoms';
+import {
+  myListModalState,
+  myListsState,
+  myListDocsState,
+  selectedListState,
+} from 'atoms';
 import { auth, db } from 'firebase-source';
 import {
   arrayRemove,
   arrayUnion,
+  deleteDoc,
   doc,
   setDoc,
   Timestamp,
@@ -18,11 +24,14 @@ import { modalCoverVariants, modalVariants } from 'variants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ErrorMessage } from 'style/sign-page';
 import { CancleButton, SubmitButton } from 'style/main-page';
+import { useUpdateDocs } from 'hooks';
 
 function MyListModal() {
   const [toggleModal, setToggleModal] = useRecoilState(myListModalState);
   const selectedList = useRecoilValue(selectedListState);
   const [myLists, setMyLists] = useRecoilState(myListsState);
+  const myListDocs = useRecoilValue(myListDocsState);
+  const updator = useUpdateDocs();
   const {
     register,
     handleSubmit,
@@ -90,6 +99,15 @@ function MyListModal() {
     const needDeleteList = myLists.find(li => li.id === selectedList?.id);
     setMyLists(lists => lists.filter(li => li.id !== selectedList?.id));
     setToggleModal(null);
+    myListDocs.forEach(async document => {
+      await updator(document, 'list', null, true);
+      await deleteDoc(
+        doc(
+          db,
+          `${auth.currentUser?.uid}/Lists/${selectedList?.id}/${document.id}`,
+        ),
+      );
+    });
     await updateDoc(docRef, { lists: arrayRemove(needDeleteList) });
   };
 
@@ -108,10 +126,7 @@ function MyListModal() {
               <FontAwesomeIcon icon={faX} onClick={onClickCloseModal} />
             </ListModalHeader>
             <ListModalBody>
-              <p>
-                리스트를 삭제할 시 이 리스트에 있는 모든 할 일은 삭제됩니다.
-                정말 삭제하시겠습니까?
-              </p>
+              <p>"{selectedList?.title}" 리스트를 정말 삭제하시겠습니까?</p>
             </ListModalBody>
             <ListModalFooter>
               <SubmitButton type="button" value="확인" onClick={deleteList} />

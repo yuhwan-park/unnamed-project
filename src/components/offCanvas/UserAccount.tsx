@@ -176,7 +176,7 @@ const FileInput = styled.input`
   display: none;
 `;
 
-const UserName = styled.div`
+const UserName = styled.h2`
   cursor: pointer;
   padding: 0 10px;
   width: 100%;
