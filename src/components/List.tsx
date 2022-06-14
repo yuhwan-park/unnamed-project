@@ -110,10 +110,4 @@ const ListContainer = styled.div`
   padding: 10px;
   background-color: rgb(244, 244, 244);
   border-radius: 6px;
-  ul {
-    border-bottom: 1px solid #bbb;
-    &:last-child {
-      border: none;
-    }
-  }
 `;

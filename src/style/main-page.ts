@@ -113,3 +113,28 @@ export const OffCanvasMenuContainer = styled.div<{ isSelected: boolean }>`
       props.isSelected ? 'rgb(210, 210, 210)' : 'rgb(230, 230, 230)'};
   }
 `;
+
+export const ListHeader = styled.div<{ isCollapsed: boolean }>`
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: ${props => props.theme.fontSize.small};
+  &:hover {
+    background-color: rgb(230, 230, 230);
+    svg {
+      opacity: 1;
+    }
+  }
+  svg {
+    opacity: 0;
+    color: rgba(0, 0, 0, 0.3);
+    padding: 0 5px;
+    transform: ${props => (props.isCollapsed ? 'rotate(90deg)' : 'none')};
+    &:hover {
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+`;
