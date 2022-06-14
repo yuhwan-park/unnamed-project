@@ -29,7 +29,7 @@ function MyListMenu() {
 
   return (
     <>
-      <MenuContainer onClick={onClickMenu} ref={ref}>
+      <MenuContainer onClick={onClickMenu} ref={ref} className="list-menu">
         <FontAwesomeIcon icon={faEllipsis} className="toggle-menu-icon" />
         {isOpen ? (
           <MenuModal>

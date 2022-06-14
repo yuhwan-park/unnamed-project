@@ -51,7 +51,11 @@ function MyList() {
             <h2>리스트</h2>
           </ListTitle>
           <div className="plus-button" ref={plusRef}>
-            <FontAwesomeIcon icon={faPlus} onClick={onClickOpenModal} />
+            <FontAwesomeIcon
+              icon={faPlus}
+              onClick={onClickOpenModal}
+              className="toggle-menu-icon"
+            />
           </div>
         </MyListHeader>
         {isCollapsed && (

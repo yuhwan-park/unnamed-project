@@ -67,7 +67,7 @@ export default function NoteItem({ note }: INoteItemProps) {
   return (
     <ListItemContainer>
       <NoteIconContainer onClick={onClickList} className="show-editor-trigger">
-        <FontAwesomeIcon icon={faNoteSticky} className="sub-icon" />
+        <FontAwesomeIcon icon={faNoteSticky} className="sub-icon" size="lg" />
       </NoteIconContainer>
       <Title
         className="show-editor-trigger"
@@ -88,6 +88,6 @@ const NoteIconContainer = styled(IconContainer)`
   z-index: 1;
   .sub-icon {
     color: rgba(0, 0, 0, 0.3);
-    font-size: 20px;
+    width: 20px;
   }
 `;

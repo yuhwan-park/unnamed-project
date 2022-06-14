@@ -1,6 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
-import { selectedDocumentState, dateState } from 'atoms';
+import {
+  faCalendarDays,
+  faArrowLeftLong,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  selectedDocumentState,
+  dateState,
+  isWideState,
+  showEditorState,
+} from 'atoms';
 import CheckBox from 'components/common/CheckBox';
 import ListMenu from 'components/list/ListMenu';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -13,10 +21,13 @@ import { deleteDoc, doc, setDoc } from 'firebase/firestore';
 import { auth, db } from 'firebase-source';
 import CalendarView from 'components/common/CalendarView';
 import { useSetDocCount } from 'hooks/useSetDocCount';
+import { devices } from 'style/media-queries';
 
 function EditorHeader() {
   const selectedDoc = useRecoilValue(selectedDocumentState);
+  const isWide = useRecoilValue(isWideState);
   const setDate = useSetRecoilState(dateState);
+  const setShowEditor = useSetRecoilState(showEditorState);
   const [showCalendar, setShowCalendar] = useState(false);
   const [newDate, setNewDate] = useState('');
   const setDocCount = useSetDocCount();
@@ -29,6 +40,10 @@ function EditorHeader() {
 
   const onClickDay = (value: Date) => {
     setNewDate(dayjs(value).format('YYYYMMDD'));
+  };
+
+  const onClickGoBack = () => {
+    setShowEditor(false);
   };
 
   const onClickConfirmToUpdateDate = async () => {
@@ -71,6 +86,14 @@ function EditorHeader() {
         <>
           <Wrapper>
             <FrontMenuContainer>
+              {!isWide && (
+                <FontAwesomeIcon
+                  onClick={onClickGoBack}
+                  icon={faArrowLeftLong}
+                  className="go-back-icon"
+                  size="lg"
+                />
+              )}
               {!selectedDoc.isNote && <CheckBox todo={selectedDoc} />}
             </FrontMenuContainer>
             <CalendarIconContainer onClick={onClickToggleCalendar}>
@@ -127,8 +150,16 @@ const Wrapper = styled.div`
 `;
 
 const FrontMenuContainer = styled.div`
-  padding-right: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
   border-right: 1px solid rgba(0, 0, 0, 0.05);
+  .go-back-icon {
+    color: #bbb;
+    padding: 0 10px;
+    cursor: pointer;
+  }
 `;
 
 const BackMenuContainer = styled.div`
@@ -157,6 +188,9 @@ const CalendarContainer = styled.div`
   z-index: 300;
   background-color: white;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  @media ${devices.laptop} {
+    left: -50px;
+  }
 `;
 
 const EditorTitleContainer = styled.div`

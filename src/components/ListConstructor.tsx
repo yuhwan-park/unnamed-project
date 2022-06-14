@@ -54,7 +54,11 @@ function ListConstructor({ documentData }: IListConstructorProps) {
             isCollapsed={collapseDoingToDo}
             onClick={() => onClickListHeader('doing')}
           >
-            <FontAwesomeIcon icon={faChevronRight} size="sm" />
+            <FontAwesomeIcon
+              icon={faChevronRight}
+              size="sm"
+              className="toggle-menu-icon"
+            />
             <h2>할일 {`(${doingTodo.length})`}</h2>
           </ListHeader>
           {collapseDoingToDo &&
@@ -68,7 +72,11 @@ function ListConstructor({ documentData }: IListConstructorProps) {
             isCollapsed={collapseDoneToDo}
             onClick={() => onClickListHeader('done')}
           >
-            <FontAwesomeIcon icon={faChevronRight} size="sm" />
+            <FontAwesomeIcon
+              icon={faChevronRight}
+              size="sm"
+              className="toggle-menu-icon"
+            />
             <h2>완료 {`(${doneTodo.length})`}</h2>
           </ListHeader>
           {collapseDoneToDo &&
@@ -82,7 +90,11 @@ function ListConstructor({ documentData }: IListConstructorProps) {
             isCollapsed={collapsenotes}
             onClick={() => onClickListHeader('note')}
           >
-            <FontAwesomeIcon icon={faChevronRight} size="sm" />
+            <FontAwesomeIcon
+              icon={faChevronRight}
+              size="sm"
+              className="toggle-menu-icon"
+            />
             <h2>노트 {`(${notes.length})`}</h2>
           </ListHeader>
           {collapsenotes &&

@@ -3,7 +3,12 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { dateState, selectedListState, toggleMenuState } from 'atoms';
+import {
+  dateState,
+  isWideState,
+  selectedListState,
+  toggleMenuState,
+} from 'atoms';
 import {
   faAngleLeft,
   faBars,
@@ -16,12 +21,14 @@ import CalendarView from './CalendarView';
 import dayjs from 'dayjs';
 import { dateVariants } from 'variants';
 import { useDetectClickOutside } from 'hooks/useDetectClickOutside';
+import { devices } from 'style/media-queries';
 
-function Nav({ isWide }: { isWide: boolean }) {
+function Nav() {
   const [date, setDate] = useRecoilState(dateState);
   const [isBack, setIsBack] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [toggleCalendar, setToggleCalendar] = useState(false);
+  const isWide = useRecoilValue(isWideState);
   const setToggleMenu = useSetRecoilState(toggleMenuState);
   const myList = useRecoilValue(selectedListState);
   const { pathname } = useLocation();
@@ -162,11 +169,17 @@ const PrevButton = styled(Button)`
   position: relative;
   left: -100px;
   z-index: 1;
+  @media ${devices.mobileL} {
+    left: -70px;
+  }
 `;
 
 const NextButton = styled(Button)`
   position: relative;
   right: -100px;
+  @media ${devices.mobileL} {
+    right: -70px;
+  }
 `;
 
 const MenuIcon = styled(Button)`

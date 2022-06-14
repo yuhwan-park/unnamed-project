@@ -6,6 +6,7 @@ import { RecoilRoot } from 'recoil';
 import 'react-reflex/styles.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import 'assets/fonts.css';
+import { devices } from 'style/media-queries';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -70,6 +71,11 @@ a {
 .logo {
   font-family: 'Comfortaa', cursive;
   color : #1082FD;
+}
+.toggle-menu-icon {
+  @media ${devices.mobileL} {
+    opacity: 1 !important;
+  }
 }
 `;
 

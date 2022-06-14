@@ -8,6 +8,7 @@ import MyList from './offCanvas/MyList';
 import CalendarList from './offCanvas/CalendarList';
 import ShowAllList from './offCanvas/ShowAllList';
 import React from 'react';
+import { devices } from 'style/media-queries';
 
 function OffCanvasMenu() {
   const toggleMenu = useRecoilValue(toggleMenuState);
@@ -41,6 +42,11 @@ const Wrapper = styled(motion.div)`
   height: 100%;
   background-color: rgb(244, 244, 244);
   max-width: 350px;
+  @media ${devices.laptop} {
+    position: absolute;
+    z-index: 10;
+    box-shadow: 0 6px 20px rgb(0 0 0 / 15%);
+  }
 `;
 
 const MainMenuContainer = styled.div`

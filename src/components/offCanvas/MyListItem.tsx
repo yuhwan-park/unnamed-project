@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
 import MyListMenu from './MyListMenu';
 import { MenuIcon } from 'style/main-page';
-import { useRecoilValue } from 'recoil';
-import { selectedListState } from 'atoms';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { isWideState, selectedListState, toggleMenuState } from 'atoms';
 import { useEffect, useState } from 'react';
 
 interface IMyListItemProps {
@@ -16,9 +16,15 @@ interface IMyListItemProps {
 function MyListItem({ list }: IMyListItemProps) {
   const [isSelected, setIsSelected] = useState(false);
   const selectedList = useRecoilValue(selectedListState);
+  const isWide = useRecoilValue(isWideState);
+  const setToggleMenu = useSetRecoilState(toggleMenuState);
   const navigator = useNavigate();
-  const onClickListItem = () => {
+
+  const onClickListItem = (e: any) => {
     navigator(`/main/lists/${list.id}/tasks`);
+    if (!isWide && !e.target.closest('.list-menu')) {
+      setToggleMenu(false);
+    }
   };
 
   useEffect(() => {

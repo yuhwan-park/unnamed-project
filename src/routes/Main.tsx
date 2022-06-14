@@ -1,5 +1,5 @@
 import { onAuthStateChanged } from 'firebase/auth';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { auth } from 'firebase-source';
 import Nav from 'components/common/Nav';
@@ -10,14 +10,20 @@ import ContentEditor from 'components/ContentEditor';
 import { AnimatePresence, motion } from 'framer-motion';
 import OffCanvasMenu from 'components/OffCanvasMenu';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { loadingSelector, paramState, userState } from 'atoms';
+import {
+  isWideState,
+  loadingSelector,
+  paramState,
+  showEditorState,
+  userState,
+} from 'atoms';
 import { editorVariants } from 'variants';
 import Loading from 'components/common/Loading';
 
 function Main() {
   const [userData, setUserData] = useRecoilState(userState);
-  const [showEditor, setShowEditor] = useState(false);
-  const [isWide, setIsWide] = useState(window.innerWidth > 1024 ? true : false);
+  const [showEditor, setShowEditor] = useRecoilState(showEditorState);
+  const [isWide, setIsWide] = useRecoilState(isWideState);
   const isLoading = useRecoilValue(loadingSelector);
   const setParams = useSetRecoilState(paramState);
   const navigator = useNavigate();
@@ -26,7 +32,7 @@ function Main() {
   const onClickScreen = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
     if (isWide) return;
-    if (target.closest('.check-box')) return;
+    if (target.closest('.check-box') || target.closest('.go-back-icon')) return;
     setShowEditor(Boolean(target.closest('.show-editor-trigger')));
   };
 
@@ -55,7 +61,7 @@ function Main() {
     };
     window.addEventListener('resize', handleWindowResize);
     return () => window.removeEventListener('resize', handleWindowResize);
-  }, []);
+  }, [setIsWide]);
 
   useEffect(() => {
     const closeDetail = (e: KeyboardEvent) => {
@@ -63,7 +69,7 @@ function Main() {
     };
     if (showEditor) window.addEventListener('keydown', closeDetail);
     return () => window.removeEventListener('keydown', closeDetail);
-  }, [showEditor]);
+  }, [setShowEditor, showEditor]);
 
   return (
     <>
@@ -71,7 +77,7 @@ function Main() {
       <Wrapper onClick={onClickScreen}>
         {userData ? (
           <>
-            <Nav isWide={isWide} />
+            <Nav />
             {isWide ? (
               <ResponsiveContainer>
                 <OffCanvasMenu />
@@ -127,7 +133,7 @@ const ResponsiveContainer = styled.div`
 `;
 
 const EditorContainer = styled(motion.div)`
-  z-index: 4;
+  z-index: 30;
   width: 70%;
   position: absolute;
   height: calc(100% - 50px);

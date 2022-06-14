@@ -39,7 +39,7 @@ export const IconContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 30px;
-  padding: 0 5px 0 10px;
+  padding: 0 5px;
 `;
 
 export const MenuButtonContainer = styled.div`

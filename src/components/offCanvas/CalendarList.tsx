@@ -1,17 +1,22 @@
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { paramState } from 'atoms';
+import { isWideState, paramState, toggleMenuState } from 'atoms';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { MenuIcon, OffCanvasMenuContainer } from 'style/main-page';
 
 function CalendarList() {
   const params = useRecoilValue(paramState);
+  const isWide = useRecoilValue(isWideState);
+  const setToggleMenu = useSetRecoilState(toggleMenuState);
   const { pathname } = useLocation();
   const navigator = useNavigate();
 
   const onClickDateList = () => {
     navigator('/main');
+    if (!isWide) {
+      setToggleMenu(false);
+    }
   };
 
   return (

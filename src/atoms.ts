@@ -22,6 +22,16 @@ export const loadingState = atom({
   },
 });
 
+export const showEditorState = atom({
+  key: 'showEditor',
+  default: false,
+});
+
+export const isWideState = atom({
+  key: 'isWide',
+  default: window.innerWidth > 1024 ? true : false,
+});
+
 export const loadingSelector = selector({
   key: 'loadingSelector',
   get: ({ get }) => {
