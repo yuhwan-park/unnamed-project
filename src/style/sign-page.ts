@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const Logo = styled.h1`
+  cursor: pointer;
   font-size: 96px;
 `;
 

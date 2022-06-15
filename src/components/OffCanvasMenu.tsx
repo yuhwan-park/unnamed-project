@@ -46,7 +46,8 @@ export default React.memo(OffCanvasMenu);
 const Wrapper = styled(motion.div)`
   height: 100%;
   background-color: rgb(244, 244, 244);
-  max-width: 300px;
+  max-width: 350px;
+  overflow-x: hidden;
   overflow-y: scroll;
   @media ${devices.laptop} {
     position: absolute;

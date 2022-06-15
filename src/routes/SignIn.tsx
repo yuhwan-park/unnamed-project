@@ -43,9 +43,11 @@ function SignIn() {
   }, [navigator]);
   return (
     <Container>
-      <Logo draggable className="logo">
-        dail
-      </Logo>
+      <Link to={'/'}>
+        <Logo draggable className="logo">
+          dail
+        </Logo>
+      </Link>
       <FormContainer>
         <FormProvider {...methods}>
           <Form onSubmit={methods.handleSubmit(onSubmit)}>

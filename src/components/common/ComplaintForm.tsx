@@ -33,7 +33,7 @@ function ComplaintForm({ toggleFunc }: IComplaintFormProps) {
         <ComplaintInput type="text" id="title" {...register('title')} />
         <label htmlFor="content">내용</label>
         <ComplaintTextArea id="content" {...register('content')} />
-        <Message>{message}</Message>
+        {message && <Message>{message}</Message>}
         <FormFooter>
           <SubmitButton type="submit" value="제출" />
           <CancleButton

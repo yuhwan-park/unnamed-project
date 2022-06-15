@@ -16,6 +16,8 @@ import {
 } from 'style/sign-page';
 import { auth } from 'firebase-source';
 import { IUpdatePasswordFormData } from 'types';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function RequestUpdatePassword() {
   const [email, setEmail] = useState('');
@@ -31,9 +33,11 @@ function RequestUpdatePassword() {
   };
   return (
     <Container>
-      <Logo draggable className="logo">
-        dail
-      </Logo>
+      <Link to={'/'}>
+        <Logo draggable className="logo">
+          dail
+        </Logo>
+      </Link>
       <EFormContainer>
         {email ? (
           <Message>
@@ -42,7 +46,7 @@ function RequestUpdatePassword() {
         ) : (
           <Form onSubmit={handleSubmit(onSubmitEmail)}>
             <InputContainer>
-              <i className="fa-solid fa-envelope"></i>
+              <FontAwesomeIcon icon={faEnvelope} />
               <TextInput
                 type="text"
                 {...register('email', {

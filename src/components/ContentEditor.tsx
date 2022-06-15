@@ -7,6 +7,7 @@ import { useUpdateDocs } from 'hooks';
 import { useMemo } from 'react';
 import EditorHeader from './ContentEditor/EditorHeader';
 import '@toast-ui/editor/dist/toastui-editor.css';
+import '@toast-ui/editor/dist/i18n/ko-kr';
 
 function ContentEditor() {
   const params = useRecoilValue(paramState);
@@ -55,6 +56,7 @@ function ContentEditor() {
             height="100%"
             initialEditType="wysiwyg"
             autofocus={false}
+            language="ko-KR"
             hideModeSwitch={true}
             toolbarItems={[
               ['heading', 'bold', 'italic', 'strike'],
