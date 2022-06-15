@@ -50,7 +50,7 @@ function EditorHeader() {
     if (!selectedDoc || !newDate || newDate === selectedDoc.date) return;
 
     setShowCalendar(false);
-    updator(selectedDoc, 'date', newDate, false);
+    updator(selectedDoc, 'date', newDate, true);
 
     if (selectedDoc.date) {
       const oldDocRef = doc(
