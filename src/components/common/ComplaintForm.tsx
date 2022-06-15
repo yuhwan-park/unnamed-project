@@ -3,6 +3,7 @@ import { addDoc, collection } from 'firebase/firestore';
 import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { CancleButton, SubmitButton } from 'style/main-page';
+import { ErrorMessage } from 'style/sign-page';
 import styled from 'styled-components';
 
 interface IComplaintFormProps {
@@ -11,7 +12,12 @@ interface IComplaintFormProps {
 
 function ComplaintForm({ toggleFunc }: IComplaintFormProps) {
   const [message, setMessage] = useState('');
-  const { register, handleSubmit, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
 
   const onComplaintFormSubmit = async ({ title, content }: FieldValues) => {
     const issue = { title, content };
@@ -30,9 +36,20 @@ function ComplaintForm({ toggleFunc }: IComplaintFormProps) {
       </Message>
       <FormContainer onSubmit={handleSubmit(onComplaintFormSubmit)}>
         <label htmlFor="title">제목</label>
-        <ComplaintInput type="text" id="title" {...register('title')} />
+        <ComplaintInput
+          type="text"
+          id="title"
+          {...register('title', { required: '필수 항목입니다.' })}
+        />
+        {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
         <label htmlFor="content">내용</label>
-        <ComplaintTextArea id="content" {...register('content')} />
+        <ComplaintTextArea
+          id="content"
+          {...register('content', { required: '필수 항목입니다.' })}
+        />
+        {errors.content && (
+          <ErrorMessage>{errors.content.message}</ErrorMessage>
+        )}
         {message && <Message>{message}</Message>}
         <FormFooter>
           <SubmitButton type="submit" value="제출" />
@@ -69,6 +86,10 @@ const Message = styled.p`
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
+  label {
+    font-size: ${({ theme }) => theme.fontSize.small};
+    font-weight: 700;
+  }
 `;
 
 const ComplaintInput = styled.input`
