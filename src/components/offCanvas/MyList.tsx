@@ -103,4 +103,5 @@ const EmptyContent = styled.div`
   color: rgba(0, 0, 0, 0.4);
   font-size: ${props => props.theme.fontSize.small};
   line-height: 16px;
+  min-width: 250px;
 `;
