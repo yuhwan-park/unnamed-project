@@ -9,10 +9,9 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { ListHeader } from 'style/main-page';
 import styled from 'styled-components';
 import MyListItem from './MyListItem';
-import MyListModal from './MyListModal';
 
 function MyList() {
-  const [toggleModal, setToggleModal] = useRecoilState(myListModalState);
+  const setToggleModal = useSetRecoilState(myListModalState);
   const setIsLoading = useSetRecoilState(loadingState);
   const [myLists, setMyLists] = useRecoilState(myListsState);
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -43,35 +42,32 @@ function MyList() {
   }, [setIsLoading, setMyLists]);
 
   return (
-    <>
-      <MyListContainer>
-        <MyListHeader isCollapsed={isCollapsed} onClick={onClickListHeader}>
-          <ListTitle>
-            <FontAwesomeIcon icon={faChevronRight} size="sm" />
-            <h2>리스트</h2>
-          </ListTitle>
-          <div className="plus-button" ref={plusRef}>
-            <FontAwesomeIcon
-              icon={faPlus}
-              onClick={onClickOpenModal}
-              className="toggle-menu-icon"
-            />
-          </div>
-        </MyListHeader>
-        {isCollapsed && (
-          <MyListContent>
-            {myLists.length ? (
-              myLists.map(list => <MyListItem key={list.id} list={list} />)
-            ) : (
-              <EmptyContent>
-                카테고리별로 리스트를 추가하여 할 일 혹은 노트를 관리해보세요!
-              </EmptyContent>
-            )}
-          </MyListContent>
-        )}
-      </MyListContainer>
-      {toggleModal && <MyListModal />}
-    </>
+    <MyListContainer>
+      <MyListHeader isCollapsed={isCollapsed} onClick={onClickListHeader}>
+        <ListTitle>
+          <FontAwesomeIcon icon={faChevronRight} size="sm" />
+          <h2>리스트</h2>
+        </ListTitle>
+        <div className="plus-button" ref={plusRef}>
+          <FontAwesomeIcon
+            icon={faPlus}
+            onClick={onClickOpenModal}
+            className="toggle-menu-icon"
+          />
+        </div>
+      </MyListHeader>
+      {isCollapsed && (
+        <MyListContent>
+          {myLists.length ? (
+            myLists.map(list => <MyListItem key={list.id} list={list} />)
+          ) : (
+            <EmptyContent>
+              카테고리별로 리스트를 추가하여 할 일 혹은 노트를 관리해보세요!
+            </EmptyContent>
+          )}
+        </MyListContent>
+      )}
+    </MyListContainer>
   );
 }
 
@@ -79,6 +75,7 @@ export default MyList;
 
 const MyListContainer = styled.div`
   padding: 10px 20px;
+  margin-bottom: 40px;
 `;
 
 const ListTitle = styled.div`

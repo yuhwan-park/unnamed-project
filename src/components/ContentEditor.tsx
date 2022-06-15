@@ -6,6 +6,7 @@ import { paramState, selectedDocumentState } from 'atoms';
 import { useUpdateDocs } from 'hooks';
 import { useMemo } from 'react';
 import EditorHeader from './ContentEditor/EditorHeader';
+import '@toast-ui/editor/dist/toastui-editor.css';
 
 function ContentEditor() {
   const params = useRecoilValue(paramState);

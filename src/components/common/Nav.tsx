@@ -14,6 +14,7 @@ import {
   faBars,
   faAngleRight,
   faCalendarDays,
+  faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -22,12 +23,14 @@ import dayjs from 'dayjs';
 import { dateVariants } from 'variants';
 import { useDetectClickOutside } from 'hooks/useDetectClickOutside';
 import { devices } from 'style/media-queries';
+import ComplaintForm from './ComplaintForm';
 
 function Nav() {
   const [date, setDate] = useRecoilState(dateState);
   const [isBack, setIsBack] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [toggleCalendar, setToggleCalendar] = useState(false);
+  const [toggleIssue, setToggleIssue] = useState(false);
   const isWide = useRecoilValue(isWideState);
   const setToggleMenu = useSetRecoilState(toggleMenuState);
   const myList = useRecoilValue(selectedListState);
@@ -36,7 +39,12 @@ function Nav() {
   const CloseDropdownMenu = useCallback(() => {
     setToggleCalendar(false);
   }, []);
-  const ref = useDetectClickOutside({ onTriggered: CloseDropdownMenu });
+  const calendarRef = useDetectClickOutside({ onTriggered: CloseDropdownMenu });
+
+  const closeForm = useCallback(() => {
+    setToggleIssue(false);
+  }, []);
+  const issueRef = useDetectClickOutside({ onTriggered: closeForm });
 
   const onClickNext = () => {
     setIsBack(false);
@@ -70,6 +78,10 @@ function Nav() {
     setToggleCalendar(false);
   };
 
+  const onClickIssueButton = () => {
+    setToggleIssue(prev => !prev);
+  };
+
   useEffect(() => {
     if (isWide) {
       setToggleMenu(true);
@@ -79,7 +91,7 @@ function Nav() {
   }, [setToggleMenu, isWide]);
 
   return (
-    <Wrapper ref={ref}>
+    <Wrapper ref={calendarRef}>
       <MenuIcon onClick={onClickMenuIcon}>
         <FontAwesomeIcon icon={faBars} />
       </MenuIcon>
@@ -127,6 +139,14 @@ function Nav() {
           )}
         </>
       )}
+      <ComplaintContainer ref={issueRef}>
+        <Button onClick={onClickIssueButton}>
+          <FontAwesomeIcon icon={faTriangleExclamation} />
+        </Button>
+        {toggleIssue && (
+          <ComplaintForm toggleFunc={(bool: boolean) => setToggleIssue(bool)} />
+        )}
+      </ComplaintContainer>
     </Wrapper>
   );
 }
@@ -187,4 +207,10 @@ const MenuIcon = styled(Button)`
   left: 30px;
   z-index: 10;
   padding-right: 10px;
+`;
+
+const ComplaintContainer = styled.div`
+  position: absolute;
+  right: 0;
+  padding: 0 10px;
 `;
