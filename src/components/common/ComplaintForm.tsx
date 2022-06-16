@@ -70,7 +70,7 @@ const Wrapper = styled.div`
   position: absolute;
   top: 30px;
   right: 10px;
-  width: 400px;
+  width: 350px;
   background-color: white;
   border-radius: 5px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);

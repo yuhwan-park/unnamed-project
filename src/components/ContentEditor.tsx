@@ -53,7 +53,7 @@ function ContentEditor() {
         <EditorContainer>
           <EditorHeader />
           <Editor
-            height="100%"
+            height="80%"
             initialEditType="wysiwyg"
             autofocus={false}
             language="ko-KR"

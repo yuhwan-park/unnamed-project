@@ -162,6 +162,7 @@ const SignLink = styled.div`
   display: flex;
   justify-content: flex-end;
   width: 40%;
+  word-break: keep-all;
   a {
     color: black;
     padding: 0 20px;
@@ -170,7 +171,7 @@ const SignLink = styled.div`
       font-weight: 700;
     }
   }
-  @media ${devices.mobileL} {
+  @media (max-width: 480px) {
     width: 50%;
     a {
       font-size: 14px;

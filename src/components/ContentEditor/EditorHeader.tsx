@@ -196,12 +196,11 @@ const CalendarContainer = styled.div`
 const EditorTitleContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 40px;
 `;
 
 const EditorTitle = styled.div`
   width: 100%;
-  padding: 5px 10px;
+  padding: 10px;
   font-weight: 700;
 `;
 

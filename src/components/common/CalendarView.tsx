@@ -23,7 +23,7 @@ function CalendarView({ value, onClickDay }: ICalendarViewProps) {
       onClickDay={onClickDay}
       tileContent={({ date, view }) => {
         const dateString = dayjs(date).format('YYYYMMDD');
-        if (docCount[dateString]) {
+        if (docCount && docCount[dateString]) {
           return <Count>{`(${docCount[dateString]})`}</Count>;
         }
         return null;

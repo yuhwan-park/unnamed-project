@@ -25,6 +25,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ErrorMessage } from 'style/sign-page';
 import { CancleButton, SubmitButton } from 'style/main-page';
 import { useUpdateDocs } from 'hooks';
+import { useNavigate } from 'react-router-dom';
 
 function MyListModal() {
   const [toggleModal, setToggleModal] = useRecoilState(myListModalState);
@@ -32,6 +33,7 @@ function MyListModal() {
   const [myLists, setMyLists] = useRecoilState(myListsState);
   const myListDocs = useRecoilValue(myListDocsState);
   const updator = useUpdateDocs();
+  const navigator = useNavigate();
   const {
     register,
     handleSubmit,
@@ -82,14 +84,16 @@ function MyListModal() {
     if (!auth.currentUser || !isError) return;
 
     const docRef = doc(db, `${auth.currentUser?.uid}/Lists`);
+    const newListId = shortUUID.generate();
     const listData = {
       title,
       createdAt: Timestamp.fromDate(new Date()),
-      id: shortUUID.generate(),
+      id: newListId,
     };
     setMyLists(prev => [...prev, listData]);
     setValue('title', '');
     setToggleModal(null);
+    navigator(`/main/lists/${newListId}/tasks`);
     await setDoc(docRef, { lists: arrayUnion(listData) }, { merge: true });
   };
 
