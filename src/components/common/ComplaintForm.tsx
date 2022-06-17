@@ -81,6 +81,7 @@ const Wrapper = styled.div`
 const Message = styled.p`
   font-size: ${({ theme }) => theme.fontSize.small};
   padding: 10px 0;
+  line-height: 16px;
 `;
 
 const FormContainer = styled.form`
@@ -89,6 +90,7 @@ const FormContainer = styled.form`
   label {
     font-size: ${({ theme }) => theme.fontSize.small};
     font-weight: 700;
+    padding: 8px 0;
   }
 `;
 

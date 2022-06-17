@@ -50,10 +50,10 @@ function ContentEditor() {
   return (
     <Wrapper className="show-editor-trigger">
       {params['id'] && document && (
-        <EditorContainer>
+        <>
           <EditorHeader />
           <Editor
-            height="80%"
+            height="calc(100% - 100px)"
             initialEditType="wysiwyg"
             autofocus={false}
             language="ko-KR"
@@ -69,7 +69,7 @@ function ContentEditor() {
             onKeyup={onKeyUpEditor}
             onBlur={onBlurEditor}
           />
-        </EditorContainer>
+        </>
       )}
     </Wrapper>
   );
@@ -80,8 +80,4 @@ export default React.memo(ContentEditor);
 const Wrapper = styled.div`
   background-color: white;
   height: 100%;
-`;
-
-const EditorContainer = styled.div`
-  height: calc(100% - 80px);
 `;

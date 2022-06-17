@@ -202,6 +202,12 @@ const EditorTitle = styled.div`
   width: 100%;
   padding: 10px;
   font-weight: 700;
+  max-height: 58px;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 `;
 
 const CalendarIconContainer = styled.div`

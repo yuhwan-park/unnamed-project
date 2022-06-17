@@ -124,18 +124,18 @@ function Main() {
 export default Main;
 
 const Wrapper = styled.div`
-  height: calc(100vh - 50px);
+  height: 100vh;
 `;
 
 const ResponsiveContainer = styled.div`
   display: flex;
-  height: 100%;
+  height: calc(100vh - 50px);
 `;
 
 const EditorContainer = styled(motion.div)`
   z-index: 30;
   width: 70%;
   position: absolute;
-  height: calc(100% - 50px);
+  height: calc(100vh - 50px);
   box-shadow: 0 6px 20px rgb(0 0 0 / 15%);
 `;
