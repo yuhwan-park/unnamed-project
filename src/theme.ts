@@ -13,4 +13,13 @@ export const Theme: DefaultTheme = {
   fontFamily: {
     main: `'Nanum Gothic', sans-serif`,
   },
+  iconColor: 'rgba(0, 0, 0, 0.3)',
+  hoverColor: {
+    icon: 'rgba(0, 0, 0, 0.6)',
+  },
+  textEllipsis: () => `
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  `,
 };

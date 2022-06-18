@@ -58,9 +58,7 @@ const Wrapper = styled.div<{ isSelected: boolean }>`
     }
   }
   p {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    ${({ theme }) => theme.textEllipsis};
     width: 100%;
   }
 `;

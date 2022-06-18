@@ -119,9 +119,7 @@ const MyListContainer = styled.li`
 
 const MyListTitle = styled.p`
   width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  ${({ theme }) => theme.textEllipsis};
   font-size: ${props => props.theme.fontSize.medium};
 `;
 

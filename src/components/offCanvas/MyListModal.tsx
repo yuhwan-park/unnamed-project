@@ -229,7 +229,7 @@ const ListModalHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   svg {
-    color: rgba(0, 0, 0, 0.3);
+    color: ${({ theme }) => theme.iconColor};
     cursor: pointer;
     &:hover {
       color: rgba(0, 0, 0, 0.8);

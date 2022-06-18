@@ -54,9 +54,7 @@ const ListItemText = styled.div`
   text-align: right;
   font-size: ${props => props.theme.fontSize.small};
   color: rgba(0, 0, 0, 0.4);
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  ${({ theme }) => theme.textEllipsis};
   width: fit-content;
   min-width: 60px;
   max-width: 100px;

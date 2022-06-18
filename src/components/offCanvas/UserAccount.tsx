@@ -180,7 +180,5 @@ const UserName = styled.h2`
   cursor: pointer;
   padding: 0 10px;
   width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  ${({ theme }) => theme.textEllipsis};
 `;

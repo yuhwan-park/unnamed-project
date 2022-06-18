@@ -27,9 +27,9 @@ export const MenuContainer = styled.div`
   .toggle-menu-icon {
     padding: 0 10px 0 5px;
     opacity: 0;
-    color: rgba(0, 0, 0, 0.3);
+    color: ${({ theme }) => theme.iconColor};
     &:hover {
-      color: rgba(0, 0, 0, 0.6);
+      color: ${({ theme }) => theme.hoverColor.icon};
     }
   }
 `;
@@ -73,7 +73,7 @@ export const MenuModal = styled.div`
 
 export const MenuIcon = styled.div`
   svg {
-    color: rgba(0, 0, 0, 0.3);
+    color: ${({ theme }) => theme.iconColor};
     padding: 0 10px;
   }
 `;
@@ -130,7 +130,7 @@ export const ListHeader = styled.div<{ isCollapsed: boolean }>`
   }
   svg {
     opacity: 0;
-    color: rgba(0, 0, 0, 0.3);
+    color: ${({ theme }) => theme.iconColor};
     padding: 0 5px;
     transform: ${props => (props.isCollapsed ? 'rotate(90deg)' : 'none')};
     &:hover {

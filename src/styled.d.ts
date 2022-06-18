@@ -14,5 +14,10 @@ declare module 'styled-components' {
     fontFamily: {
       main: string;
     };
+    iconColor: string;
+    hoverColor: {
+      icon: string;
+    };
+    textEllipsis: () => string;
   }
 }
