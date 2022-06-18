@@ -19,6 +19,7 @@ import {
 } from 'atoms';
 import { editorVariants } from 'variants';
 import Loading from 'components/common/Loading';
+import { useDetectClickOutside } from 'hooks';
 
 function Main() {
   const [userData, setUserData] = useRecoilState(userState);
@@ -28,6 +29,7 @@ function Main() {
   const setParams = useSetRecoilState(paramState);
   const navigator = useNavigate();
   const params = useParams();
+  useDetectClickOutside({ onTriggered: () => setShowEditor(false) });
 
   const onClickScreen = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
@@ -62,14 +64,6 @@ function Main() {
     window.addEventListener('resize', handleWindowResize);
     return () => window.removeEventListener('resize', handleWindowResize);
   }, [setIsWide]);
-
-  useEffect(() => {
-    const closeDetail = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' || e.keyCode === 27) setShowEditor(false);
-    };
-    if (showEditor) window.addEventListener('keydown', closeDetail);
-    return () => window.removeEventListener('keydown', closeDetail);
-  }, [setShowEditor, showEditor]);
 
   return (
     <>

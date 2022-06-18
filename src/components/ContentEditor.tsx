@@ -12,10 +12,10 @@ import '@toast-ui/editor/dist/i18n/ko-kr';
 function ContentEditor() {
   const params = useRecoilValue(paramState);
   const document = useRecoilValue(selectedDocumentState);
-  let timer: NodeJS.Timeout;
   const flag = useRef(false);
   const updator = useUpdateDocs();
   const editorRef = useMemo(() => React.createRef<Editor>(), []);
+  let timer: NodeJS.Timeout;
 
   const onKeyUpEditor = () => {
     const content = editorRef.current?.getInstance().getMarkdown();
