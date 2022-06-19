@@ -39,6 +39,7 @@ function List() {
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
       if (!user) return;
+      console.log('asdasd');
       const allDocSnap = await getDoc(doc(db, user.uid, 'All'));
 
       if (allDocSnap.exists()) {

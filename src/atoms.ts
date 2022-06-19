@@ -114,12 +114,12 @@ export const selectedDocumentState = selector({
   get: ({ get }) => {
     const params = get(paramState);
     const myListDocs = get(myListDocsState);
-    const allDocs = get(allDocumentSelector);
+    const allDocs = get(allDocumentState);
 
     if (params['listId']) {
       return myListDocs.find(document => document.id === params['id']);
     }
-    return allDocs.find(document => document.id === params['id']);
+    return params['id'] ? allDocs[params['id']] : undefined;
   },
 });
 
