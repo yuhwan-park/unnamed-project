@@ -14,9 +14,8 @@ import ListMenu from './ListMenu';
 import CheckBox from 'components/common/CheckBox';
 import { IDocument } from 'types';
 import ListIcons from './ListIcons';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { dateState, selectedListState } from 'atoms';
-import dayjs from 'dayjs';
+import { useRecoilValue } from 'recoil';
+import { selectedListState } from 'atoms';
 
 interface ITodoItemProps {
   todo: IDocument;
@@ -30,7 +29,6 @@ function TodoItem({ todo }: ITodoItemProps) {
   const navigator = useNavigate();
   const { register } = useForm();
   const selectedList = useRecoilValue(selectedListState);
-  const setDate = useSetRecoilState(dateState);
   const { pathname } = useLocation();
 
   const onClickList = () => {
@@ -39,7 +37,6 @@ function TodoItem({ todo }: ITodoItemProps) {
     } else if (pathname.includes('all')) {
       navigator(`/main/all/tasks/${todo.id}`);
     } else {
-      setDate(dayjs(todo.date));
       navigator(`/main/${todo.id}`);
     }
   };
@@ -87,7 +84,7 @@ function TodoItem({ todo }: ITodoItemProps) {
   );
 }
 
-export default React.memo(TodoItem);
+export default TodoItem;
 
 const ToDoTitle = styled(Title)<{ isDone: boolean }>`
   color: ${props => (props.isDone ? '#bbb' : 'black')};

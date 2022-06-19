@@ -1,9 +1,9 @@
 import { setDoc, updateDoc } from 'firebase/firestore';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { dateState, selectedListState } from 'atoms';
+import { selectedListState } from 'atoms';
 import { IconContainer, ListItemContainer, Title } from 'style/main-page';
 import ListMenu from './ListMenu';
 import { faNoteSticky } from '@fortawesome/free-solid-svg-icons';
@@ -16,7 +16,6 @@ import {
 } from 'hooks';
 import { IDocument } from 'types';
 import ListIcons from './ListIcons';
-import dayjs from 'dayjs';
 
 interface INoteItemProps {
   note: IDocument;
@@ -27,7 +26,6 @@ export default function NoteItem({ note }: INoteItemProps) {
   const updator = useUpdateDocs();
   const { register } = useForm();
   const myList = useRecoilValue(selectedListState);
-  const setDate = useSetRecoilState(dateState);
   const docRef = useGetDocRef(note);
   const ListDocRef = useGetListDocRef(note);
   const allDocRef = useGetAllDocRef();
@@ -39,7 +37,6 @@ export default function NoteItem({ note }: INoteItemProps) {
     } else if (pathname.includes('all')) {
       navigator(`/main/all/tasks/${note.id}`);
     } else {
-      setDate(dayjs(note.date));
       navigator(`/main/${note.id}`);
     }
   };

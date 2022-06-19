@@ -7,7 +7,7 @@ import {
   orderBy,
   query,
 } from 'firebase/firestore';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import {
@@ -25,7 +25,7 @@ import ContentForm from 'components/list/ContentForm';
 import ListConstructor from './ListConstructor';
 import { useLocation } from 'react-router-dom';
 
-export default function List() {
+function List() {
   const date = useRecoilValue(dateSelector);
   const selectedList = useRecoilValue(selectedListState);
   const setAllDocuments = useSetRecoilState(allDocumentState);
@@ -99,6 +99,8 @@ export default function List() {
     </Wrapper>
   );
 }
+
+export default List;
 
 const Wrapper = styled.div`
   height: 100%;
