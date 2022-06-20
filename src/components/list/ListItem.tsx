@@ -1,14 +1,9 @@
 import React from 'react';
-import { setDoc, updateDoc } from 'firebase/firestore';
+import { doc, setDoc, updateDoc } from 'firebase/firestore';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import {
-  useGetAllDocRef,
-  useGetDocRef,
-  useGetListDocRef,
-  useUpdateDocs,
-} from 'hooks';
+import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
 import { IconContainer, ListItemContainer, Title } from 'style/main-page';
 import ListMenu from './ListMenu';
 import CheckBox from 'components/common/CheckBox';
@@ -18,6 +13,7 @@ import { useRecoilValue } from 'recoil';
 import { screenStatusState } from 'atoms';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faNoteSticky } from '@fortawesome/free-solid-svg-icons';
+import { auth, db } from 'firebase-source';
 
 interface ITodoItemProps {
   item: IDocument;
@@ -27,7 +23,6 @@ function ListItem({ item }: ITodoItemProps) {
   const updator = useUpdateDocs();
   const docRef = useGetDocRef(item);
   const ListDocRef = useGetListDocRef(item);
-  const allDocRef = useGetAllDocRef();
   const navigator = useNavigate();
   const { register } = useForm();
   const screenStatus = useRecoilValue(screenStatusState);
@@ -54,13 +49,11 @@ function ListItem({ item }: ITodoItemProps) {
     if (docRef) {
       await updateDoc(docRef, { title });
     }
-    if (allDocRef) {
-      await setDoc(
-        allDocRef,
-        { docMap: { [item.id]: { ...item, title } } },
-        { merge: true },
-      );
-    }
+    await setDoc(
+      doc(db, `${auth.currentUser?.uid}/All`),
+      { docMap: { [item.id]: { ...item, title } } },
+      { merge: true },
+    );
   };
   return (
     <ListItemContainer>
