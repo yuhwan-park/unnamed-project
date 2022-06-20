@@ -1,5 +1,5 @@
 import { onAuthStateChanged } from 'firebase/auth';
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { auth } from 'firebase-source';
 import Nav from 'components/common/Nav';
@@ -69,7 +69,7 @@ function Main() {
     <>
       {isLoading && <Loading />}
       <Wrapper onClick={onClickScreen}>
-        {userData ? (
+        {userData && (
           <>
             <Nav />
             {isWide ? (
@@ -109,13 +109,13 @@ function Main() {
               </ResponsiveContainer>
             )}
           </>
-        ) : null}
+        )}
       </Wrapper>
     </>
   );
 }
 
-export default Main;
+export default memo(Main);
 
 const Wrapper = styled.div`
   height: 100vh;

@@ -7,7 +7,7 @@ import {
   orderBy,
   query,
 } from 'firebase/firestore';
-import React, { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import {
@@ -39,7 +39,6 @@ function List() {
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
       if (!user) return;
-      console.log('asdasd');
       const allDocSnap = await getDoc(doc(db, user.uid, 'All'));
 
       if (allDocSnap.exists()) {
@@ -89,19 +88,21 @@ function List() {
       {!pathname.includes('all') && <ContentForm />}
 
       <ListContainer>
-        {selectedList ? (
-          <ListConstructor documentData={myListDocs} />
-        ) : pathname.includes('all') ? (
-          <ListConstructor documentData={allDocuments} />
-        ) : (
-          <ListConstructor documentData={documents} />
-        )}
+        <ListConstructor
+          documentData={
+            selectedList
+              ? myListDocs
+              : pathname.includes('all')
+              ? allDocuments
+              : documents
+          }
+        />
       </ListContainer>
     </Wrapper>
   );
 }
 
-export default List;
+export default memo(List);
 
 const Wrapper = styled.div`
   height: 100%;

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Editor } from '@toast-ui/react-editor';
-import React, { useEffect, useRef } from 'react';
+import { createRef, memo, useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import { paramState, selectedDocumentState } from 'atoms';
 import { useUpdateDocs } from 'hooks';
@@ -14,7 +14,7 @@ function ContentEditor() {
   const document = useRecoilValue(selectedDocumentState);
   const flag = useRef(false);
   const updator = useUpdateDocs();
-  const editorRef = useMemo(() => React.createRef<Editor>(), []);
+  const editorRef = useMemo(() => createRef<Editor>(), []);
   let timer: NodeJS.Timeout;
 
   const onKeyUpEditor = () => {
@@ -75,7 +75,7 @@ function ContentEditor() {
   );
 }
 
-export default React.memo(ContentEditor);
+export default memo(ContentEditor);
 
 const Wrapper = styled.div`
   background-color: white;

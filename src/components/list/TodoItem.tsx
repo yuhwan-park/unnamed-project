@@ -41,11 +41,11 @@ function TodoItem({ todo }: ITodoItemProps) {
     }
   };
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     updator(todo, 'title', e.currentTarget.value, false);
   };
 
-  const onBlur = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onBlurTitle = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const title = e.currentTarget.value;
     if (ListDocRef) {
       await updateDoc(ListDocRef, { title });
@@ -73,8 +73,8 @@ function TodoItem({ todo }: ITodoItemProps) {
           onClick={onClickList}
           spellCheck={false}
           {...register(`todoTitle-${todo.id}`, {
-            onBlur,
-            onChange,
+            onBlur: onBlurTitle,
+            onChange: onChangeTitle,
           })}
         />
         <ListIcons item={todo} />

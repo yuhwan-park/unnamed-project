@@ -17,7 +17,7 @@ function ListConstructor({ documentData }: IListConstructorProps) {
   const [notes, setNotes] = useState<IDocument[]>([]);
   const [collapseDoingToDo, setCollapseDoingToDo] = useState(true);
   const [collapseDoneToDo, setCollapseDoneToDo] = useState(true);
-  const [collapsenotes, setCollapsenotes] = useState(true);
+  const [collapseNotes, setCollapseNotes] = useState(true);
 
   const onClickListHeader = (type: string) => {
     switch (type) {
@@ -28,7 +28,7 @@ function ListConstructor({ documentData }: IListConstructorProps) {
         setCollapseDoneToDo(prev => !prev);
         break;
       case 'note':
-        setCollapsenotes(prev => !prev);
+        setCollapseNotes(prev => !prev);
         break;
       default:
         break;
@@ -36,20 +36,21 @@ function ListConstructor({ documentData }: IListConstructorProps) {
   };
 
   useEffect(() => {
-    const doingTodosData = documentData.filter(
-      document => !document.isDone && !document.isNote,
-    );
-    const doneTodosData = documentData.filter(
-      document => document.isDone && !document.isNote,
-    );
-    const notesData = documentData.filter(document => document.isNote);
+    const doingTodosData: IDocument[] = [];
+    const doneTodosData: IDocument[] = [];
+    const notesData: IDocument[] = [];
+    documentData.forEach(document => {
+      if (document.isNote) notesData.push(document);
+      else if (document.isDone) doneTodosData.push(document);
+      else doingTodosData.push(document);
+    });
     setDoingTodo(doingTodosData.sort((a, b) => a.priority - b.priority));
     setDoneTodo(doneTodosData);
     setNotes(notesData);
   }, [documentData]);
   return (
     <Wrapper>
-      {Boolean(doingTodo.length) && (
+      {doingTodo.length > 0 && (
         <ul>
           <ListHeader
             isCollapsed={collapseDoingToDo}
@@ -67,7 +68,7 @@ function ListConstructor({ documentData }: IListConstructorProps) {
         </ul>
       )}
 
-      {Boolean(doneTodo.length) && (
+      {doneTodo.length > 0 && (
         <ul>
           <ListHeader
             isCollapsed={collapseDoneToDo}
@@ -85,10 +86,10 @@ function ListConstructor({ documentData }: IListConstructorProps) {
         </ul>
       )}
 
-      {Boolean(notes.length) && (
+      {notes.length > 0 && (
         <ul>
           <ListHeader
-            isCollapsed={collapsenotes}
+            isCollapsed={collapseNotes}
             onClick={() => onClickListHeader('note')}
           >
             <FontAwesomeIcon
@@ -98,7 +99,7 @@ function ListConstructor({ documentData }: IListConstructorProps) {
             />
             <h2>노트 {`(${notes.length})`}</h2>
           </ListHeader>
-          {collapsenotes &&
+          {collapseNotes &&
             notes.map(note => <NoteItem key={note.id} note={note} />)}
         </ul>
       )}
