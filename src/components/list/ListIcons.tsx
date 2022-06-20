@@ -1,9 +1,9 @@
 import { faSquarePollHorizontal } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { dateState, paramState } from 'atoms';
+import { dateState, screenStatusState } from 'atoms';
 import dayjs from 'dayjs';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { IDocument } from 'types';
 
@@ -14,25 +14,26 @@ interface IListIconsProps {
 function ListIcons({ item }: IListIconsProps) {
   const navigator = useNavigate();
   const setDate = useSetRecoilState(dateState);
-  const params = useRecoilValue(paramState);
-  const { pathname } = useLocation();
+  const [screenStatus, setScreenStatus] = useRecoilState(screenStatusState);
 
   const onClickListTitle = () => {
     navigator(`/main/lists/${item.list?.id}/tasks`);
+    setScreenStatus('List');
   };
   const onClickDate = () => {
     setDate(dayjs(item.date));
     navigator(`/main`);
+    setScreenStatus('Date');
   };
 
   return (
     <>
-      {item.list && !params['listId'] && (
+      {item.list && screenStatus !== 'List' && (
         <ListItemText onClick={onClickListTitle}>
           {item.list.title}
         </ListItemText>
       )}
-      {item.date && (params['listId'] || pathname.includes('all')) && (
+      {item.date && screenStatus !== 'Date' && (
         <ListItemText onClick={onClickDate}>
           {dayjs(item.date).format('M월D일')}
         </ListItemText>

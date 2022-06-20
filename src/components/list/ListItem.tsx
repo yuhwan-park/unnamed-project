@@ -1,7 +1,7 @@
 import React from 'react';
 import { setDoc, updateDoc } from 'firebase/firestore';
 import { useForm } from 'react-hook-form';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   useGetAllDocRef,
@@ -15,7 +15,7 @@ import CheckBox from 'components/common/CheckBox';
 import { IDocument } from 'types';
 import ListIcons from './ListIcons';
 import { useRecoilValue } from 'recoil';
-import { selectedListState } from 'atoms';
+import { screenStatusState } from 'atoms';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faNoteSticky } from '@fortawesome/free-solid-svg-icons';
 
@@ -30,13 +30,12 @@ function ListItem({ item }: ITodoItemProps) {
   const allDocRef = useGetAllDocRef();
   const navigator = useNavigate();
   const { register } = useForm();
-  const selectedList = useRecoilValue(selectedListState);
-  const { pathname } = useLocation();
+  const screenStatus = useRecoilValue(screenStatusState);
 
   const onClickList = () => {
-    if (item.list && selectedList) {
+    if (item.list && screenStatus === 'List') {
       navigator(`/main/lists/${item.list.id}/tasks/${item.id}`);
-    } else if (pathname.includes('all')) {
+    } else if (screenStatus === 'All') {
       navigator(`/main/all/tasks/${item.id}`);
     } else {
       navigator(`/main/${item.id}`);
@@ -64,7 +63,7 @@ function ListItem({ item }: ITodoItemProps) {
     }
   };
   return (
-    <ListItemContainer onClick={onClickList}>
+    <ListItemContainer>
       {item.isNote ? (
         <NoteIconContainer className="show-editor-trigger">
           <FontAwesomeIcon icon={faNoteSticky} className="sub-icon" size="lg" />
@@ -78,6 +77,7 @@ function ListItem({ item }: ITodoItemProps) {
         isDone={item.isDone}
         defaultValue={item.title}
         spellCheck={false}
+        onClick={onClickList}
         {...register('title', {
           onBlur: onBlurTitle,
           onChange: onChangeTitle,

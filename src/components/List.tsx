@@ -18,12 +18,12 @@ import {
   documentState,
   loadingState,
   myListDocsState,
+  screenStatusState,
   selectedListState,
 } from 'atoms';
 import { auth, db } from 'firebase-source';
 import ContentForm from 'components/list/ContentForm';
 import ListConstructor from './ListConstructor';
-import { useLocation } from 'react-router-dom';
 
 function List() {
   const date = useRecoilValue(dateSelector);
@@ -32,9 +32,9 @@ function List() {
   const setDocumentCount = useSetRecoilState(documentCountByDateState);
   const setIsLoading = useSetRecoilState(loadingState);
   const allDocuments = useRecoilValue(allDocumentSelector);
+  const screenStatus = useRecoilValue(screenStatusState);
   const [myListDocs, setMyListDocs] = useRecoilState(myListDocsState);
   const [documents, setDocuments] = useRecoilState(documentState);
-  const { pathname } = useLocation();
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
@@ -85,14 +85,14 @@ function List() {
   }, [selectedList, setMyListDocs]);
   return (
     <Wrapper>
-      {!pathname.includes('all') && <ContentForm />}
+      {screenStatus !== 'All' && <ContentForm />}
 
       <ListContainer>
         <ListConstructor
           documentData={
             selectedList
               ? myListDocs
-              : pathname.includes('all')
+              : screenStatus === 'All'
               ? allDocuments
               : documents
           }

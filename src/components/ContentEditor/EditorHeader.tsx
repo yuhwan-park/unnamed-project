@@ -202,25 +202,27 @@ const EditorTitle = styled.div`
   width: 100%;
   padding: 10px;
   font-weight: 700;
-  max-height: 58px;
-  display: -webkit-box;
+  max-height: 60px;
   overflow: hidden;
   text-overflow: ellipsis;
-  -webkit-box-orient: vertical;
+  word-break: break-all;
+  display: -webkit-box;
   -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 `;
 
 const CalendarIconContainer = styled.div`
+  display: flex;
+  align-items: center;
   padding: 5px 10px;
-  margin-left: 5px;
   cursor: pointer;
   border-radius: 4px;
   svg {
     color: rgba(0, 0, 0, 0.5);
   }
   span {
-    padding: 0 5px;
-    font-size: ${props => props.theme.fontSize.medium};
+    padding-left: 5px;
+    font-size: ${props => props.theme.fontSize.small};
   }
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);

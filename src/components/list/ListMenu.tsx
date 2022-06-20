@@ -1,14 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { useCallback, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import {
-  allDocumentState,
-  documentState,
-  myListDocsState,
-  selectedListState,
-} from 'atoms';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { allDocumentState, documentState, myListDocsState } from 'atoms';
 import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
 import {
   faTrashCan,
@@ -37,12 +31,9 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
   const setMyListDocs = useSetRecoilState(myListDocsState);
   const setDocCount = useSetDocCount();
   const [allDocument, setAllDocument] = useRecoilState(allDocumentState);
-  const selectedList = useRecoilValue(selectedListState);
-  const navigator = useNavigate();
   const updator = useUpdateDocs();
   const docRef = useGetDocRef(item);
   const ListDocRef = useGetListDocRef(item);
-  const { pathname } = useLocation();
   const CloseDropdownMenu = useCallback(() => {
     setIsOpen(false);
   }, []);
@@ -66,14 +57,6 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
     const allDocRef = doc(db, `${auth.currentUser?.uid}/All`);
     await updateDoc(allDocRef, { docMap: newAllDocument });
     await setDocCount(item.date, false);
-
-    if (pathname.includes('all')) return;
-
-    if (selectedList) {
-      navigator(`/main/lists/${selectedList.id}/tasks`);
-    } else {
-      navigator('/main');
-    }
   };
 
   const onClickConvert = async () => {

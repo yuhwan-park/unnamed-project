@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -6,6 +6,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   dateState,
   isWideState,
+  screenStatusState,
   selectedListState,
   toggleMenuState,
 } from 'atoms';
@@ -17,7 +18,6 @@ import {
   faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useLocation, useNavigate } from 'react-router-dom';
 import CalendarView from './CalendarView';
 import dayjs from 'dayjs';
 import { dateVariants } from 'variants';
@@ -32,10 +32,9 @@ function Nav() {
   const [toggleCalendar, setToggleCalendar] = useState(false);
   const [toggleIssue, setToggleIssue] = useState(false);
   const isWide = useRecoilValue(isWideState);
+  const selectedList = useRecoilValue(selectedListState);
+  const screenStatus = useRecoilValue(screenStatusState);
   const setToggleMenu = useSetRecoilState(toggleMenuState);
-  const myList = useRecoilValue(selectedListState);
-  const { pathname } = useLocation();
-  const navigator = useNavigate();
   const CloseDropdownMenu = useCallback(() => {
     setToggleCalendar(false);
   }, []);
@@ -49,13 +48,11 @@ function Nav() {
   const onClickNext = () => {
     setIsBack(false);
     setDate(prev => prev.add(1, 'day'));
-    navigator('/main');
   };
 
   const onClickPrev = () => {
     setIsBack(true);
     setDate(prev => prev.add(-1, 'day'));
-    navigator('/main');
   };
 
   const onClickMenuIcon = () => {
@@ -95,9 +92,9 @@ function Nav() {
       <MenuIcon onClick={onClickMenuIcon}>
         <FontAwesomeIcon icon={faBars} />
       </MenuIcon>
-      {myList ? (
-        <Today>{myList.title}</Today>
-      ) : pathname.includes('all') ? (
+      {selectedList ? (
+        <Today>{selectedList.title}</Today>
+      ) : screenStatus === 'All' ? (
         <Today>모두 보기</Today>
       ) : (
         <>
@@ -151,7 +148,7 @@ function Nav() {
   );
 }
 
-export default React.memo(Nav);
+export default memo(Nav);
 
 const Wrapper = styled.div`
   display: flex;

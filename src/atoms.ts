@@ -22,6 +22,11 @@ export const loadingState = atom({
   },
 });
 
+export const screenStatusState = atom<'All' | 'Date' | 'List'>({
+  key: 'screenStatus',
+  default: 'Date',
+});
+
 export const showEditorState = atom({
   key: 'showEditor',
   default: false,

@@ -1,18 +1,19 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderOpen } from '@fortawesome/free-solid-svg-icons';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { MenuIcon, OffCanvasMenuContainer } from 'style/main-page';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { isWideState, toggleMenuState } from 'atoms';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { isWideState, screenStatusState, toggleMenuState } from 'atoms';
 
 function ShowAllList() {
-  const { pathname } = useLocation();
   const navigator = useNavigate();
   const isWide = useRecoilValue(isWideState);
   const setToggleMenu = useSetRecoilState(toggleMenuState);
+  const [screenStatus, setScreenStatus] = useRecoilState(screenStatusState);
 
   const onClickDateList = () => {
     navigator('/main/all/tasks');
+    setScreenStatus('All');
     if (!isWide) {
       setToggleMenu(false);
     }
@@ -20,7 +21,7 @@ function ShowAllList() {
 
   return (
     <OffCanvasMenuContainer
-      isSelected={pathname.includes('all')}
+      isSelected={screenStatus === 'All'}
       onClick={onClickDateList}
     >
       <MenuIcon>

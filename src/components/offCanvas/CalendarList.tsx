@@ -1,19 +1,19 @@
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isWideState, paramState, toggleMenuState } from 'atoms';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { isWideState, screenStatusState, toggleMenuState } from 'atoms';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { MenuIcon, OffCanvasMenuContainer } from 'style/main-page';
 
 function CalendarList() {
-  const params = useRecoilValue(paramState);
   const isWide = useRecoilValue(isWideState);
   const setToggleMenu = useSetRecoilState(toggleMenuState);
-  const { pathname } = useLocation();
+  const [screenStatus, setScreenStatus] = useRecoilState(screenStatusState);
   const navigator = useNavigate();
 
   const onClickDateList = () => {
     navigator('/main');
+    setScreenStatus('Date');
     if (!isWide) {
       setToggleMenu(false);
     }
@@ -21,7 +21,7 @@ function CalendarList() {
 
   return (
     <OffCanvasMenuContainer
-      isSelected={!params['listId'] && !pathname.includes('all')}
+      isSelected={screenStatus === 'Date'}
       onClick={onClickDateList}
     >
       <MenuIcon>
