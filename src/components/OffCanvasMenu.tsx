@@ -7,7 +7,7 @@ import { menuVariants } from 'variants';
 import MyList from './offCanvas/MyList';
 import CalendarList from './offCanvas/CalendarList';
 import ShowAllList from './offCanvas/ShowAllList';
-import React from 'react';
+import { memo } from 'react';
 import { devices } from 'style/media-queries';
 import MyListModal from './offCanvas/MyListModal';
 
@@ -41,7 +41,7 @@ function OffCanvasMenu() {
   );
 }
 
-export default React.memo(OffCanvasMenu);
+export default memo(OffCanvasMenu);
 
 const Wrapper = styled(motion.div)`
   height: 100%;

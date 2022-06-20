@@ -16,12 +16,12 @@ function useUpdateDocs() {
     value: any,
     needDbUpdate: boolean,
   ) => {
-    if (!auth.currentUser) return;
-
     const newDoc = { ...document, [key]: value };
+
     setDocument(docs =>
       docs.map(doc => (doc.id === document.id ? newDoc : doc)),
     );
+
     setMyListDocs(docs =>
       docs.map(doc => (doc.id === document.id ? newDoc : doc)),
     );
@@ -31,14 +31,16 @@ function useUpdateDocs() {
       [document.id]: newDoc,
     }));
 
+    if (!needDbUpdate || !auth.currentUser) return;
+
     const allDocRef = doc(db, `${auth.currentUser.uid}/All`);
+
     await setDoc(
       allDocRef,
       { docMap: { [document.id]: newDoc } },
       { merge: true },
     );
 
-    if (!needDbUpdate) return;
     if (document.date) {
       const docRef = doc(
         db,

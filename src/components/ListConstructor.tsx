@@ -1,9 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { IDocument } from 'types';
-import NoteItem from './list/NoteItem';
-import TodoItem from './list/TodoItem';
+import ListItem from './list/ListItem';
 import { ListHeader } from 'style/main-page';
 import styled from 'styled-components';
 
@@ -48,6 +47,7 @@ function ListConstructor({ documentData }: IListConstructorProps) {
     setDoneTodo(doneTodosData);
     setNotes(notesData);
   }, [documentData]);
+
   return (
     <Wrapper>
       {doingTodo.length > 0 && (
@@ -64,7 +64,7 @@ function ListConstructor({ documentData }: IListConstructorProps) {
             <h2>할일 {`(${doingTodo.length})`}</h2>
           </ListHeader>
           {collapseDoingToDo &&
-            doingTodo.map(todo => <TodoItem key={todo.id} todo={todo} />)}
+            doingTodo.map(todo => <ListItem key={todo.id} item={todo} />)}
         </ul>
       )}
 
@@ -82,7 +82,7 @@ function ListConstructor({ documentData }: IListConstructorProps) {
             <h2>완료 {`(${doneTodo.length})`}</h2>
           </ListHeader>
           {collapseDoneToDo &&
-            doneTodo.map(todo => <TodoItem key={todo.id} todo={todo} />)}
+            doneTodo.map(todo => <ListItem key={todo.id} item={todo} />)}
         </ul>
       )}
 
@@ -100,9 +100,10 @@ function ListConstructor({ documentData }: IListConstructorProps) {
             <h2>노트 {`(${notes.length})`}</h2>
           </ListHeader>
           {collapseNotes &&
-            notes.map(note => <NoteItem key={note.id} note={note} />)}
+            notes.map(note => <ListItem key={note.id} item={note} />)}
         </ul>
       )}
+
       {!documentData.length && (
         <EmptyContent>
           <h1>할 일이 없어요 😗</h1>
@@ -113,7 +114,7 @@ function ListConstructor({ documentData }: IListConstructorProps) {
   );
 }
 
-export default ListConstructor;
+export default memo(ListConstructor);
 
 const Wrapper = styled.div`
   height: 100%;

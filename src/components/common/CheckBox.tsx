@@ -4,6 +4,7 @@ import { IconContainer } from 'style/main-page';
 import styled from 'styled-components';
 import { useUpdateDocs } from 'hooks';
 import { IDocument } from 'types';
+import { memo } from 'react';
 
 interface ICheckBoxProps {
   todo: IDocument;
@@ -30,7 +31,7 @@ function CheckBox({ todo }: ICheckBoxProps) {
   );
 }
 
-export default CheckBox;
+export default memo(CheckBox);
 
 const CheckBoxContainer = styled.div<{ isDone: boolean; priority: number }>`
   display: flex;
