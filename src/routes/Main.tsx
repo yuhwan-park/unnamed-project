@@ -1,7 +1,4 @@
-import { onAuthStateChanged } from 'firebase/auth';
-import React, { memo, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { auth } from 'firebase-source';
+import React, { useEffect } from 'react';
 import Nav from 'components/common/Nav';
 import List from 'components/List';
 import styled from 'styled-components';
@@ -9,26 +6,17 @@ import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import ContentEditor from 'components/ContentEditor';
 import { AnimatePresence, motion } from 'framer-motion';
 import OffCanvasMenu from 'components/OffCanvasMenu';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import {
-  isWideState,
-  loadingSelector,
-  paramState,
-  showEditorState,
-  userState,
-} from 'atoms';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { isWideState, loadingSelector, showEditorState } from 'atoms';
 import { editorVariants } from 'variants';
 import Loading from 'components/common/Loading';
 import { useDetectClickOutside } from 'hooks';
+import GlobalLogic from 'components/common/GlobalLogic';
 
 function Main() {
-  const [userData, setUserData] = useRecoilState(userState);
   const [showEditor, setShowEditor] = useRecoilState(showEditorState);
   const [isWide, setIsWide] = useRecoilState(isWideState);
   const isLoading = useRecoilValue(loadingSelector);
-  const setParams = useSetRecoilState(paramState);
-  const navigator = useNavigate();
-  const params = useParams();
   useDetectClickOutside({ onTriggered: () => setShowEditor(false) });
 
   const onClickScreen = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -37,21 +25,6 @@ function Main() {
     if (target.closest('.check-box') || target.closest('.go-back-icon')) return;
     setShowEditor(Boolean(target.closest('.show-editor-trigger')));
   };
-
-  useEffect(() => {
-    setParams(params);
-  }, [params, setParams]);
-
-  useEffect(() => {
-    onAuthStateChanged(auth, user => {
-      if (!user) {
-        navigator('/');
-      } else {
-        const { displayName, email, uid, photoURL } = user;
-        setUserData({ displayName, email, uid, photoURL });
-      }
-    });
-  }, [navigator, setUserData]);
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -69,7 +42,7 @@ function Main() {
     <>
       {isLoading && <Loading />}
       <Wrapper onClick={onClickScreen}>
-        {userData && (
+        {true && (
           <>
             <Nav />
             {isWide ? (
@@ -111,11 +84,12 @@ function Main() {
           </>
         )}
       </Wrapper>
+      <GlobalLogic />
     </>
   );
 }
 
-export default memo(Main);
+export default Main;
 
 const Wrapper = styled.div`
   height: 100vh;
