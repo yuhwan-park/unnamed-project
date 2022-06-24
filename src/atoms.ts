@@ -24,7 +24,17 @@ export const loadingState = atom({
 
 export const screenStatusState = atom<'All' | 'Date' | 'List'>({
   key: 'screenStatus',
-  default: 'Date',
+  default: selector({
+    key: 'screenStatus/selector',
+    get: ({ get }) => {
+      const { href } = window.location;
+      return href.includes('all')
+        ? 'All'
+        : href.includes('lists')
+        ? 'List'
+        : 'Date';
+    },
+  }),
 });
 
 export const showEditorState = atom({

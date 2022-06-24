@@ -1,5 +1,5 @@
 import { collection, doc, setDoc, Timestamp } from 'firebase/firestore';
-import React, { useState } from 'react';
+import { memo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -83,7 +83,7 @@ function ContentForm() {
   );
 }
 
-export default React.memo(ContentForm);
+export default memo(ContentForm);
 
 const FormContainer = styled.form`
   position: relative;

@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { doc, setDoc, updateDoc } from 'firebase/firestore';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -82,7 +82,7 @@ function ListItem({ item }: ITodoItemProps) {
   );
 }
 
-export default ListItem;
+export default memo(ListItem);
 
 const ToDoTitle = styled(Title)<{ isDone: boolean }>`
   color: ${props => (props.isDone ? '#bbb' : 'black')};
