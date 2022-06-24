@@ -29,12 +29,12 @@ function Home() {
         </SignLink>
       </Nav>
       <Container>
-        <Word>
+        <Paragraph>
           <p>
             Daily하게 <span>dail</span> !
           </p>
           <p>지금 바로 기록해보세요!</p>
-        </Word>
+        </Paragraph>
 
         <Link to={'/signup'}>
           <StartButton
@@ -104,7 +104,7 @@ const StartButton = styled(motion.div)`
   padding: 20px 50px;
 `;
 
-const Word = styled.div`
+const Paragraph = styled.div`
   width: 80%;
   text-align: center;
 
