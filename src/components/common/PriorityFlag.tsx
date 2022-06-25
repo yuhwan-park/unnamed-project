@@ -4,10 +4,16 @@ import { useUpdateDocs } from 'hooks';
 import styled from 'styled-components';
 import { IDocument } from 'types';
 
-function PriorityFlag({ todo }: { todo: IDocument }) {
+interface IPriorityFlagProps {
+  todo: IDocument;
+  toggleMenu: () => void;
+}
+
+function PriorityFlag({ todo, toggleMenu }: IPriorityFlagProps) {
   const updator = useUpdateDocs();
 
   const onClickFlag = async (priority: number) => {
+    toggleMenu();
     await updator(todo, 'priority', priority, true);
   };
 

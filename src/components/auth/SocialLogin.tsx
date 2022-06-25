@@ -7,6 +7,7 @@ function SocialLogin() {
   const provider = new GoogleAuthProvider();
 
   const onClickSignInWithGoogle = async () => {
+    sessionStorage.setItem('logging-in', 'true');
     await signInWithRedirect(auth, provider);
   };
   return (

@@ -16,8 +16,10 @@ import {
 } from 'style/sign-page';
 import { auth } from 'firebase-source';
 import { IFormData } from 'types';
+import Loading from 'components/common/Loading';
 
 function SignIn() {
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [error, setError] = useState('');
   const navigator = useNavigate();
   const methods = useForm<IFormData>();
@@ -35,6 +37,12 @@ function SignIn() {
   };
 
   useEffect(() => {
+    if (sessionStorage.getItem('logging-in')) {
+      setIsLoggingIn(true);
+    }
+  }, []);
+
+  useEffect(() => {
     onAuthStateChanged(auth, user => {
       if (user) {
         navigator('/main');
@@ -43,6 +51,7 @@ function SignIn() {
   }, [navigator]);
   return (
     <Container>
+      {isLoggingIn && <Loading />}
       <Link to={'/'}>
         <Logo draggable className="logo">
           dail

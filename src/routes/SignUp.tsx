@@ -22,8 +22,10 @@ import {
 } from 'style/sign-page';
 import { useSetRecoilState } from 'recoil';
 import { userState } from 'atoms';
+import Loading from 'components/common/Loading';
 
 function SignUp() {
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [error, setError] = useState('');
   const navigator = useNavigate();
   const methods = useForm<IFormData>();
@@ -49,6 +51,13 @@ function SignUp() {
       }
     }
   };
+
+  useEffect(() => {
+    if (sessionStorage.getItem('logging-in')) {
+      setIsLoggingIn(true);
+    }
+  }, []);
+
   useEffect(() => {
     onAuthStateChanged(auth, user => {
       // 로그인 정보가 있다면 바로 메인 페이지로
@@ -57,8 +66,10 @@ function SignUp() {
       }
     });
   }, [navigator]);
+
   return (
     <Container>
+      {isLoggingIn && <Loading />}
       <Link to={'/'}>
         <Logo draggable className="logo">
           dail

@@ -74,7 +74,9 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
       </ListMenuIconContainer>
       {isOpen && (
         <MenuModal>
-          {!item.isNote && <PriorityFlag todo={item} />}
+          {!item.isNote && (
+            <PriorityFlag toggleMenu={CloseDropdownMenu} todo={item} />
+          )}
 
           {moveListFlag && <MoveListModal item={item} />}
           <MenuButtonContainer onClick={onClickMoveList}>
