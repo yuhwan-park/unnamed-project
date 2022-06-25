@@ -20,11 +20,14 @@ import {
   Message,
   Form,
 } from 'style/sign-page';
+import { useSetRecoilState } from 'recoil';
+import { userState } from 'atoms';
 
 function SignUp() {
   const [error, setError] = useState('');
   const navigator = useNavigate();
   const methods = useForm<IFormData>();
+  const setUserData = useSetRecoilState(userState);
 
   const onSubmit = async ({ email, password, nickname }: IFormData) => {
     // 이메일 로그인
@@ -38,6 +41,7 @@ function SignUp() {
         await updateProfile(userCredential.user, {
           displayName: nickname,
         });
+        setUserData(obj => ({ ...obj, displayName: nickname }));
       }
     } catch (err: any) {
       if (err.code === 'auth/email-already-in-use') {
