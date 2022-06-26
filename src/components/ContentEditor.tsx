@@ -24,7 +24,7 @@ function ContentEditor() {
     }
     timer = setTimeout(async () => {
       if (!document) return;
-      updator(document, 'content', content, true);
+      await updator(document, 'content', content, true);
     }, 1000);
   };
 
@@ -32,7 +32,7 @@ function ContentEditor() {
     const content = editorRef.current?.getInstance().getMarkdown();
     setTimeout(async () => {
       if (!document) return;
-      updator(document, 'content', content, true);
+      await updator(document, 'content', content, true);
     }, 100);
   };
 

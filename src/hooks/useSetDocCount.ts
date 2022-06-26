@@ -8,8 +8,8 @@ function useSetDocCount() {
   const setDocCount = useSetRecoilState(documentCountByDateState);
 
   return useCallback(
-    async (date: string, isIncrease: boolean) => {
-      if (isIncrease) {
+    async (date: string, isIncrease: 'Plus' | 'Minus') => {
+      if (isIncrease === 'Plus') {
         setDocCount(obj => ({ ...obj, [date]: obj[date] ? obj[date] + 1 : 1 }));
       } else {
         setDocCount(obj => ({ ...obj, [date]: obj[date] - 1 }));
@@ -17,7 +17,7 @@ function useSetDocCount() {
       const allDocRef = doc(db, `${auth.currentUser?.uid}/All`);
       await setDoc(
         allDocRef,
-        { docCount: { [date]: increment(isIncrease ? 1 : -1) } },
+        { docCount: { [date]: increment(isIncrease === 'Plus' ? 1 : -1) } },
         { merge: true },
       );
     },

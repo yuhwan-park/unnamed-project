@@ -50,17 +50,17 @@ function EditorHeader() {
     if (!selectedDoc || !newDate || newDate === selectedDoc.date) return;
 
     setShowCalendar(false);
-    updator(selectedDoc, 'date', newDate, true);
+    await updator(selectedDoc, 'date', newDate, true);
 
     if (selectedDoc.date) {
       const oldDocRef = doc(
         db,
         `${auth.currentUser?.uid}/${selectedDoc.date}/Document/${selectedDoc.id}`,
       );
-      await setDocCount(selectedDoc.date, false);
+      await setDocCount(selectedDoc.date, 'Minus');
       await deleteDoc(oldDocRef);
     }
-    await setDocCount(newDate, true);
+    await setDocCount(newDate, 'Plus');
 
     const newDocRef = doc(
       db,

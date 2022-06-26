@@ -7,7 +7,12 @@ import ContentEditor from 'components/ContentEditor';
 import { AnimatePresence, motion } from 'framer-motion';
 import OffCanvasMenu from 'components/OffCanvasMenu';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { isWideState, loadingSelector, showEditorState } from 'atoms';
+import {
+  isWideState,
+  loadingSelector,
+  showEditorState,
+  userState,
+} from 'atoms';
 import { editorVariants } from 'variants';
 import Loading from 'components/common/Loading';
 import { useDetectClickOutside } from 'hooks';
@@ -17,6 +22,7 @@ function Main() {
   const [showEditor, setShowEditor] = useRecoilState(showEditorState);
   const [isWide, setIsWide] = useRecoilState(isWideState);
   const isLoading = useRecoilValue(loadingSelector);
+  const { uid } = useRecoilValue(userState);
   useDetectClickOutside({ onTriggered: () => setShowEditor(false) });
 
   const onClickScreen = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -40,10 +46,10 @@ function Main() {
 
   return (
     <>
-      {isLoading && <Loading />}
-      <Wrapper onClick={onClickScreen}>
-        {true && (
-          <>
+      {uid && (
+        <>
+          {isLoading && <Loading />}
+          <Wrapper onClick={onClickScreen}>
             <Nav />
             {isWide ? (
               <ResponsiveContainer>
@@ -81,9 +87,9 @@ function Main() {
                 </AnimatePresence>
               </ResponsiveContainer>
             )}
-          </>
-        )}
-      </Wrapper>
+          </Wrapper>
+        </>
+      )}
       <GlobalLogic />
     </>
   );

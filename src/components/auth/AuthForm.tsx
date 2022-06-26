@@ -20,44 +20,34 @@ function AuthForm({ isSignUp }: IAuthFormProps) {
   } = useFormContext<IFormData>();
   return (
     <>
-      {isSignUp ? (
+      {isSignUp && (
         <InputContainer>
           <FontAwesomeIcon icon={faUser} />
           <TextInput
             {...register('nickname')}
-            type="text"
             placeholder="닉네임 (선택사항)"
           />
         </InputContainer>
-      ) : null}
+      )}
       <InputContainer>
         <FontAwesomeIcon icon={faEnvelope} />
         <TextInput
           {...register('email', {
-            required: {
-              value: true,
-              message: '필수 항목입니다.',
-            },
+            required: '필수 항목입니다.',
             pattern: {
               value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/i,
               message: '이메일 형식에 맞지 않습니다.',
             },
           })}
-          type="text"
           placeholder="이메일"
         />
       </InputContainer>
-      <ErrorMessage>
-        {errors.email?.message ? errors.email.message : null}
-      </ErrorMessage>
+      {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
       <InputContainer>
         <FontAwesomeIcon icon={faLock} />
         <TextInput
           {...register('password', {
-            required: {
-              value: true,
-              message: '필수 항목입니다.',
-            },
+            required: '필수 항목입니다.',
             minLength: {
               value: 8,
               message: '8자 이상 입력해주세요.',
@@ -67,9 +57,9 @@ function AuthForm({ isSignUp }: IAuthFormProps) {
           placeholder="비밀번호"
         />
       </InputContainer>
-      <ErrorMessage>
-        {errors.password?.message ? errors.password.message : null}
-      </ErrorMessage>
+      {errors.password && (
+        <ErrorMessage>{errors.password.message}</ErrorMessage>
+      )}
       <SubmitInput type="submit" value={isSignUp ? '회원가입' : '로그인'} />
     </>
   );

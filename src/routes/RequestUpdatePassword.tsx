@@ -50,10 +50,7 @@ function RequestUpdatePassword() {
               <TextInput
                 type="text"
                 {...register('email', {
-                  required: {
-                    value: true,
-                    message: '필수 항목입니다.',
-                  },
+                  required: '필수 항목입니다.',
                   pattern: {
                     value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/i,
                     message: '이메일 형식에 맞지 않습니다.',
@@ -62,9 +59,9 @@ function RequestUpdatePassword() {
                 placeholder="이메일"
               />
             </InputContainer>
-            <ErrorMessage>
-              {errors.email?.message ? errors.email.message : null}
-            </ErrorMessage>
+            {errors.email && (
+              <ErrorMessage>{errors.email.message}</ErrorMessage>
+            )}
             <SubmitInput type="submit" value="메일 전송" />
           </Form>
         )}

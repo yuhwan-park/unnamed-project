@@ -62,7 +62,7 @@ function SignIn() {
           <Form onSubmit={methods.handleSubmit(onSubmit)}>
             <AuthForm isSignUp={false} />
           </Form>
-          <ErrorMessage>{error ? error : null}</ErrorMessage>
+          {error && <ErrorMessage>{error}</ErrorMessage>}
         </FormProvider>
         <Link to={'/requestUpdatePassword'}>
           <LinkStyle>비밀번호가 기억나지 않아요</LinkStyle>

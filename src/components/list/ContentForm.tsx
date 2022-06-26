@@ -57,7 +57,7 @@ function ContentForm() {
       setMyListDocs(prev => [...prev, data]);
     } else {
       setDocuments(prev => [...prev, data]);
-      await setDocCount(date, true);
+      await setDocCount(date, 'Plus');
     }
     setAllDocument(docs => ({ ...docs, [data.id]: data }));
 

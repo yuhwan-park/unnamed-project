@@ -80,7 +80,7 @@ function SignUp() {
           <Form onSubmit={methods.handleSubmit(onSubmit)}>
             <AuthForm isSignUp={true} />
           </Form>
-          <ErrorMessage>{error ? error : null}</ErrorMessage>
+          {error && <ErrorMessage>{error}</ErrorMessage>}
         </FormProvider>
         <Hr>또는</Hr>
         <SocialLogin />

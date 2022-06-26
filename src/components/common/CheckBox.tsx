@@ -14,7 +14,7 @@ function CheckBox({ todo }: ICheckBoxProps) {
   const updator = useUpdateDocs();
 
   const onClickCheckBox = async () => {
-    updator(todo, 'isDone', !todo.isDone, true);
+    await updator(todo, 'isDone', !todo.isDone, true);
   };
 
   return (

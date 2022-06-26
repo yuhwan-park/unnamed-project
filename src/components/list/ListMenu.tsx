@@ -56,7 +56,7 @@ export default function ListMenu({ item, isEditor }: IListMenu) {
 
     const allDocRef = doc(db, `${auth.currentUser?.uid}/All`);
     await updateDoc(allDocRef, { docMap: newAllDocument });
-    await setDocCount(item.date, false);
+    await setDocCount(item.date, 'Minus');
   };
 
   const onClickConvert = async () => {
