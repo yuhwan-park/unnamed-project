@@ -1,10 +1,13 @@
 import { screen, waitFor } from '@testing-library/react';
 import { render } from './utils/customRender';
 import '@testing-library/jest-dom';
+import App from 'App';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import SignIn from 'routes/SignIn';
 
 describe('로그인 페이지 링크 기능', () => {
   test('dail 로고를 클릭하면 home 페이지로 이동한다', async () => {
-    const { user } = render({ route: '/signin' });
+    const { user } = render(<App />, { route: '/signin' });
     const logo = screen.getByText('dail');
 
     expect(logo).toBeInTheDocument();
@@ -13,7 +16,7 @@ describe('로그인 페이지 링크 기능', () => {
   });
 
   test('비밀번호 찾기 페이지 링크를 클릭하면 requestUpdatePassword 페이지로 이동한다', async () => {
-    const { user } = render({ route: '/signin' });
+    const { user } = render(<App />, { route: '/signin' });
     const link = screen.getByRole('link', {
       name: '비밀번호가 기억나지 않아요',
     });
@@ -24,7 +27,7 @@ describe('로그인 페이지 링크 기능', () => {
   });
 
   test('회원가입 링크를 클릭하면 signup 페이지로 이동한다', async () => {
-    const { user } = render({ route: '/signin' });
+    const { user } = render(<App />, { route: '/signin' });
     const link = screen.getByRole('link', { name: '회원가입' });
 
     expect(link).toBeInTheDocument();
@@ -35,7 +38,7 @@ describe('로그인 페이지 링크 기능', () => {
 
 describe('회원가입 페이지 링크 기능', () => {
   test('dail 로고를 클릭하면 home 페이지로 이동한다', async () => {
-    const { user } = render({ route: '/signup' });
+    const { user } = render(<App />, { route: '/signup' });
     const logo = screen.getByText('dail');
 
     expect(logo).toBeInTheDocument();
@@ -44,7 +47,7 @@ describe('회원가입 페이지 링크 기능', () => {
   });
 
   test('로그인 링크를 클릭하면 signin 페이지로 이동한다', async () => {
-    const { user } = render({ route: '/signup' });
+    const { user } = render(<App />, { route: '/signup' });
     const link = screen.getByRole('link', { name: '로그인' });
 
     expect(link).toBeInTheDocument();
@@ -55,7 +58,7 @@ describe('회원가입 페이지 링크 기능', () => {
 
 describe('회원가입 & 로그인 폼 유효성 검사', () => {
   test('이메일과 비밀번호를 입력하지 않고 로그인 버튼을 누를 시 required 에러가 발생한다', async () => {
-    const { user } = render({ route: '/signup' });
+    const { user } = render(<App />, { route: '/signup' });
     const email = screen.getByPlaceholderText('이메일');
     const password = screen.getByPlaceholderText('비밀번호');
     const submitButton = screen.getByRole('button', { name: '회원가입' });
@@ -69,7 +72,7 @@ describe('회원가입 & 로그인 폼 유효성 검사', () => {
   });
 
   test('이메일 형식에 부합하지 않을 시 validation 에러가 발생한다', async () => {
-    const { user } = render({ route: '/signup' });
+    const { user } = render(<App />, { route: '/signup' });
     const email = screen.getByPlaceholderText('이메일');
     const password = screen.getByPlaceholderText('비밀번호');
     const submitButton = screen.getByRole('button', { name: '회원가입' });
@@ -86,7 +89,7 @@ describe('회원가입 & 로그인 폼 유효성 검사', () => {
   });
 
   test('입력한 비밀번호가 8자 이하일 시 validation 에러가 발생한다', async () => {
-    const { user } = render({ route: '/signup' });
+    const { user } = render(<App />, { route: '/signup' });
     const email = screen.getByPlaceholderText('이메일');
     const password = screen.getByPlaceholderText('비밀번호');
     const submitButton = screen.getByRole('button', { name: '회원가입' });
@@ -111,7 +114,7 @@ describe('로그인 & 회원가입', () => {
   };
 
   test('회원가입 되지않은 이메일로 로그인 시도를 할 시 에러가 발생한다', async () => {
-    const { user } = render({ route: '/signin' });
+    const { user } = render(<App />, { route: '/signin' });
     const email = screen.getByPlaceholderText('이메일');
     const password = screen.getByPlaceholderText('비밀번호');
     const submitButton = screen.getByRole('button', { name: '로그인' });
@@ -128,7 +131,7 @@ describe('로그인 & 회원가입', () => {
   });
 
   test('잘못된 비밀번호를 입력했을 시 에러가 발생한다', async () => {
-    const { user } = render({ route: '/signin' });
+    const { user } = render(<App />, { route: '/signin' });
     const email = screen.getByPlaceholderText('이메일');
     const password = screen.getByPlaceholderText('비밀번호');
     const submitButton = screen.getByRole('button', { name: '로그인' });
@@ -145,7 +148,7 @@ describe('로그인 & 회원가입', () => {
   });
 
   test('이미 등록된 이메일로 회원가입을 시도할 시 에러가 발생한다', async () => {
-    const { user } = render({ route: '/signup' });
+    const { user } = render(<App />, { route: '/signup' });
     const email = screen.getByPlaceholderText('이메일');
     const password = screen.getByPlaceholderText('비밀번호');
     const submitButton = screen.getByRole('button', { name: '회원가입' });
@@ -162,7 +165,15 @@ describe('로그인 & 회원가입', () => {
   });
 
   test('로그인에 성공하였을 시 main route로 이동한다', async () => {
-    const { user } = render({ route: '/signin' });
+    const { user } = render(
+      <BrowserRouter>
+        <Routes>
+          <Route path="main" element={null} />
+          <Route path="signin" element={<SignIn />} />
+        </Routes>
+      </BrowserRouter>,
+      { route: '/signin' },
+    );
     const email = screen.getByPlaceholderText('이메일');
     const password = screen.getByPlaceholderText('비밀번호');
     const submitButton = screen.getByRole('button', { name: '로그인' });
@@ -173,6 +184,8 @@ describe('로그인 & 회원가입', () => {
     await user.type(password, TEST_ACCOUNT.PW);
     await user.click(submitButton);
 
-    await waitFor(() => expect(window.location.pathname).toBe('/main'));
+    await waitFor(() => expect(window.location.pathname).toBe('/main'), {
+      timeout: 10000,
+    });
   });
 });
