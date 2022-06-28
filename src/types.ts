@@ -18,10 +18,6 @@ export interface IFormData {
   nickname?: string;
 }
 
-export interface IUpdatePasswordFormData {
-  email: string;
-}
-
 export interface ITaskFormData {
   title: string;
 }

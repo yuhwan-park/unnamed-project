@@ -1,16 +1,21 @@
+// dependencies
 import { Link } from 'react-router-dom';
+
+// styles
 import { Logo } from 'style/sign-page';
 import styled from 'styled-components';
 
 function NotFound() {
   return (
     <Wrapper>
-      <Logo className="logo">dail</Logo>
+      <Logo>dail</Logo>
+
       <MessageContainer>
         <h2>404 Page Not Found</h2>
         <p>페이지를 찾을 수 없습니다.</p>
         <p>불편을 드려 죄송합니다.</p>
       </MessageContainer>
+
       <Link to={'/'}>
         <Button>홈으로</Button>
       </Link>

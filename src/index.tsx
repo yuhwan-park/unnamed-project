@@ -67,10 +67,6 @@ table {
 a {
   text-decoration: none;
 }
-.logo {
-  font-family: 'Comfortaa', cursive;
-  color : #1082FD;
-}
 .toggle-menu-icon {
   @media ${devices.mobileL} {
     opacity: 1 !important;

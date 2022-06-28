@@ -1,8 +1,16 @@
-import { sendPasswordResetEmail } from 'firebase/auth';
+// dependencies
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { sendPasswordResetEmail } from 'firebase/auth';
+
+// sources
+import { auth } from 'firebase-source';
+
+// styles
 import {
   Container,
   ErrorMessage,
@@ -14,10 +22,10 @@ import {
   SubmitInput,
   TextInput,
 } from 'style/sign-page';
-import { auth } from 'firebase-source';
-import { IUpdatePasswordFormData } from 'types';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+interface IUpdatePasswordFormData {
+  email: string;
+}
 
 function RequestUpdatePassword() {
   const [email, setEmail] = useState('');
@@ -31,24 +39,23 @@ function RequestUpdatePassword() {
     setEmail(email);
     await sendPasswordResetEmail(auth, email);
   };
+
   return (
     <Container>
       <Link to={'/'}>
-        <Logo draggable className="logo">
-          dail
-        </Logo>
+        <Logo>dail</Logo>
       </Link>
+
       <EFormContainer>
         {email ? (
-          <Message>
+          <Paragraph>
             {email} 로 비밀번호 재설정 메일을 전송하였습니다. 확인해주세요.
-          </Message>
+          </Paragraph>
         ) : (
           <Form onSubmit={handleSubmit(onSubmitEmail)}>
             <InputContainer>
               <FontAwesomeIcon icon={faEnvelope} />
               <TextInput
-                type="text"
                 {...register('email', {
                   required: '필수 항목입니다.',
                   pattern: {
@@ -59,12 +66,15 @@ function RequestUpdatePassword() {
                 placeholder="이메일"
               />
             </InputContainer>
+
             {errors.email && (
               <ErrorMessage>{errors.email.message}</ErrorMessage>
             )}
+
             <SubmitInput type="submit" value="메일 전송" />
           </Form>
         )}
+
         <Link to={'/signin'}>
           <ELinkStyle>로그인 화면으로 돌아가기</ELinkStyle>
         </Link>
@@ -84,7 +94,7 @@ const ELinkStyle = styled(LinkStyle)`
   text-align: center;
   padding-top: 40px;
 `;
-const Message = styled.div`
+const Paragraph = styled.div`
   padding: 20px 0;
   font-size: ${props => props.theme.fontSize.medium};
   line-height: 24px;

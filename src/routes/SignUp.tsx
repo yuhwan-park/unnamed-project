@@ -1,37 +1,45 @@
+// dependencies
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   updateProfile,
 } from 'firebase/auth';
 import { useEffect, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+
+// components
 import AuthForm from 'components/auth/AuthForm';
-import { auth } from 'firebase-source';
-import { IFormData } from 'types';
 import SocialLogin from 'components/auth/SocialLogin';
+import Loading from 'components/common/Loading';
+
+// states
+import { userState } from 'atoms';
+
+// types
+import { IFormData } from 'types';
+
+// sources
+import { auth } from 'firebase-source';
+
+// styles
 import {
-  Logo,
   Hr,
   LinkStyle,
   ErrorMessage,
   Container,
   FormContainer,
   Message,
-  Form,
+  Logo,
 } from 'style/sign-page';
-import { useSetRecoilState } from 'recoil';
-import { userState } from 'atoms';
-import Loading from 'components/common/Loading';
 
 function SignUp() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [error, setError] = useState('');
   const navigator = useNavigate();
-  const methods = useForm<IFormData>();
   const setUserData = useSetRecoilState(userState);
 
-  const onSubmit = async ({ email, password, nickname }: IFormData) => {
+  const onSignUp = async ({ email, password, nickname }: IFormData) => {
     // 이메일 로그인
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -69,21 +77,21 @@ function SignUp() {
 
   return (
     <Container>
+      {/* 구글 로그인 중일 때 보여주는 로딩 */}
       {isLoggingIn && <Loading />}
+
       <Link to={'/'}>
-        <Logo draggable className="logo">
-          dail
-        </Logo>
+        <Logo>dail</Logo>
       </Link>
+
       <FormContainer>
-        <FormProvider {...methods}>
-          <Form onSubmit={methods.handleSubmit(onSubmit)}>
-            <AuthForm isSignUp={true} />
-          </Form>
-          {error && <ErrorMessage>{error}</ErrorMessage>}
-        </FormProvider>
+        <AuthForm onSubmit={onSignUp} />
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+
         <Hr>또는</Hr>
+
         <SocialLogin />
+
         <Message>
           이미 계정이 있으신가요?{' '}
           <Link to={'/signin'}>

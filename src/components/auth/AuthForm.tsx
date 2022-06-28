@@ -1,25 +1,42 @@
+// dependencies
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
-import { useFormContext } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+
+// types
+import { IFormData } from 'types';
+
+// styles
 import {
   ErrorMessage,
+  Form,
   InputContainer,
   SubmitInput,
   TextInput,
 } from 'style/sign-page';
-import { IFormData } from 'types';
 
 interface IAuthFormProps {
-  isSignUp: boolean;
+  onSubmit: (args: IFormData) => Promise<void>;
 }
 
-function AuthForm({ isSignUp }: IAuthFormProps) {
+function AuthForm({ onSubmit }: IAuthFormProps) {
+  const [isSignUp, setIsSingUp] = useState(false);
+  const location = useLocation();
   const {
     register,
+    handleSubmit,
     formState: { errors },
-  } = useFormContext<IFormData>();
+  } = useForm<IFormData>();
+
+  useEffect(() => {
+    setIsSingUp(location.pathname === '/signup');
+  }, [location.pathname]);
+
   return (
-    <>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      {/* 회원가입 페이지일 때만 닉네임 인풋 렌더 */}
       {isSignUp && (
         <InputContainer>
           <FontAwesomeIcon icon={faUser} />
@@ -29,6 +46,8 @@ function AuthForm({ isSignUp }: IAuthFormProps) {
           />
         </InputContainer>
       )}
+
+      {/* 이메일 인풋 */}
       <InputContainer>
         <FontAwesomeIcon icon={faEnvelope} />
         <TextInput
@@ -43,6 +62,8 @@ function AuthForm({ isSignUp }: IAuthFormProps) {
         />
       </InputContainer>
       {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
+
+      {/* 비밀번호 인풋 */}
       <InputContainer>
         <FontAwesomeIcon icon={faLock} />
         <TextInput
@@ -60,8 +81,9 @@ function AuthForm({ isSignUp }: IAuthFormProps) {
       {errors.password && (
         <ErrorMessage>{errors.password.message}</ErrorMessage>
       )}
+
       <SubmitInput type="submit" value={isSignUp ? '회원가입' : '로그인'} />
-    </>
+    </Form>
   );
 }
 

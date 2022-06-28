@@ -20,14 +20,13 @@ function Home() {
   return (
     <Wrapper>
       <Nav>
-        <Logo className="logo" draggable>
-          dail
-        </Logo>
-        <SignLink>
+        <Logo>dail</Logo>
+        <Links>
           <Link to={'/signin'}>로그인</Link>
           <Link to={'/signup'}>회원가입</Link>
-        </SignLink>
+        </Links>
       </Nav>
+
       <Container>
         <Paragraph>
           <p>
@@ -50,6 +49,7 @@ function Home() {
           </StartButton>
         </Link>
       </Container>
+
       <ShapeDivider>
         <svg
           data-name="Layer 1"
@@ -129,8 +129,11 @@ const Paragraph = styled.div`
 
 const Logo = styled.div`
   font-size: 48px;
+  font-family: 'Comfortaa', cursive;
+  color: #1082fd;
   width: 40%;
   padding-left: 30px;
+  user-select: none;
   @media ${devices.mobileL} {
     width: 50%;
     padding-left: 20px;
@@ -158,7 +161,7 @@ const ShapeDivider = styled.div`
   }
 `;
 
-const SignLink = styled.div`
+const Links = styled.div`
   display: flex;
   justify-content: flex-end;
   width: 40%;
