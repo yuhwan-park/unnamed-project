@@ -1,10 +1,9 @@
 import { screen } from '@testing-library/react';
 import Nav from 'components/common/Nav';
-import { render } from 'tests/utils/customRender';
 import '@testing-library/jest-dom';
 import dayjs from 'dayjs';
-import { RecoilObserver } from 'tests/utils/RecoilObserver';
 import { toggleMenuState } from 'atoms';
+import { RecoilObserver, render } from 'tests/utils';
 
 describe('Nav 컴포넌트 유닛 테스트', () => {
   test('마운트 되었을 때 당일 날짜가 텍스트로 표시되어있다', () => {

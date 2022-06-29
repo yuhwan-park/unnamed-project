@@ -4,11 +4,11 @@ import { userState } from 'atoms';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import UserAccountMenu from './UserAccountMenu';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { auth, storage } from 'firebase-source';
 import shortUUID from 'short-uuid';
-import { updateProfile } from 'firebase/auth';
+import { onAuthStateChanged, updateProfile } from 'firebase/auth';
 import { FieldValues, useForm } from 'react-hook-form';
 
 const userIconStyle = {
@@ -43,22 +43,20 @@ function UserAccount() {
     }
   };
 
-  const storageImage = async (fileURL: string | ArrayBuffer) => {
-    const fileRef = ref(storage, `images/${shortUUID.generate()}`);
-    await uploadString(fileRef, fileURL as string, 'data_url');
-    const url = await getDownloadURL(fileRef);
+  const storeImage = async (fileURL: string | ArrayBuffer) => {
+    const storageRef = ref(storage, `images/${shortUUID.generate()}`);
+    await uploadString(storageRef, fileURL as string, 'data_url');
+    const url = await getDownloadURL(storageRef);
     return url;
   };
 
-  const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.currentTarget.files) return;
-    const file = e.currentTarget.files[0];
+  const updateProfileImage = (file: File) => {
     const reader = new FileReader();
     reader.onloadend = async event => {
       const resultURL = event.target?.result;
       if (!resultURL) return;
       try {
-        const url = await storageImage(resultURL);
+        const url = await storeImage(resultURL);
         setUser(user => ({ ...user, photoURL: url }));
         if (auth.currentUser) {
           await updateProfile(auth.currentUser, { photoURL: url });
@@ -70,6 +68,12 @@ function UserAccount() {
     reader.readAsDataURL(file);
   };
 
+  const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.currentTarget.files) return;
+    const file = e.currentTarget.files[0];
+    updateProfileImage(file);
+  };
+
   const onBlurNameInput = async (e: React.FormEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
     await setDisplayName(value);
@@ -78,6 +82,14 @@ function UserAccount() {
   const onSubmitNameInput = async ({ displayName }: FieldValues) => {
     await setDisplayName(displayName);
   };
+
+  useEffect(() => {
+    onAuthStateChanged(auth, user => {
+      if (!user) return;
+      const { displayName, email, uid, photoURL } = user;
+      setUser({ displayName, email, uid, photoURL });
+    });
+  }, [setUser]);
 
   return (
     <Wrapper>
@@ -112,7 +124,7 @@ function UserAccount() {
         </form>
       ) : (
         <UserName onClick={onClickDisplayName}>
-          {user?.displayName || user?.email || ''}
+          {user?.displayName || user?.email || '익명'}
         </UserName>
       )}
 

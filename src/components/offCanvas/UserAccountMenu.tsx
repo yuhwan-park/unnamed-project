@@ -29,7 +29,7 @@ function UserAccountMenu() {
   };
 
   return (
-    <MenuContainer onClick={onClickMenu} ref={ref}>
+    <MenuContainer onClick={onClickMenu} ref={ref} data-testid="user-menu">
       <FontAwesomeIcon icon={faGear} className="toggle-menu-icon" />
       {isOpen ? (
         <MenuModal>

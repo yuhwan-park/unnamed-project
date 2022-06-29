@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { render } from './utils/customRender';
 import App from 'App';
+import { render } from './utils';
 
 describe('홈페이지 버튼 테스트', () => {
   test('로그인 버튼을 클릭하면 signin 페이지로 이동한다', async () => {

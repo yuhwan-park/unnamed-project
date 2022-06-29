@@ -7,12 +7,7 @@ import ContentEditor from 'components/ContentEditor';
 import { AnimatePresence, motion } from 'framer-motion';
 import OffCanvasMenu from 'components/OffCanvasMenu';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import {
-  isWideState,
-  loadingSelector,
-  showEditorState,
-  userState,
-} from 'atoms';
+import { isWideState, loadingSelector, showEditorState } from 'atoms';
 import { editorVariants } from 'variants';
 import Loading from 'components/common/Loading';
 import { useDetectClickOutside } from 'hooks';
@@ -22,7 +17,6 @@ function Main() {
   const [showEditor, setShowEditor] = useRecoilState(showEditorState);
   const [isWide, setIsWide] = useRecoilState(isWideState);
   const isLoading = useRecoilValue(loadingSelector);
-  const { uid } = useRecoilValue(userState);
   useDetectClickOutside({ onTriggered: () => setShowEditor(false) });
 
   const onClickScreen = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -46,50 +40,47 @@ function Main() {
 
   return (
     <>
-      {uid && (
-        <>
-          {isLoading && <Loading />}
-          <Wrapper onClick={onClickScreen}>
-            <Nav />
-            {isWide ? (
-              <ResponsiveContainer>
-                <OffCanvasMenu />
-                <ReflexContainer orientation="vertical">
-                  <ReflexElement className="left-pane">
-                    <List />
-                  </ReflexElement>
-                  <ReflexSplitter style={{ border: 'none' }} />
-                  <ReflexElement
-                    className="right-pane"
-                    minSize={400}
-                    maxSize={window.innerWidth / 2 + 100}
-                  >
-                    <ContentEditor />
-                  </ReflexElement>
-                </ReflexContainer>
-              </ResponsiveContainer>
-            ) : (
-              <ResponsiveContainer>
-                <OffCanvasMenu />
+      {isLoading && <Loading />}
+      <Wrapper onClick={onClickScreen}>
+        <Nav />
+        {isWide ? (
+          <ResponsiveContainer>
+            <OffCanvasMenu />
+            <ReflexContainer orientation="vertical">
+              <ReflexElement className="left-pane">
                 <List />
-                <AnimatePresence initial={false}>
-                  {showEditor && (
-                    <EditorContainer
-                      variants={editorVariants}
-                      animate="visible"
-                      initial="initial"
-                      exit="exit"
-                      transition={{ type: 'tween' }}
-                    >
-                      <ContentEditor />
-                    </EditorContainer>
-                  )}
-                </AnimatePresence>
-              </ResponsiveContainer>
-            )}
-          </Wrapper>
-        </>
-      )}
+              </ReflexElement>
+              <ReflexSplitter style={{ border: 'none' }} />
+              <ReflexElement
+                className="right-pane"
+                minSize={400}
+                maxSize={window.innerWidth / 2 + 100}
+              >
+                <ContentEditor />
+              </ReflexElement>
+            </ReflexContainer>
+          </ResponsiveContainer>
+        ) : (
+          <ResponsiveContainer>
+            <OffCanvasMenu />
+            <List />
+            <AnimatePresence initial={false}>
+              {showEditor && (
+                <EditorContainer
+                  variants={editorVariants}
+                  animate="visible"
+                  initial="initial"
+                  exit="exit"
+                  transition={{ type: 'tween' }}
+                >
+                  <ContentEditor />
+                </EditorContainer>
+              )}
+            </AnimatePresence>
+          </ResponsiveContainer>
+        )}
+      </Wrapper>
+
       <GlobalLogic />
     </>
   );
