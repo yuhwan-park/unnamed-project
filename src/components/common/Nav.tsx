@@ -1,15 +1,8 @@
-import { memo, useCallback, useEffect } from 'react';
-import { useState } from 'react';
+// dependencies
+import { memo, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import {
-  dateState,
-  isWideState,
-  screenStatusState,
-  selectedListState,
-  toggleMenuState,
-} from 'atoms';
 import {
   faAngleLeft,
   faBars,
@@ -18,12 +11,26 @@ import {
   faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import CalendarView from './CalendarView';
 import dayjs from 'dayjs';
+
+// components
+import ComplaintForm from './ComplaintForm';
+import CalendarView from './CalendarView';
+
+// states
+import {
+  dateState,
+  screenStatusState,
+  selectedListState,
+  toggleMenuState,
+} from 'atoms';
+
+// sources
 import { dateVariants } from 'variants';
 import { useDetectClickOutside } from 'hooks/useDetectClickOutside';
+
+// styles
 import { devices } from 'style/media-queries';
-import ComplaintForm from './ComplaintForm';
 
 function Nav() {
   const [date, setDate] = useRecoilState(dateState);
@@ -31,19 +38,18 @@ function Nav() {
   const [isHovered, setIsHovered] = useState(false);
   const [toggleCalendar, setToggleCalendar] = useState(false);
   const [toggleIssue, setToggleIssue] = useState(false);
-  const isWide = useRecoilValue(isWideState);
   const selectedList = useRecoilValue(selectedListState);
   const screenStatus = useRecoilValue(screenStatusState);
   const setToggleMenu = useSetRecoilState(toggleMenuState);
-  const CloseDropdownMenu = useCallback(() => {
+  const closeCalendar = useCallback(() => {
     setToggleCalendar(false);
   }, []);
-  const calendarRef = useDetectClickOutside({ onTriggered: CloseDropdownMenu });
+  const calendarRef = useDetectClickOutside({ onTriggered: closeCalendar });
 
-  const closeForm = useCallback(() => {
+  const closeIssueForm = useCallback(() => {
     setToggleIssue(false);
   }, []);
-  const issueRef = useDetectClickOutside({ onTriggered: closeForm });
+  const issueRef = useDetectClickOutside({ onTriggered: closeIssueForm });
 
   const onClickNext = () => {
     setIsBack(false);
@@ -79,17 +85,9 @@ function Nav() {
     setToggleIssue(prev => !prev);
   };
 
-  useEffect(() => {
-    if (isWide) {
-      setToggleMenu(true);
-    } else {
-      setToggleMenu(false);
-    }
-  }, [setToggleMenu, isWide]);
-
   return (
     <Wrapper ref={calendarRef}>
-      <MenuIcon onClick={onClickMenuIcon}>
+      <MenuIcon onClick={onClickMenuIcon} data-testid="menu-toggle-button">
         <FontAwesomeIcon icon={faBars} />
       </MenuIcon>
       {selectedList ? (
@@ -98,7 +96,7 @@ function Nav() {
         <Today>모두 보기</Today>
       ) : (
         <>
-          <PrevButton onClick={onClickPrev}>
+          <PrevButton onClick={onClickPrev} data-testid="prev-button">
             <FontAwesomeIcon icon={faAngleLeft} />
           </PrevButton>
           <AnimatePresence custom={isBack} initial={false}>
@@ -114,30 +112,27 @@ function Nav() {
               onMouseLeave={onMouseLeaveToday}
             >
               {isHovered ? (
-                <Button>
-                  <FontAwesomeIcon
-                    icon={faCalendarDays}
-                    onClick={onClickCalendar}
-                  />
+                <Button data-testid="calendar-button" onClick={onClickCalendar}>
+                  <FontAwesomeIcon icon={faCalendarDays} />
                 </Button>
               ) : (
                 <div>{date.format('M월 D일')}</div>
               )}
             </Today>
           </AnimatePresence>
-          <NextButton onClick={onClickNext}>
+          <NextButton onClick={onClickNext} data-testid="next-button">
             <FontAwesomeIcon icon={faAngleRight} />
           </NextButton>
 
           {toggleCalendar && (
-            <CalendarContainer>
+            <CalendarContainer data-testid="calendar">
               <CalendarView value={date.toDate()} onClickDay={onClickDay} />
             </CalendarContainer>
           )}
         </>
       )}
       <ComplaintContainer ref={issueRef}>
-        <Button onClick={onClickIssueButton}>
+        <Button onClick={onClickIssueButton} data-testid="issue-button">
           <FontAwesomeIcon icon={faTriangleExclamation} />
         </Button>
         {toggleIssue && (

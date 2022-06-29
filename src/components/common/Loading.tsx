@@ -5,10 +5,8 @@ function Loading() {
   return (
     <Wrapper>
       <Logo
-        className="logo"
         animate={{ opacity: 0.2 }}
         transition={{ repeat: Infinity, duration: 0.6, repeatType: 'mirror' }}
-        draggable
       >
         dail
       </Logo>
@@ -34,4 +32,7 @@ const Wrapper = styled.div`
 const Logo = styled(motion.div)`
   font-size: 124px;
   opacity: 1;
+  font-family: 'Comfortaa', cursive;
+  color: #1082fd;
+  user-select: none;
 `;

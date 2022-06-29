@@ -1,19 +1,24 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { myListModalState, toggleMenuState } from 'atoms';
+import { isWideState, myListModalState, toggleMenuState } from 'atoms';
 import UserAccount from './offCanvas/UserAccount';
 import { menuVariants } from 'variants';
 import MyList from './offCanvas/MyList';
 import CalendarList from './offCanvas/CalendarList';
 import ShowAllList from './offCanvas/ShowAllList';
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { devices } from 'style/media-queries';
 import MyListModal from './offCanvas/MyListModal';
 
 function OffCanvasMenu() {
-  const toggleMenu = useRecoilValue(toggleMenuState);
+  const [toggleMenu, setToggleMenu] = useRecoilState(toggleMenuState);
   const toggleModal = useRecoilValue(myListModalState);
+  const isWide = useRecoilValue(isWideState);
+
+  useEffect(() => {
+    setToggleMenu(isWide);
+  }, [setToggleMenu, isWide]);
 
   return (
     <>
