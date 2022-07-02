@@ -23,6 +23,7 @@ function CalendarList() {
     <OffCanvasMenuContainer
       isSelected={screenStatus === 'Date'}
       onClick={onClickDateList}
+      data-testid="calendar-list-container"
     >
       <MenuIcon>
         <FontAwesomeIcon icon={faCalendarDays} />

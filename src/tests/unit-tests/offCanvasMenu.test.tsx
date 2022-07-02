@@ -2,6 +2,8 @@ import '@testing-library/jest-dom';
 import { screen } from '@testing-library/react';
 import { userState } from 'atoms';
 import GlobalLogic from 'components/common/GlobalLogic';
+import CalendarList from 'components/offCanvas/CalendarList';
+import ShowAllList from 'components/offCanvas/ShowAllList';
 import UserAccount from 'components/offCanvas/UserAccount';
 import { BrowserRouter } from 'react-router-dom';
 import { RecoilSetter, render } from 'tests/utils';
@@ -74,5 +76,41 @@ describe('오프캔버스 메뉴 기능 테스트', () => {
       await user.click(logoutButton);
       expect(window.location.pathname).toBe('/');
     });
+
+    describe('할일 필터 기능', () => {
+      test('모두 보기 메뉴를 클릭 시 모든 할일을 볼 수 있는 라우트로 이동한다', async () => {
+        const { user } = render(
+          <BrowserRouter>
+            <ShowAllList />
+          </BrowserRouter>,
+          { route: '/main' },
+        );
+
+        const showAll = screen.getByTestId('show-all-container');
+
+        expect(window.location.pathname).toBe('/main');
+        await user.click(showAll);
+        expect(window.location.pathname).toBe('/main/all/tasks');
+      });
+
+      test('날짜별로 보기 메뉴를 클릭 시 main 라우트로 이동한다', async () => {
+        const { user } = render(
+          <BrowserRouter>
+            <CalendarList />
+          </BrowserRouter>,
+          { route: '/main/all/tasks' },
+        );
+
+        const calendarListButton = screen.getByTestId(
+          'calendar-list-container',
+        );
+
+        expect(window.location.pathname).toBe('/main/all/tasks');
+        await user.click(calendarListButton);
+        expect(window.location.pathname).toBe('/main');
+      });
+    });
+
+    describe('리스트 CRUD 기능', () => {});
   });
 });

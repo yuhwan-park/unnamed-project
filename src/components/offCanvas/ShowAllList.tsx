@@ -23,6 +23,7 @@ function ShowAllList() {
     <OffCanvasMenuContainer
       isSelected={screenStatus === 'All'}
       onClick={onClickDateList}
+      data-testid="show-all-container"
     >
       <MenuIcon>
         <FontAwesomeIcon icon={faFolderOpen} />

@@ -36,6 +36,7 @@ export default CalendarView;
 
 const Count = styled.div`
   position: absolute;
-  margin-left: 8px;
+  width: calc(100% - 13px);
+  text-align: center;
   font-size: 8px;
 `;

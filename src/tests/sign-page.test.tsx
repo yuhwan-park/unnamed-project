@@ -4,6 +4,8 @@ import App from 'App';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import SignIn from 'routes/SignIn';
 import { render } from './utils';
+import { signOut } from 'firebase/auth';
+import { auth } from 'firebase-source';
 
 describe('로그인 페이지 링크 기능', () => {
   test('dail 로고를 클릭하면 home 페이지로 이동한다', async () => {
@@ -185,5 +187,7 @@ describe('로그인 & 회원가입', () => {
     await user.click(submitButton);
 
     await waitFor(() => expect(window.location.pathname).toBe('/main'));
+
+    await signOut(auth);
   });
 });
