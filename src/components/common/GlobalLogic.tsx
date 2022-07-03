@@ -24,10 +24,6 @@ function GlobalLogic() {
     setParams(params);
   }, [params, setParams]);
 
-  useEffect(() => {
-    // 소셜 로그인 중인지 판단을 위한 플래그를 제거
-    sessionStorage.clear();
-  }, []);
   return null;
 }
 

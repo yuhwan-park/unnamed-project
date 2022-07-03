@@ -69,7 +69,7 @@ function MyListModal() {
     const isError = checkError(title);
     if (!auth.currentUser || !isError) return;
 
-    const docRef = doc(db, `${auth.currentUser?.uid}/Lists`);
+    const docRef = doc(db, `${auth.currentUser.uid}/Lists`);
     const newLists = myLists.map(list =>
       list.id === selectedList?.id ? { ...list, title } : list,
     );
@@ -77,6 +77,9 @@ function MyListModal() {
     setValue('title', '');
     setToggleModal(null);
     await updateDoc(docRef, { lists: newLists });
+    myListDocs.forEach(async document => {
+      await updator(document, 'list', { ...document.list, title }, true);
+    });
   };
 
   const createList = async ({ title }: FieldValues) => {

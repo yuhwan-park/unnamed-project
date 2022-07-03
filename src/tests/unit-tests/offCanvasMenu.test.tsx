@@ -1,13 +1,12 @@
 import '@testing-library/jest-dom';
 import { screen } from '@testing-library/react';
-import { myListsState, userState } from 'atoms';
+import { userState } from 'atoms';
 import GlobalLogic from 'components/common/GlobalLogic';
 import CalendarList from 'components/offCanvas/CalendarList';
 import ShowAllList from 'components/offCanvas/ShowAllList';
 import UserAccount from 'components/offCanvas/UserAccount';
-import OffCanvasMenu from 'components/OffCanvasMenu';
 import { BrowserRouter } from 'react-router-dom';
-import { RecoilObserver, RecoilSetter, render } from 'tests/utils';
+import { RecoilSetter, render } from 'tests/utils';
 
 const MOCK_USER = {
   displayName: 'aa',
@@ -109,38 +108,6 @@ describe('오프캔버스 메뉴 기능 테스트', () => {
         expect(window.location.pathname).toBe('/main/all/tasks');
         await user.click(calendarListButton);
         expect(window.location.pathname).toBe('/main');
-      });
-    });
-
-    describe('리스트 CRUD 기능', () => {
-      test('리스트 추가 버튼을 누르면 리스트 추가 모달이 나오고 리스트를 추가할 수 있다', async () => {
-        const onChange = jest.fn();
-        const { user } = render(
-          <BrowserRouter>
-            <RecoilObserver node={myListsState} onChange={onChange} />
-            <OffCanvasMenu />
-          </BrowserRouter>,
-          { route: '/main' },
-        );
-
-        const addListButton = screen.getByTestId('add-list-button');
-
-        await user.click(addListButton);
-
-        expect(
-          screen.getByRole('heading', { name: '리스트 추가' }),
-        ).toBeInTheDocument();
-
-        await user.type(
-          screen.getByPlaceholderText(/리스트 이름을 적어주세요/),
-          'TESTLIST',
-        );
-        const submitButton = screen.getByRole('button', { name: '확인' });
-        expect(submitButton).toBeInTheDocument();
-        await user.click(submitButton);
-
-        expect(onChange).toHaveBeenCalledTimes(1);
-        expect(onChange).toHaveBeenCalledWith({});
       });
     });
   });

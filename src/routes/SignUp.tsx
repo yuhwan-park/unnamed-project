@@ -61,10 +61,8 @@ function SignUp() {
   };
 
   useEffect(() => {
-    if (sessionStorage.getItem('logging-in')) {
-      setIsLoggingIn(true);
-    }
-  }, []);
+    setIsLoggingIn(sessionStorage.length > 0);
+  }, [isLoggingIn]);
 
   useEffect(() => {
     onAuthStateChanged(auth, user => {

@@ -2,14 +2,13 @@ import { GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
 import styled from 'styled-components';
 import { auth } from 'firebase-source';
 import GoogleLogo from 'assets/GoogleLogo.svg';
-
 function SocialLogin() {
   const provider = new GoogleAuthProvider();
 
   const onClickSignInWithGoogle = async () => {
-    sessionStorage.setItem('logging-in', 'true');
     await signInWithRedirect(auth, provider);
   };
+
   return (
     <GoogleLogin onClick={onClickSignInWithGoogle}>
       <img src={GoogleLogo} width="20px" alt="Google" />
