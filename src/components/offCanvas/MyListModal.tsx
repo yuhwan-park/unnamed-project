@@ -83,7 +83,7 @@ function MyListModal() {
     const isError = checkError(title);
     if (!auth.currentUser || !isError) return;
 
-    const docRef = doc(db, `${auth.currentUser?.uid}/Lists`);
+    const docRef = doc(db, `${auth.currentUser.uid}/Lists`);
     const newListId = shortUUID.generate();
     const listData = {
       title,

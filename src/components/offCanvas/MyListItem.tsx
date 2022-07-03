@@ -49,7 +49,7 @@ function MyListItem({ list }: IMyListItemProps) {
   );
 }
 
-const Wrapper = styled.div<{ isSelected: boolean }>`
+const Wrapper = styled.li<{ isSelected: boolean }>`
   position: relative;
   display: flex;
   padding: 10px 0;

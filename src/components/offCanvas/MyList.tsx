@@ -48,12 +48,13 @@ function MyList() {
           <FontAwesomeIcon icon={faChevronRight} size="sm" />
           <h2>리스트</h2>
         </ListTitle>
-        <div className="plus-button" ref={plusRef}>
-          <FontAwesomeIcon
-            icon={faPlus}
-            onClick={onClickOpenModal}
-            className="toggle-menu-icon"
-          />
+        <div
+          className="plus-button"
+          ref={plusRef}
+          onClick={onClickOpenModal}
+          data-testid="add-list-button"
+        >
+          <FontAwesomeIcon icon={faPlus} className="toggle-menu-icon" />
         </div>
       </MyListHeader>
       {isCollapsed && (
@@ -90,7 +91,7 @@ const MyListHeader = styled(ListHeader)`
   }
 `;
 
-const MyListContent = styled.div`
+const MyListContent = styled.ul`
   height: fit-content;
 `;
 
