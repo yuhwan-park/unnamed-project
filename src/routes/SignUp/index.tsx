@@ -1,37 +1,24 @@
 // dependencies
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+// components
+import AuthForm from 'components/auth/AuthForm';
+import SocialLogin from 'components/auth/SocialLogin';
+import Loading from 'components/common/Loading';
+// states
+import { userState } from 'atoms';
+// types
+import { IFormData } from 'types';
+// firebase
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   updateProfile,
 } from 'firebase/auth';
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
-
-// components
-import AuthForm from 'components/auth/AuthForm';
-import SocialLogin from 'components/auth/SocialLogin';
-import Loading from 'components/common/Loading';
-
-// states
-import { userState } from 'atoms';
-
-// types
-import { IFormData } from 'types';
-
-// sources
 import { auth } from 'firebase-source';
-
 // styles
-import {
-  Hr,
-  LinkStyle,
-  ErrorMessage,
-  Container,
-  FormContainer,
-  Message,
-  Logo,
-} from 'style/sign-page';
+import * as S from 'style/sign-page';
 
 function SignUp() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -74,30 +61,30 @@ function SignUp() {
   }, [navigator]);
 
   return (
-    <Container>
+    <S.Container>
       {/* 구글 로그인 중일 때 보여주는 로딩 */}
       {isLoggingIn && <Loading />}
 
       <Link to={'/'}>
-        <Logo>dail</Logo>
+        <S.Logo>dail</S.Logo>
       </Link>
 
-      <FormContainer>
+      <S.FormContainer>
         <AuthForm onSubmit={onSignUp} />
-        {error && <ErrorMessage>{error}</ErrorMessage>}
+        {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
 
-        <Hr>또는</Hr>
+        <S.Hr>또는</S.Hr>
 
         <SocialLogin />
 
-        <Message>
+        <S.Message>
           이미 계정이 있으신가요?{' '}
           <Link to={'/signin'}>
-            <LinkStyle>로그인</LinkStyle>
+            <S.LinkStyle>로그인</S.LinkStyle>
           </Link>
-        </Message>
-      </FormContainer>
-    </Container>
+        </S.Message>
+      </S.FormContainer>
+    </S.Container>
   );
 }
 

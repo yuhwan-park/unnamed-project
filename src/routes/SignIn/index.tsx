@@ -2,28 +2,16 @@
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
 // components
 import AuthForm from 'components/auth/AuthForm';
 import SocialLogin from 'components/auth/SocialLogin';
 import Loading from 'components/common/Loading';
-
 // types
 import { IFormData } from 'types';
-
 // sources
 import { auth } from 'firebase-source';
-
 // styles
-import {
-  Container,
-  ErrorMessage,
-  FormContainer,
-  Hr,
-  LinkStyle,
-  Logo,
-  Message,
-} from 'style/sign-page';
+import * as S from 'style/sign-page';
 
 function SignIn() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -55,34 +43,34 @@ function SignIn() {
   }, [navigator]);
 
   return (
-    <Container>
+    <S.Container>
       {/* 구글 로그인 중일 때 보여주는 로딩 */}
       {isLoggingIn && <Loading />}
 
       <Link to={'/'}>
-        <Logo>dail</Logo>
+        <S.Logo>dail</S.Logo>
       </Link>
 
-      <FormContainer>
+      <S.FormContainer>
         <AuthForm onSubmit={onSignIn} />
-        {error && <ErrorMessage>{error}</ErrorMessage>}
+        {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
 
         <Link to={'/requestUpdatePassword'}>
-          <LinkStyle>비밀번호가 기억나지 않아요</LinkStyle>
+          <S.LinkStyle>비밀번호가 기억나지 않아요</S.LinkStyle>
         </Link>
 
-        <Hr>또는</Hr>
+        <S.Hr>또는</S.Hr>
 
         <SocialLogin />
 
-        <Message>
+        <S.Message>
           계정이 없으신가요?{' '}
           <Link to={'/signup'}>
-            <LinkStyle>회원가입</LinkStyle>
+            <S.LinkStyle>회원가입</S.LinkStyle>
           </Link>
-        </Message>
-      </FormContainer>
-    </Container>
+        </S.Message>
+      </S.FormContainer>
+    </S.Container>
   );
 }
 

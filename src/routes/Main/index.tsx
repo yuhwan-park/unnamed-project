@@ -1,17 +1,22 @@
+// dependencies
 import React, { useEffect } from 'react';
+import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
+import { AnimatePresence } from 'framer-motion';
+import { useRecoilState, useRecoilValue } from 'recoil';
+// components
 import Nav from 'components/common/Nav';
 import List from 'components/List';
-import styled from 'styled-components';
-import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import ContentEditor from 'components/ContentEditor';
-import { AnimatePresence, motion } from 'framer-motion';
 import OffCanvasMenu from 'components/OffCanvasMenu';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { isWideState, loadingSelector, showEditorState } from 'atoms';
-import { editorVariants } from 'variants';
 import Loading from 'components/common/Loading';
-import { useDetectClickOutside } from 'hooks';
 import GlobalLogic from 'components/common/GlobalLogic';
+// states
+import { isWideState, loadingSelector, showEditorState } from 'atoms';
+// sources
+import { editorVariants } from 'variants';
+import { useDetectClickOutside } from 'hooks';
+// styles
+import * as S from './style';
 
 function Main() {
   const [showEditor, setShowEditor] = useRecoilState(showEditorState);
@@ -41,10 +46,10 @@ function Main() {
   return (
     <>
       {isLoading && <Loading />}
-      <Wrapper onClick={onClickScreen}>
+      <S.Wrapper onClick={onClickScreen}>
         <Nav />
         {isWide ? (
-          <ResponsiveContainer>
+          <S.ResponsiveContainer>
             <OffCanvasMenu />
             <ReflexContainer orientation="vertical">
               <ReflexElement className="left-pane">
@@ -59,14 +64,14 @@ function Main() {
                 <ContentEditor />
               </ReflexElement>
             </ReflexContainer>
-          </ResponsiveContainer>
+          </S.ResponsiveContainer>
         ) : (
-          <ResponsiveContainer>
+          <S.ResponsiveContainer>
             <OffCanvasMenu />
             <List />
             <AnimatePresence initial={false}>
               {showEditor && (
-                <EditorContainer
+                <S.EditorContainer
                   variants={editorVariants}
                   animate="visible"
                   initial="initial"
@@ -74,12 +79,12 @@ function Main() {
                   transition={{ type: 'tween' }}
                 >
                   <ContentEditor />
-                </EditorContainer>
+                </S.EditorContainer>
               )}
             </AnimatePresence>
-          </ResponsiveContainer>
+          </S.ResponsiveContainer>
         )}
-      </Wrapper>
+      </S.Wrapper>
 
       <GlobalLogic />
     </>
@@ -87,20 +92,3 @@ function Main() {
 }
 
 export default Main;
-
-const Wrapper = styled.div`
-  height: 100vh;
-`;
-
-const ResponsiveContainer = styled.div`
-  display: flex;
-  height: calc(100vh - 50px);
-`;
-
-const EditorContainer = styled(motion.div)`
-  z-index: 30;
-  width: 70%;
-  position: absolute;
-  height: calc(100vh - 50px);
-  box-shadow: 0 6px 20px rgb(0 0 0 / 15%);
-`;

@@ -4,11 +4,9 @@ import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 // firebase
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from 'firebase-source';
-
 // styles
 import * as S from './style';
 
