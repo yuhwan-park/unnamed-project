@@ -23,7 +23,7 @@ import {
 } from 'atoms';
 import { auth, db } from 'firebase-source';
 import ContentForm from 'components/list/ContentForm';
-import ListConstructor from './ListConstructor';
+import ListConstructor from './list/ListConstructor';
 
 function List() {
   const date = useRecoilValue(dateSelector);

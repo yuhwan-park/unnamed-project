@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { memo, useEffect, useState } from 'react';
 import { IDocument } from 'types';
-import ListItem from './list/ListItem';
+import ListItem from './ListItem';
 import { ListHeader } from 'style/main-page';
 import styled from 'styled-components';
 

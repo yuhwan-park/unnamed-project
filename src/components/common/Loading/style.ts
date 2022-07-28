@@ -1,22 +1,7 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-function Loading() {
-  return (
-    <Wrapper>
-      <Logo
-        animate={{ opacity: 0.2 }}
-        transition={{ repeat: Infinity, duration: 0.6, repeatType: 'mirror' }}
-      >
-        dail
-      </Logo>
-    </Wrapper>
-  );
-}
-
-export default Loading;
-
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -29,7 +14,7 @@ const Wrapper = styled.div`
   background-color: white;
 `;
 
-const Logo = styled(motion.div)`
+export const Logo = styled(motion.div)`
   font-size: 124px;
   opacity: 1;
   font-family: 'Comfortaa', cursive;

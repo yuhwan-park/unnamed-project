@@ -1,9 +1,12 @@
-import { documentCountByDateState } from 'atoms';
+// dependencies
 import dayjs from 'dayjs';
 import Calendar from 'react-calendar';
 import { useRecoilValue } from 'recoil';
+// states
+import { documentCountByDateState } from 'atoms';
+// styles
 import 'style/calendar.css';
-import styled from 'styled-components';
+import * as S from './style';
 
 interface ICalendarViewProps {
   value: Date | null;
@@ -24,7 +27,7 @@ function CalendarView({ value, onClickDay }: ICalendarViewProps) {
       tileContent={({ date, view }) => {
         const dateString = dayjs(date).format('YYYYMMDD');
         if (docCount && docCount[dateString]) {
-          return <Count>{`(${docCount[dateString]})`}</Count>;
+          return <S.Count>{`(${docCount[dateString]})`}</S.Count>;
         }
         return null;
       }}
@@ -33,10 +36,3 @@ function CalendarView({ value, onClickDay }: ICalendarViewProps) {
 }
 
 export default CalendarView;
-
-const Count = styled.div`
-  position: absolute;
-  width: calc(100% - 13px);
-  text-align: center;
-  font-size: 8px;
-`;

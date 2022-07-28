@@ -1,9 +1,12 @@
-import { paramState } from 'atoms';
-import { auth } from 'firebase-source';
-import { onAuthStateChanged } from 'firebase/auth';
+// dependencis
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
+// states
+import { paramState } from 'atoms';
+// firebase
+import { auth } from 'firebase-source';
+import { onAuthStateChanged } from 'firebase/auth';
 
 function GlobalLogic() {
   const params = useParams();

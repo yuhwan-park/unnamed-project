@@ -1,8 +1,12 @@
+// dependencies
 import { faFlag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// hooks
 import { useUpdateDocs } from 'hooks';
-import styled from 'styled-components';
+// types
 import { IDocument } from 'types';
+// styles
+import * as S from './style';
 
 interface IPriorityFlagProps {
   todo: IDocument;
@@ -18,9 +22,9 @@ function PriorityFlag({ todo, toggleMenu }: IPriorityFlagProps) {
   };
 
   return (
-    <Wrapper>
-      <FlagLabel htmlFor="flagContainer">우선도</FlagLabel>
-      <FlagContainer id="flagContainer">
+    <S.Wrapper>
+      <S.FlagLabel htmlFor="flagContainer">우선도</S.FlagLabel>
+      <S.FlagContainer id="flagContainer">
         <FontAwesomeIcon
           icon={faFlag}
           style={{ color: 'red' }}
@@ -41,34 +45,9 @@ function PriorityFlag({ todo, toggleMenu }: IPriorityFlagProps) {
           style={{ color: 'lightgray' }}
           onClick={() => onClickFlag(4)}
         />
-      </FlagContainer>
-    </Wrapper>
+      </S.FlagContainer>
+    </S.Wrapper>
   );
 }
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-`;
-
-const FlagContainer = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  svg {
-    padding: 10px;
-    &:hover {
-      background-color: rgb(240, 240, 240);
-    }
-  }
-`;
-
-const FlagLabel = styled.label`
-  font-size: ${props => props.theme.fontSize.small};
-  color: rgba(0, 0, 0, 0.5);
-  padding: 5px 10px;
-`;
 
 export default PriorityFlag;

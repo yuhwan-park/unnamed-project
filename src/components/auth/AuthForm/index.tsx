@@ -4,18 +4,10 @@ import { faUser, faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-
 // types
 import { IFormData } from 'types';
-
 // styles
-import {
-  ErrorMessage,
-  Form,
-  InputContainer,
-  SubmitInput,
-  TextInput,
-} from 'style/sign-page';
+import * as S from 'style/sign-page';
 
 interface IAuthFormProps {
   onSubmit: (args: IFormData) => Promise<void>;
@@ -35,22 +27,22 @@ function AuthForm({ onSubmit }: IAuthFormProps) {
   }, [location.pathname]);
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <S.Form onSubmit={handleSubmit(onSubmit)}>
       {/* 회원가입 페이지일 때만 닉네임 인풋 렌더 */}
       {isSignUp && (
-        <InputContainer>
+        <S.InputContainer>
           <FontAwesomeIcon icon={faUser} />
-          <TextInput
+          <S.TextInput
             {...register('nickname')}
             placeholder="닉네임 (선택사항)"
           />
-        </InputContainer>
+        </S.InputContainer>
       )}
 
       {/* 이메일 인풋 */}
-      <InputContainer>
+      <S.InputContainer>
         <FontAwesomeIcon icon={faEnvelope} />
-        <TextInput
+        <S.TextInput
           {...register('email', {
             required: '필수 항목입니다.',
             pattern: {
@@ -60,13 +52,13 @@ function AuthForm({ onSubmit }: IAuthFormProps) {
           })}
           placeholder="이메일"
         />
-      </InputContainer>
-      {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
+      </S.InputContainer>
+      {errors.email && <S.ErrorMessage>{errors.email.message}</S.ErrorMessage>}
 
       {/* 비밀번호 인풋 */}
-      <InputContainer>
+      <S.InputContainer>
         <FontAwesomeIcon icon={faLock} />
-        <TextInput
+        <S.TextInput
           {...register('password', {
             required: '필수 항목입니다.',
             minLength: {
@@ -77,13 +69,13 @@ function AuthForm({ onSubmit }: IAuthFormProps) {
           type="password"
           placeholder="비밀번호"
         />
-      </InputContainer>
+      </S.InputContainer>
       {errors.password && (
-        <ErrorMessage>{errors.password.message}</ErrorMessage>
+        <S.ErrorMessage>{errors.password.message}</S.ErrorMessage>
       )}
 
-      <SubmitInput type="submit" value={isSignUp ? '회원가입' : '로그인'} />
-    </Form>
+      <S.SubmitInput type="submit" value={isSignUp ? '회원가입' : '로그인'} />
+    </S.Form>
   );
 }
 

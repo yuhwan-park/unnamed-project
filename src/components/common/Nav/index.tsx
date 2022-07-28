@@ -1,7 +1,5 @@
 // dependencies
 import { memo, useCallback, useState } from 'react';
-import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   faAngleLeft,
@@ -12,11 +10,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dayjs from 'dayjs';
-
+import { AnimatePresence } from 'framer-motion';
 // components
-import ComplaintForm from './ComplaintForm';
-import CalendarView from './CalendarView';
-
+import CalendarView from '../CalendarView';
+import ComplaintForm from '../ComplaintForm';
 // states
 import {
   dateState,
@@ -24,13 +21,12 @@ import {
   selectedListState,
   toggleMenuState,
 } from 'atoms';
-
+// hooks
+import { useDetectClickOutside } from 'hooks';
 // sources
 import { dateVariants } from 'variants';
-import { useDetectClickOutside } from 'hooks/useDetectClickOutside';
-
 // styles
-import { devices } from 'style/media-queries';
+import * as S from './style';
 
 function Nav() {
   const [date, setDate] = useRecoilState(dateState);
@@ -86,21 +82,21 @@ function Nav() {
   };
 
   return (
-    <Wrapper ref={calendarRef}>
-      <MenuIcon onClick={onClickMenuIcon} data-testid="menu-toggle-button">
+    <S.Wrapper ref={calendarRef}>
+      <S.MenuIcon onClick={onClickMenuIcon} data-testid="menu-toggle-button">
         <FontAwesomeIcon icon={faBars} />
-      </MenuIcon>
+      </S.MenuIcon>
       {selectedList ? (
-        <Today>{selectedList.title}</Today>
+        <S.Today>{selectedList.title}</S.Today>
       ) : screenStatus === 'All' ? (
-        <Today>모두 보기</Today>
+        <S.Today>모두 보기</S.Today>
       ) : (
         <>
-          <PrevButton onClick={onClickPrev} data-testid="prev-button">
+          <S.PrevButton onClick={onClickPrev} data-testid="prev-button">
             <FontAwesomeIcon icon={faAngleLeft} />
-          </PrevButton>
+          </S.PrevButton>
           <AnimatePresence custom={isBack} initial={false}>
-            <Today
+            <S.Today
               custom={isBack}
               key={date.format('M/D')}
               variants={dateVariants}
@@ -112,100 +108,38 @@ function Nav() {
               onMouseLeave={onMouseLeaveToday}
             >
               {isHovered ? (
-                <Button data-testid="calendar-button" onClick={onClickCalendar}>
+                <S.Button
+                  data-testid="calendar-button"
+                  onClick={onClickCalendar}
+                >
                   <FontAwesomeIcon icon={faCalendarDays} />
-                </Button>
+                </S.Button>
               ) : (
                 <div>{date.format('M월 D일')}</div>
               )}
-            </Today>
+            </S.Today>
           </AnimatePresence>
-          <NextButton onClick={onClickNext} data-testid="next-button">
+          <S.NextButton onClick={onClickNext} data-testid="next-button">
             <FontAwesomeIcon icon={faAngleRight} />
-          </NextButton>
+          </S.NextButton>
 
           {toggleCalendar && (
-            <CalendarContainer data-testid="calendar">
+            <S.CalendarContainer data-testid="calendar">
               <CalendarView value={date.toDate()} onClickDay={onClickDay} />
-            </CalendarContainer>
+            </S.CalendarContainer>
           )}
         </>
       )}
-      <ComplaintContainer ref={issueRef}>
-        <Button onClick={onClickIssueButton} data-testid="issue-button">
+      <S.ComplaintContainer ref={issueRef}>
+        <S.Button onClick={onClickIssueButton} data-testid="issue-button">
           <FontAwesomeIcon icon={faTriangleExclamation} />
-        </Button>
+        </S.Button>
         {toggleIssue && (
           <ComplaintForm toggleFunc={(bool: boolean) => setToggleIssue(bool)} />
         )}
-      </ComplaintContainer>
-    </Wrapper>
+      </S.ComplaintContainer>
+    </S.Wrapper>
   );
 }
 
 export default memo(Nav);
-
-const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50px;
-  background-color: #474747;
-`;
-
-const Today = styled(motion.div)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  width: 200px;
-  height: 50px;
-  font-size: 18px;
-  color: white;
-  font-family: ${props => props.theme.fontFamily.main};
-`;
-
-const CalendarContainer = styled.div`
-  position: absolute;
-  top: 40px;
-  z-index: 300;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-`;
-
-const Button = styled.div`
-  svg {
-    cursor: pointer;
-    color: white;
-    font-size: 30px;
-  }
-`;
-
-const PrevButton = styled(Button)`
-  position: relative;
-  left: -100px;
-  z-index: 1;
-  @media ${devices.mobileL} {
-    left: -70px;
-  }
-`;
-
-const NextButton = styled(Button)`
-  position: relative;
-  right: -100px;
-  @media ${devices.mobileL} {
-    right: -70px;
-  }
-`;
-
-const MenuIcon = styled(Button)`
-  position: absolute;
-  left: 30px;
-  z-index: 10;
-  padding-right: 10px;
-`;
-
-const ComplaintContainer = styled.div`
-  position: absolute;
-  right: 0;
-  padding: 0 10px;
-`;
