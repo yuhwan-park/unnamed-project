@@ -5,7 +5,7 @@ import { AnimatePresence } from 'framer-motion';
 import { useRecoilState, useRecoilValue } from 'recoil';
 // components
 import Nav from 'components/common/Nav';
-import List from 'components/List';
+import TodoList from 'components/TodoList';
 import ContentEditor from 'components/ContentEditor';
 import OffCanvasMenu from 'components/OffCanvasMenu';
 import Loading from 'components/common/Loading';
@@ -53,7 +53,7 @@ function Main() {
             <OffCanvasMenu />
             <ReflexContainer orientation="vertical">
               <ReflexElement className="left-pane">
-                <List />
+                <TodoList />
               </ReflexElement>
               <ReflexSplitter style={{ border: 'none' }} />
               <ReflexElement
@@ -68,7 +68,7 @@ function Main() {
         ) : (
           <S.ResponsiveContainer>
             <OffCanvasMenu />
-            <List />
+            <TodoList />
             <AnimatePresence initial={false}>
               {showEditor && (
                 <S.EditorContainer

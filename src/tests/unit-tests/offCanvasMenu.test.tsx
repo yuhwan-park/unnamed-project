@@ -2,9 +2,9 @@ import '@testing-library/jest-dom';
 import { screen } from '@testing-library/react';
 import { userState } from 'atoms';
 import GlobalLogic from 'components/common/GlobalLogic';
-import CalendarList from 'components/offCanvas/CalendarList';
-import ShowAllList from 'components/offCanvas/ShowAllList';
-import UserAccount from 'components/offCanvas/UserAccount';
+import CalendarList from 'components/OffCanvasMenu/CalendarList';
+import ShowAllList from 'components/OffCanvasMenu/ShowAllList';
+import UserAccount from 'components/OffCanvasMenu/UserAccount';
 import { BrowserRouter } from 'react-router-dom';
 import { RecoilSetter, render } from 'tests/utils';
 
