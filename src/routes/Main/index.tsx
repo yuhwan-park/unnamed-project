@@ -4,7 +4,7 @@ import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import { AnimatePresence } from 'framer-motion';
 import { useRecoilState, useRecoilValue } from 'recoil';
 // components
-import Nav from 'components/common/Nav';
+import Header from 'components/common/Header';
 import TodoList from 'components/TodoList';
 import ContentEditor from 'components/ContentEditor';
 import OffCanvasMenu from 'components/OffCanvasMenu';
@@ -47,7 +47,7 @@ function Main() {
     <>
       {isLoading && <Loading />}
       <S.Wrapper onClick={onClickScreen}>
-        <Nav />
+        <Header />
         {isWide ? (
           <S.ResponsiveContainer>
             <OffCanvasMenu />

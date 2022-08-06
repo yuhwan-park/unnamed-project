@@ -5,12 +5,12 @@ export const Wrapper = styled.div`
   height: 100vh;
 `;
 
-export const ResponsiveContainer = styled.div`
+export const ResponsiveContainer = styled.main`
   display: flex;
   height: calc(100vh - 50px);
 `;
 
-export const EditorContainer = styled(motion.div)`
+export const EditorContainer = styled(motion.section)`
   z-index: 30;
   width: 70%;
   position: absolute;

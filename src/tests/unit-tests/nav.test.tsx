@@ -1,5 +1,5 @@
 import { screen } from '@testing-library/react';
-import Nav from 'components/common/Nav';
+import Header from 'components/common/Header';
 import '@testing-library/jest-dom';
 import dayjs from 'dayjs';
 import { toggleMenuState } from 'atoms';
@@ -7,7 +7,7 @@ import { RecoilObserver, render } from 'tests/utils';
 
 describe('Nav 컴포넌트 유닛 테스트', () => {
   test('마운트 되었을 때 당일 날짜가 텍스트로 표시되어있다', () => {
-    render(<Nav />, { route: '/main' });
+    render(<Header />, { route: '/main' });
 
     const today = dayjs().format('M월 D일');
     const text = screen.getByText(new RegExp(today));
@@ -15,7 +15,7 @@ describe('Nav 컴포넌트 유닛 테스트', () => {
   });
 
   test('< 버튼을 눌렀을 때 이전 날짜 텍스트가 렌더링된다', async () => {
-    const { user } = render(<Nav />, { route: '/main' });
+    const { user } = render(<Header />, { route: '/main' });
 
     const today = dayjs().format('M월 D일');
     const yesterday = dayjs().add(-1, 'day').format('M월 D일');
@@ -29,7 +29,7 @@ describe('Nav 컴포넌트 유닛 테스트', () => {
   });
 
   test('> 버튼을 눌렀을 때 다음 날짜 텍스트가 렌더링된다', async () => {
-    const { user } = render(<Nav />, { route: '/main' });
+    const { user } = render(<Header />, { route: '/main' });
 
     const today = dayjs().format('M월 D일');
     const tomorrow = dayjs().add(1, 'day').format('M월 D일');
@@ -43,7 +43,7 @@ describe('Nav 컴포넌트 유닛 테스트', () => {
   });
 
   test('날짜 텍스트가 hover되면 캘린더 아이콘으로 바뀐다', async () => {
-    const { user } = render(<Nav />, { route: '/main' });
+    const { user } = render(<Header />, { route: '/main' });
 
     const today = dayjs().format('M월 D일');
     const text = screen.getByText(new RegExp(today));
@@ -54,7 +54,7 @@ describe('Nav 컴포넌트 유닛 테스트', () => {
   });
 
   test('캘린더 아이콘을 클릭할 시 캘린더 모달이 렌더링되고 캘린더의 날짜를 클릭하면 해당 날짜로 이동한다', async () => {
-    const { user } = render(<Nav />, { route: '/main' });
+    const { user } = render(<Header />, { route: '/main' });
     const today = dayjs().format('M월 D일');
     const text = screen.getByText(new RegExp(today));
     await user.hover(text);
@@ -75,7 +75,7 @@ describe('Nav 컴포넌트 유닛 테스트', () => {
     const { user } = render(
       <>
         <RecoilObserver node={toggleMenuState} onChange={onChange} />
-        <Nav />
+        <Header />
       </>,
       { route: '/main' },
     );
@@ -91,7 +91,7 @@ describe('Nav 컴포넌트 유닛 테스트', () => {
   });
 
   test('이슈 제보 아이콘을 클릭하면 이슈 제보 폼이 렌더링된다', async () => {
-    const { user } = render(<Nav />, { route: '/main' });
+    const { user } = render(<Header />, { route: '/main' });
 
     const issueButton = screen.getByTestId('issue-button');
 

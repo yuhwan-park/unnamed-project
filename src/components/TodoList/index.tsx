@@ -30,7 +30,7 @@ import { auth, db } from 'firebase-source';
 // styles
 import * as S from './style';
 
-function List() {
+function TodoList() {
   const date = useRecoilValue(dateSelector);
   const selectedList = useRecoilValue(selectedListState);
   const setAllDocuments = useSetRecoilState(allDocumentState);
@@ -108,4 +108,4 @@ function List() {
   );
 }
 
-export default memo(List);
+export default memo(TodoList);

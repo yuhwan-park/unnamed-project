@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { devices } from 'style/media-queries';
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.header`
   display: flex;
   align-items: center;
   justify-content: center;

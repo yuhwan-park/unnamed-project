@@ -28,7 +28,7 @@ import { dateVariants } from 'variants';
 // styles
 import * as S from './style';
 
-function Nav() {
+function Header() {
   const [date, setDate] = useRecoilState(dateState);
   const [isBack, setIsBack] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -142,4 +142,4 @@ function Nav() {
   );
 }
 
-export default memo(Nav);
+export default memo(Header);
