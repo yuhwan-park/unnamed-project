@@ -14,27 +14,27 @@ import ListMenu from 'components/TodoList/ListMenu';
 // states
 import {
   selectedDocumentState,
-  dateState,
   isWideState,
   showEditorState,
+  docIdsByDateState,
 } from 'atoms';
 // firebase
-import { deleteDoc, doc, setDoc } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, doc, setDoc } from 'firebase/firestore';
 import { auth, db } from 'firebase-source';
 // hooks
-import { useUpdateDocs, useSetDocCount } from 'hooks';
+import { useUpdateTodo, useSetDocCount } from 'hooks';
 // styles
 import * as S from './style';
 
 function EditorHeader() {
   const selectedDoc = useRecoilValue(selectedDocumentState);
   const isWide = useRecoilValue(isWideState);
-  const setDate = useSetRecoilState(dateState);
-  const setShowEditor = useSetRecoilState(showEditorState);
-  const [showCalendar, setShowCalendar] = useState(false);
   const [newDate, setNewDate] = useState('');
+  const [showCalendar, setShowCalendar] = useState(false);
+  const setDocIdsByDate = useSetRecoilState(docIdsByDateState);
+  const setShowEditor = useSetRecoilState(showEditorState);
   const setDocCount = useSetDocCount();
-  const updator = useUpdateDocs();
+  const updator = useUpdateTodo();
   const calendarRef = useRef<HTMLDivElement>(null);
 
   const onClickToggleCalendar = () => {
@@ -52,26 +52,34 @@ function EditorHeader() {
   const onClickConfirmToUpdateDate = async () => {
     if (!selectedDoc || !newDate || newDate === selectedDoc.date) return;
 
+    const dateDocRef = doc(db, `${auth.currentUser?.uid}/Date`);
     setShowCalendar(false);
-    await updator(selectedDoc, 'date', newDate, true);
 
     if (selectedDoc.date) {
-      const oldDocRef = doc(
-        db,
-        `${auth.currentUser?.uid}/${selectedDoc.date}/Document/${selectedDoc.id}`,
+      setDocIdsByDate(ids => ({
+        ...ids,
+        [selectedDoc.date]: ids[selectedDoc.date].filter(
+          id => id !== selectedDoc.id,
+        ),
+        [newDate]: ids[newDate]
+          ? [...ids[newDate], selectedDoc.id]
+          : [selectedDoc.id],
+      }));
+      await setDoc(
+        dateDocRef,
+        { [selectedDoc.date]: arrayRemove(selectedDoc.id) },
+        { merge: true },
       );
       await setDocCount(selectedDoc.date, 'Minus');
-      await deleteDoc(oldDocRef);
     }
-    await setDocCount(newDate, 'Plus');
 
-    const newDocRef = doc(
-      db,
-      `${auth.currentUser?.uid}/${newDate}/Document/${selectedDoc.id}`,
+    await updator(selectedDoc, 'date', newDate);
+    await setDoc(
+      dateDocRef,
+      { [newDate]: arrayUnion(selectedDoc.id) },
+      { merge: true },
     );
-    const newItem = { ...selectedDoc, date: newDate };
-    await setDoc(newDocRef, newItem);
-    setDate(dayjs(newDate));
+    await setDocCount(newDate, 'Plus');
   };
 
   useEffect(() => {
@@ -83,6 +91,7 @@ function EditorHeader() {
     document.addEventListener('mousedown', handleClickOutSide);
     return () => document.removeEventListener('mousedown', handleClickOutSide);
   }, []);
+
   return (
     <>
       {selectedDoc && (

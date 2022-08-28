@@ -1,23 +1,18 @@
 // dependencies
 import { faChevronRight, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useRef, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import React, { useRef, useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 // components
 import MyListItem from '../MyListItem';
 // states
-import { loadingState, myListModalState, myListsState } from 'atoms';
-// firebase
-import { auth, db } from 'firebase-source';
-import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { myListModalState, myListsArray } from 'atoms';
 // styles
 import * as S from './style';
 
 function MyList() {
+  const myLists = useRecoilValue(myListsArray);
   const setToggleModal = useSetRecoilState(myListModalState);
-  const setIsLoading = useSetRecoilState(loadingState);
-  const [myLists, setMyLists] = useRecoilState(myListsState);
   const [isCollapsed, setIsCollapsed] = useState(true);
   const plusRef = useRef<HTMLDivElement>(null);
 
@@ -31,19 +26,6 @@ function MyList() {
 
     setIsCollapsed(prev => !prev);
   };
-
-  useEffect(() => {
-    onAuthStateChanged(auth, async user => {
-      if (user) {
-        const docRef = doc(db, `${user.uid}/Lists`);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setMyLists(docSnap.data().lists);
-        }
-        setIsLoading(obj => ({ ...obj, myLists: true }));
-      }
-    });
-  }, [setIsLoading, setMyLists]);
 
   return (
     <S.MyListContainer>
@@ -63,8 +45,10 @@ function MyList() {
       </S.MyListHeader>
       {isCollapsed && (
         <S.MyListContent>
-          {myLists.length ? (
-            myLists.map(list => <MyListItem key={list.id} list={list} />)
+          {Object.values(myLists).length ? (
+            Object.values(myLists).map(list => (
+              <MyListItem key={list.id} list={list} />
+            ))
           ) : (
             <S.EmptyContent>
               카테고리별로 리스트를 추가하여 할 일 혹은 노트를 관리해보세요!

@@ -2,16 +2,17 @@
 import { memo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import shortUUID from 'short-uuid';
 // states
 import {
   allDocumentState,
   dateSelector,
-  documentState,
-  myListDocsState,
+  docIdsByDateState,
+  myListsState,
   selectedListState,
 } from 'atoms';
 // firebase
-import { collection, doc, setDoc, Timestamp } from 'firebase/firestore';
+import { arrayUnion, doc, setDoc, Timestamp } from 'firebase/firestore';
 import { auth, db } from 'firebase-source';
 // hooks
 import { useSetDocCount } from 'hooks';
@@ -22,33 +23,27 @@ import * as S from './style';
 
 function ContentForm() {
   const date = useRecoilValue(dateSelector);
-  const setDocuments = useSetRecoilState(documentState);
-  const setMyListDocs = useSetRecoilState(myListDocsState);
+  const setMyLists = useSetRecoilState(myListsState);
   const setAllDocument = useSetRecoilState(allDocumentState);
-  const setDocCount = useSetDocCount();
+  const setDocIdsByDate = useSetRecoilState(docIdsByDateState);
   const selectedList = useRecoilValue(selectedListState);
+  const setDocCount = useSetDocCount();
   const [isNote, setIsNote] = useState(false);
   const { register, handleSubmit, setValue } = useForm<ITaskFormData>();
 
   const onSelectChange = ({
     currentTarget: { value },
   }: React.ChangeEvent<HTMLSelectElement>) => {
-    if (value === 'note') {
-      setIsNote(true);
-    } else {
-      setIsNote(false);
-    }
+    setIsNote(value === 'note');
   };
 
   const onToDoSubmit = async ({ title }: ITaskFormData) => {
-    setValue('title', '');
     if (!auth.currentUser) return;
-    const docRef = selectedList
-      ? doc(collection(db, `${auth.currentUser.uid}/Lists/${selectedList.id}`))
-      : doc(collection(db, `${auth.currentUser.uid}/${date}/Document`));
+    setValue('title', '');
+
     const allDocRef = doc(db, `${auth.currentUser.uid}/All`);
     const data = {
-      id: docRef.id,
+      id: shortUUID.generate(),
       title,
       content: '',
       createdAt: Timestamp.fromDate(new Date()),
@@ -59,17 +54,36 @@ function ContentForm() {
       date: selectedList ? '' : date,
       list: selectedList ? selectedList : null,
     };
-    if (selectedList) {
-      setMyListDocs(prev => [...prev, data]);
-    } else {
-      setDocuments(prev => [...prev, data]);
-      await setDocCount(date, 'Plus');
-    }
+
     setAllDocument(docs => ({ ...docs, [data.id]: data }));
 
+    if (selectedList) {
+      const docRef = doc(db, `${auth.currentUser.uid}/Lists`);
+      setMyLists(lists => ({
+        ...lists,
+        [selectedList.id]: {
+          ...selectedList,
+          docIds: [...selectedList.docIds, data.id],
+        },
+      }));
+
+      await setDoc(
+        docRef,
+        { [selectedList.id]: { docIds: arrayUnion(data.id) } },
+        { merge: true },
+      );
+    } else {
+      const docRef = doc(db, `${auth.currentUser.uid}/Date`);
+      setDocIdsByDate(ids => ({
+        ...ids,
+        [date]: ids[date] ? [...ids[date], data.id] : [data.id],
+      }));
+      await setDoc(docRef, { [date]: arrayUnion(data.id) }, { merge: true });
+      await setDocCount(date, 'Plus');
+    }
     await setDoc(allDocRef, { docMap: { [data.id]: data } }, { merge: true });
-    await setDoc(docRef, data);
   };
+
   return (
     <S.FormContainer onSubmit={handleSubmit(onToDoSubmit)}>
       <input

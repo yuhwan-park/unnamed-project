@@ -5,15 +5,14 @@ import {
   faCheck,
   faCircleXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useRecoilValue } from 'recoil';
 // states
-import { myListDocsState, myListsState, paramState } from 'atoms';
+import { myListsArray, myListsState } from 'atoms';
 // firebase
-import { deleteDoc, doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from 'firebase-source';
 // hooks
-import { useUpdateDocs } from 'hooks';
+import { useUpdateTodo } from 'hooks';
 // types
 import { IDocument, IMyList } from 'types';
 // styles
@@ -24,46 +23,54 @@ interface IMoveListModalProps {
 }
 
 function MoveListModal({ item }: IMoveListModalProps) {
-  const myLists = useRecoilValue(myListsState);
-  const setMyListDocs = useSetRecoilState(myListDocsState);
-  const params = useRecoilValue(paramState);
-  const navigator = useNavigate();
-  const updator = useUpdateDocs();
+  const [myLists, setMyLists] = useRecoilState(myListsState);
+  const sortedMyLists = useRecoilValue(myListsArray);
+  const updator = useUpdateTodo();
+  const listsRef = doc(db, `${auth.currentUser?.uid}/Lists`);
 
   const onClickMoveListItem = async (list: IMyList) => {
     if (item.list && item.list.id === list.id) return;
 
-    if (params['listId']) {
-      setMyListDocs(docs => docs.filter(doc => doc.id !== item.id));
-      navigator(`/main/lists/${params['listId']}/tasks`);
-    }
-
-    await updator(item, 'list', list, true);
-
     if (item.list) {
-      const oldMyListDocRef = doc(
-        db,
-        `${auth.currentUser?.uid}/Lists/${item.list.id}/${item.id}`,
-      );
-      await deleteDoc(oldMyListDocRef);
+      const newMyLists = {
+        ...myLists,
+        [item.list.id]: {
+          ...myLists[item.list.id],
+          docIds: myLists[item.list.id].docIds.filter(id => id !== item.id),
+        },
+        [list.id]: {
+          ...myLists[list.id],
+          docIds: [...myLists[list.id].docIds, item.id],
+        },
+      };
+      setMyLists(newMyLists);
+      await setDoc(listsRef, { ...newMyLists });
+    } else {
+      const newMyLists = {
+        ...myLists,
+        [list.id]: {
+          ...myLists[list.id],
+          docIds: [...myLists[list.id].docIds, item.id],
+        },
+      };
+      setMyLists(newMyLists);
+      await setDoc(listsRef, { ...newMyLists });
     }
-
-    const newMyListDocRef = doc(
-      db,
-      `${auth.currentUser?.uid}/Lists/${list.id}/${item.id}`,
-    );
-    const newItem = { ...item, list };
-    await setDoc(newMyListDocRef, newItem);
+    await updator(item, 'list', list);
   };
 
   const onClickDeleteList = async () => {
     if (!item.list) return;
-    setMyListDocs(docs => docs.filter(doc => doc.id !== item.id));
-
-    await updator(item, 'list', null, true);
-    await deleteDoc(
-      doc(db, `${auth.currentUser?.uid}/Lists/${item.list.id}/${item.id}`),
-    );
+    const newMyLists = {
+      ...myLists,
+      [item.list.id]: {
+        ...myLists[item.list.id],
+        docIds: myLists[item.list.id].docIds.filter(id => id !== item.id),
+      },
+    };
+    setMyLists(newMyLists);
+    await setDoc(listsRef, { ...newMyLists });
+    await updator(item, 'list', null);
   };
 
   return (
@@ -80,8 +87,8 @@ function MoveListModal({ item }: IMoveListModalProps) {
         )}
       </S.MyListContainer>
 
-      {myLists.length
-        ? myLists.map(list => (
+      {sortedMyLists.length
+        ? sortedMyLists.map(list => (
             <S.MyListContainer
               key={list.id}
               onClick={() => onClickMoveListItem(list)}

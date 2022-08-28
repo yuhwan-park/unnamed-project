@@ -11,11 +11,8 @@ import ListIcons from '../ListIcons';
 import ListMenu from '../ListMenu';
 // states
 import { screenStatusState } from 'atoms';
-// firebase
-import { doc, setDoc, updateDoc } from 'firebase/firestore';
-import { auth, db } from 'firebase-source';
 // hooks
-import { useGetDocRef, useGetListDocRef, useUpdateDocs } from 'hooks';
+import { useUpdateTodo } from 'hooks';
 // types
 import { IDocument } from 'types';
 // styles
@@ -26,9 +23,7 @@ interface ITodoItemProps {
 }
 
 function ListItem({ item }: ITodoItemProps) {
-  const updator = useUpdateDocs();
-  const docRef = useGetDocRef(item);
-  const ListDocRef = useGetListDocRef(item);
+  const updator = useUpdateTodo();
   const navigator = useNavigate();
   const { register } = useForm();
   const screenStatus = useRecoilValue(screenStatusState);
@@ -44,23 +39,9 @@ function ListItem({ item }: ITodoItemProps) {
   };
 
   const onChangeTitle = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    await updator(item, 'title', e.currentTarget.value, false);
+    await updator(item, 'title', e.currentTarget.value);
   };
 
-  const onBlurTitle = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const title = e.currentTarget.value;
-    if (ListDocRef) {
-      await updateDoc(ListDocRef, { title });
-    }
-    if (docRef) {
-      await updateDoc(docRef, { title });
-    }
-    await setDoc(
-      doc(db, `${auth.currentUser?.uid}/All`),
-      { docMap: { [item.id]: { ...item, title } } },
-      { merge: true },
-    );
-  };
   return (
     <S.ListItemContainer>
       {item.isNote ? (
@@ -78,7 +59,6 @@ function ListItem({ item }: ITodoItemProps) {
         spellCheck={false}
         onClick={onClickList}
         {...register('title', {
-          onBlur: onBlurTitle,
           onChange: onChangeTitle,
         })}
       />

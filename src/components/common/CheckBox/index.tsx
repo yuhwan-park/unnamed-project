@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { memo } from 'react';
 // hooks
-import { useUpdateDocs } from 'hooks';
+import { useUpdateTodo } from 'hooks';
 // types
 import { IDocument } from 'types';
 // styles
@@ -14,10 +14,10 @@ interface ICheckBoxProps {
 }
 
 function CheckBox({ todo }: ICheckBoxProps) {
-  const updator = useUpdateDocs();
+  const updator = useUpdateTodo();
 
   const onClickCheckBox = async () => {
-    await updator(todo, 'isDone', !todo.isDone, true);
+    await updator(todo, 'isDone', !todo.isDone);
   };
 
   return (

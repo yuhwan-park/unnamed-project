@@ -2,7 +2,7 @@
 import { faFlag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // hooks
-import { useUpdateDocs } from 'hooks';
+import { useUpdateTodo } from 'hooks';
 // types
 import { IDocument } from 'types';
 // styles
@@ -14,11 +14,11 @@ interface IPriorityFlagProps {
 }
 
 function PriorityFlag({ todo, toggleMenu }: IPriorityFlagProps) {
-  const updator = useUpdateDocs();
+  const updator = useUpdateTodo();
 
   const onClickFlag = async (priority: number) => {
     toggleMenu();
-    await updator(todo, 'priority', priority, true);
+    await updator(todo, 'priority', priority);
   };
 
   return (

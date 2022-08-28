@@ -32,8 +32,5 @@ export interface IMyList {
   title: string;
   createdAt: Timestamp;
   id: string;
-}
-
-export interface IAllDocumentState {
-  [key: string]: IDocument;
+  docIds: string[];
 }
