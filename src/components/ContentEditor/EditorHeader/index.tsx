@@ -61,7 +61,9 @@ function EditorHeader() {
         [selectedDoc.date]: ids[selectedDoc.date].filter(
           id => id !== selectedDoc.id,
         ),
-        [newDate]: [...ids[newDate], selectedDoc.id],
+        [newDate]: ids[newDate]
+          ? [...ids[newDate], selectedDoc.id]
+          : [selectedDoc.id],
       }));
       await setDoc(
         dateDocRef,
