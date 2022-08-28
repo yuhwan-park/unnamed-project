@@ -9,21 +9,12 @@ import { useNavigate } from 'react-router-dom';
 import {
   myListModalState,
   myListsState,
-  myListDocsState,
   selectedListState,
   allDocumentState,
 } from 'atoms';
 // firebase
 import { auth, db } from 'firebase-source';
-import {
-  arrayRemove,
-  arrayUnion,
-  deleteDoc,
-  doc,
-  setDoc,
-  Timestamp,
-  updateDoc,
-} from 'firebase/firestore';
+import { doc, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
 // hooks
 import { useUpdateTodo } from 'hooks';
 // styles
@@ -36,7 +27,6 @@ function MyListModal() {
   const selectedList = useRecoilValue(selectedListState);
   const allDocument = useRecoilValue(allDocumentState);
   const [myLists, setMyLists] = useRecoilState(myListsState);
-  const myListDocs = useRecoilValue(myListDocsState);
   const updator = useUpdateTodo();
   const navigator = useNavigate();
   const {

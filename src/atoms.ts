@@ -122,7 +122,7 @@ export const myListsArray = selector({
   get: ({ get }) => {
     const myLists = get(myListsState);
     return Object.values(myLists).sort(
-      (a, b) => a.createdAt.nanoseconds - b.createdAt.nanoseconds,
+      (a, b) => b.createdAt.nanoseconds - a.createdAt.nanoseconds,
     );
   },
 });
