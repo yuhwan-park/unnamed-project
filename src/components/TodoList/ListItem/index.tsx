@@ -11,11 +11,8 @@ import ListIcons from '../ListIcons';
 import ListMenu from '../ListMenu';
 // states
 import { screenStatusState } from 'atoms';
-// firebase
-import { doc, setDoc, updateDoc } from 'firebase/firestore';
-import { auth, db } from 'firebase-source';
 // hooks
-import { useGetDocRef, useGetListDocRef, useUpdateTodo } from 'hooks';
+import { useUpdateTodo } from 'hooks';
 // types
 import { IDocument } from 'types';
 // styles

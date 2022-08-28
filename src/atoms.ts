@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { Params } from 'react-router-dom';
 import { atom, selector } from 'recoil';
-import { IAllDocumentState, IDocument, IMyList, IUserState } from 'types';
+import { IDocument, IMyList, IUserState } from 'types';
 
 export const userState = atom<IUserState>({
   key: 'user',
@@ -72,7 +72,7 @@ export const toggleMenuState = atom({
 // * Document State *
 // ******************
 
-export const allDocumentState = atom<IAllDocumentState>({
+export const allDocumentState = atom<{ [key: string]: IDocument }>({
   key: 'allDocument',
   default: {},
 });
@@ -82,7 +82,7 @@ export const allDocumentSelector = selector({
   get: ({ get }) => {
     const allDocuments = get(allDocumentState);
     const sorted = Object.values(allDocuments).sort(
-      (a, b) => Number(a.date) - Number(b.date),
+      (a, b) => a.createdAt.seconds - b.createdAt.seconds,
     );
     return sorted;
   },
@@ -103,7 +103,9 @@ export const documentsById = selector({
   get: ({ get }) => {
     const docIds = get(docIdsState);
     const allDocs = get(allDocumentState);
-    return docIds.map(id => allDocs[id]);
+    return docIds
+      .map(id => allDocs[id])
+      .sort((a, b) => a.createdAt.seconds - b.createdAt.seconds);
   },
 });
 
@@ -122,7 +124,7 @@ export const myListsArray = selector({
   get: ({ get }) => {
     const myLists = get(myListsState);
     return Object.values(myLists).sort(
-      (a, b) => b.createdAt.nanoseconds - a.createdAt.nanoseconds,
+      (a, b) => a.createdAt.seconds - b.createdAt.seconds,
     );
   },
 });
@@ -145,14 +147,4 @@ export const selectedListState = selector({
 
     return params['listId'] ? lists[params['listId']] : undefined;
   },
-});
-
-export const documentState = atom<IDocument[]>({
-  key: 'todo',
-  default: [],
-});
-
-export const myListDocsState = atom<IDocument[]>({
-  key: 'myListDocs',
-  default: [],
 });

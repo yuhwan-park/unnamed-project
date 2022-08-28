@@ -53,6 +53,7 @@ function MoveListModal({ item }: IMoveListModalProps) {
           docIds: [...myLists[list.id].docIds, item.id],
         },
       };
+      setMyLists(newMyLists);
       await setDoc(listsRef, { ...newMyLists });
     }
     await updator(item, 'list', list);

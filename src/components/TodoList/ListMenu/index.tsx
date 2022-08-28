@@ -77,7 +77,7 @@ function ListMenu({ item, isEditor }: IListMenu) {
         },
       };
       setMyLists(newMyLists);
-      await updateDoc(listDocRef, { [item.list.id]: arrayRemove(item.id) });
+      await updateDoc(listDocRef, { ...newMyLists });
     }
     await updateDoc(allDocRef, { docMap: newAllDocument });
   };

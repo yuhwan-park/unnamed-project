@@ -14,7 +14,13 @@ import {
 } from 'atoms';
 // firebase
 import { auth, db } from 'firebase-source';
-import { doc, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
+import {
+  deleteField,
+  doc,
+  setDoc,
+  Timestamp,
+  updateDoc,
+} from 'firebase/firestore';
 // hooks
 import { useUpdateTodo } from 'hooks';
 // styles
@@ -105,7 +111,7 @@ function MyListModal() {
     delete newMyLists[selectedList.id];
     setMyLists(newMyLists);
     setToggleModal(null);
-    await updateDoc(docRef, { ...newMyLists });
+    await updateDoc(docRef, { [selectedList.id]: deleteField() });
   };
 
   return (

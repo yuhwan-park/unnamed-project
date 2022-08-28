@@ -34,7 +34,3 @@ export interface IMyList {
   id: string;
   docIds: string[];
 }
-
-export interface IAllDocumentState {
-  [key: string]: IDocument;
-}

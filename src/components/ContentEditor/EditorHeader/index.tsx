@@ -14,9 +14,9 @@ import ListMenu from 'components/TodoList/ListMenu';
 // states
 import {
   selectedDocumentState,
-  dateState,
   isWideState,
   showEditorState,
+  docIdsByDateState,
 } from 'atoms';
 // firebase
 import { arrayRemove, arrayUnion, doc, setDoc } from 'firebase/firestore';
@@ -31,7 +31,7 @@ function EditorHeader() {
   const isWide = useRecoilValue(isWideState);
   const [newDate, setNewDate] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
-  const setDate = useSetRecoilState(dateState);
+  const setDocIdsByDate = useSetRecoilState(docIdsByDateState);
   const setShowEditor = useSetRecoilState(showEditorState);
   const setDocCount = useSetDocCount();
   const updator = useUpdateTodo();
@@ -54,9 +54,15 @@ function EditorHeader() {
 
     const dateDocRef = doc(db, `${auth.currentUser?.uid}/Date`);
     setShowCalendar(false);
-    await updator(selectedDoc, 'date', newDate);
 
     if (selectedDoc.date) {
+      setDocIdsByDate(ids => ({
+        ...ids,
+        [selectedDoc.date]: ids[selectedDoc.date].filter(
+          id => id !== selectedDoc.id,
+        ),
+        [newDate]: [...ids[newDate], selectedDoc.id],
+      }));
       await setDoc(
         dateDocRef,
         { [selectedDoc.date]: arrayRemove(selectedDoc.id) },
@@ -65,14 +71,13 @@ function EditorHeader() {
       await setDocCount(selectedDoc.date, 'Minus');
     }
 
+    await updator(selectedDoc, 'date', newDate);
     await setDoc(
       dateDocRef,
       { [newDate]: arrayUnion(selectedDoc.id) },
       { merge: true },
     );
     await setDocCount(newDate, 'Plus');
-
-    setDate(dayjs(newDate));
   };
 
   useEffect(() => {
