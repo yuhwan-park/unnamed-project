@@ -11,6 +11,7 @@ import {
   myListsState,
   myListDocsState,
   selectedListState,
+  allDocumentState,
 } from 'atoms';
 // firebase
 import { auth, db } from 'firebase-source';
@@ -33,6 +34,7 @@ import { modalCoverVariants, modalVariants } from 'variants';
 function MyListModal() {
   const [toggleModal, setToggleModal] = useRecoilState(myListModalState);
   const selectedList = useRecoilValue(selectedListState);
+  const allDocument = useRecoilValue(allDocumentState);
   const [myLists, setMyLists] = useRecoilState(myListsState);
   const myListDocs = useRecoilValue(myListDocsState);
   const updator = useUpdateTodo();
@@ -50,7 +52,7 @@ function MyListModal() {
   };
 
   const checkError = (title: string) => {
-    const listsName = myLists.map(list => list.title);
+    const listsName = Object.values(myLists).map(list => list.title);
     if (listsName.includes(title)) {
       setError('title', {
         type: 'value',
@@ -70,56 +72,50 @@ function MyListModal() {
 
   const editList = async ({ title }: FieldValues) => {
     const isError = checkError(title);
-    if (!auth.currentUser || !isError) return;
-
-    const docRef = doc(db, `${auth.currentUser.uid}/Lists`);
-    const newLists = myLists.map(list =>
-      list.id === selectedList?.id ? { ...list, title } : list,
-    );
+    if (!auth.currentUser || !isError || !selectedList) return;
+    const listRef = doc(db, `${auth.currentUser.uid}/Lists`);
+    const newLists = {
+      ...myLists,
+      [selectedList.id]: { ...selectedList, title },
+    };
     setMyLists(newLists);
     setValue('title', '');
     setToggleModal(null);
-    await updateDoc(docRef, { lists: newLists });
-    myListDocs.forEach(async document => {
-      await updator(document, 'list', { ...document.list, title });
-    });
+    await updateDoc(listRef, { ...newLists });
   };
 
   const createList = async ({ title }: FieldValues) => {
     const isError = checkError(title);
     if (!auth.currentUser || !isError) return;
 
-    const docRef = doc(db, `${auth.currentUser.uid}/Lists`);
-    const newListId = shortUUID.generate();
-    const listData = {
+    const listsRef = doc(db, `${auth.currentUser.uid}/Lists`);
+    const newMyList = {
       title,
       createdAt: Timestamp.fromDate(new Date()),
-      id: newListId,
+      id: shortUUID.generate(),
       docIds: [],
     };
-    setMyLists(prev => [...prev, listData]);
+    const newMyLists = { ...myLists, [newMyList.id]: newMyList };
+    setMyLists(newMyLists);
     setValue('title', '');
     setToggleModal(null);
-    navigator(`/main/lists/${newListId}/tasks`);
-    await setDoc(docRef, { lists: arrayUnion(listData) }, { merge: true });
+    navigator(`/main/lists/${newMyList.id}/tasks`);
+    await setDoc(listsRef, { ...newMyLists }, { merge: true });
   };
 
   const deleteList = async () => {
-    if (!auth.currentUser) return;
+    if (!auth.currentUser || !selectedList) return;
+
     const docRef = doc(db, `${auth.currentUser.uid}/Lists`);
-    const needDeleteList = myLists.find(li => li.id === selectedList?.id);
-    setMyLists(lists => lists.filter(li => li.id !== selectedList?.id));
-    setToggleModal(null);
-    myListDocs.forEach(async document => {
-      await updator(document, 'list', null);
-      await deleteDoc(
-        doc(
-          db,
-          `${auth.currentUser?.uid}/Lists/${selectedList?.id}/${document.id}`,
-        ),
-      );
+    const newMyLists = { ...myLists };
+    newMyLists[selectedList.id].docIds.forEach(async id => {
+      await updator(allDocument[id], 'list', null);
     });
-    await updateDoc(docRef, { lists: arrayRemove(needDeleteList) });
+
+    delete newMyLists[selectedList.id];
+    setMyLists(newMyLists);
+    setToggleModal(null);
+    await updateDoc(docRef, { ...newMyLists });
   };
 
   return (

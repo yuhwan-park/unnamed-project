@@ -15,18 +15,14 @@ export const userState = atom<IUserState>({
 
 export const loadingState = atom({
   key: 'loading',
-  default: {
-    allDoc: false,
-    doc: false,
-    myLists: false,
-  },
+  default: false,
 });
 
 export const screenStatusState = atom<'All' | 'Date' | 'List'>({
   key: 'screenStatus',
   default: selector({
     key: 'screenStatus/selector',
-    get: ({ get }) => {
+    get: () => {
       const { href } = window.location;
       return href.includes('all')
         ? 'All'
@@ -45,14 +41,6 @@ export const showEditorState = atom({
 export const isWideState = atom({
   key: 'isWide',
   default: window.innerWidth > 1024,
-});
-
-export const loadingSelector = selector({
-  key: 'loadingSelector',
-  get: ({ get }) => {
-    const loading = get(loadingState);
-    return Boolean(Object.values(loading).filter(val => !val).length);
-  },
 });
 
 export const paramState = atom<Params<string>>({
@@ -100,54 +88,51 @@ export const allDocumentSelector = selector({
   },
 });
 
-export const docIdsByDate = atom<string[]>({
-  key: 'docIdsByDate',
+export const docIdsState = atom<string[]>({
+  key: 'docIds',
   default: [],
 });
 
-export const documentsByDate = selector({
-  key: 'docByDate',
+export const docIdsByDateState = atom<{ [key: string]: string[] }>({
+  key: 'docIdsByDate',
+  default: {},
+});
+
+export const documentsById = selector({
+  key: 'documentsById',
   get: ({ get }) => {
-    const docIds = get(docIdsByDate);
+    const docIds = get(docIdsState);
     const allDocs = get(allDocumentState);
     return docIds.map(id => allDocs[id]);
   },
 });
 
-interface IdocumentCountByDateState {
-  [key: string]: number;
-}
-
-export const documentCountByDateState = atom<IdocumentCountByDateState>({
+export const documentCountByDateState = atom<{ [key: string]: number }>({
   key: 'documentCount',
   default: {},
 });
 
-export const documentState = atom<IDocument[]>({
-  key: 'todo',
-  default: [],
-});
-
-export const myListsState = atom<IMyList[]>({
+export const myListsState = atom<{ [key: string]: IMyList }>({
   key: 'myLists',
-  default: [],
+  default: {},
 });
 
-export const myListDocsState = atom<IDocument[]>({
-  key: 'myListDocs',
-  default: [],
+export const myListsArray = selector({
+  key: 'myListsArray',
+  get: ({ get }) => {
+    const myLists = get(myListsState);
+    return Object.values(myLists).sort(
+      (a, b) => a.createdAt.nanoseconds - b.createdAt.nanoseconds,
+    );
+  },
 });
 
 export const selectedDocumentState = selector({
   key: 'selectedDocumentSelector',
   get: ({ get }) => {
     const params = get(paramState);
-    const myListDocs = get(myListDocsState);
     const allDocs = get(allDocumentState);
 
-    if (params['listId']) {
-      return myListDocs.find(document => document.id === params['id']);
-    }
     return params['id'] ? allDocs[params['id']] : undefined;
   },
 });
@@ -158,6 +143,16 @@ export const selectedListState = selector({
     const params = get(paramState);
     const lists = get(myListsState);
 
-    return lists.find(list => list.id === params['listId']);
+    return params['listId'] ? lists[params['listId']] : undefined;
   },
+});
+
+export const documentState = atom<IDocument[]>({
+  key: 'todo',
+  default: [],
+});
+
+export const myListDocsState = atom<IDocument[]>({
+  key: 'myListDocs',
+  default: [],
 });

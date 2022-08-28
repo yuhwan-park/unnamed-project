@@ -8,7 +8,7 @@ import {
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 // states
-import { myListDocsState, myListsState, paramState } from 'atoms';
+import { myListDocsState, myListsArray, paramState } from 'atoms';
 // firebase
 import { deleteDoc, doc, setDoc } from 'firebase/firestore';
 import { auth, db } from 'firebase-source';
@@ -24,7 +24,7 @@ interface IMoveListModalProps {
 }
 
 function MoveListModal({ item }: IMoveListModalProps) {
-  const myLists = useRecoilValue(myListsState);
+  const myLists = useRecoilValue(myListsArray);
   const setMyListDocs = useSetRecoilState(myListDocsState);
   const params = useRecoilValue(paramState);
   const navigator = useNavigate();

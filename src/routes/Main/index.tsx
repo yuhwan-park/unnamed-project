@@ -11,7 +11,7 @@ import OffCanvasMenu from 'components/OffCanvasMenu';
 import Loading from 'components/common/Loading';
 import GlobalLogic from 'components/common/GlobalLogic';
 // states
-import { isWideState, loadingSelector, showEditorState } from 'atoms';
+import { isWideState, loadingState, showEditorState } from 'atoms';
 // sources
 import { editorVariants } from 'variants';
 import { useDetectClickOutside } from 'hooks';
@@ -21,7 +21,7 @@ import * as S from './style';
 function Main() {
   const [showEditor, setShowEditor] = useRecoilState(showEditorState);
   const [isWide, setIsWide] = useRecoilState(isWideState);
-  const isLoading = useRecoilValue(loadingSelector);
+  const isLoading = useRecoilValue(loadingState);
   useDetectClickOutside({ onTriggered: () => setShowEditor(false) });
 
   const onClickScreen = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -45,7 +45,7 @@ function Main() {
 
   return (
     <>
-      {isLoading && <Loading />}
+      {!isLoading && <Loading />}
       <S.Wrapper onClick={onClickScreen}>
         <Header />
         {isWide ? (

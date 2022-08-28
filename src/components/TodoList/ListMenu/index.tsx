@@ -12,7 +12,12 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import PriorityFlag from 'components/common/PriorityFlag';
 import MoveListModal from '../MoveListModal';
 // states
-import { allDocumentState, docIdsByDate } from 'atoms';
+import {
+  allDocumentState,
+  docIdsByDateState,
+  docIdsState,
+  myListsState,
+} from 'atoms';
 // firebase
 import { arrayRemove, doc, updateDoc } from 'firebase/firestore';
 import { auth, db } from 'firebase-source';
@@ -32,7 +37,9 @@ function ListMenu({ item, isEditor }: IListMenu) {
   const [isOpen, setIsOpen] = useState(false);
   const [moveListFlag, setMoveListFlag] = useState(false);
   const [allDocument, setAllDocument] = useRecoilState(allDocumentState);
-  const setDocIds = useSetRecoilState(docIdsByDate);
+  const setDocIds = useSetRecoilState(docIdsState);
+  const [myLists, setMyLists] = useRecoilState(myListsState);
+  const setDocIdsByDate = useSetRecoilState(docIdsByDateState);
   const updator = useUpdateTodo();
   const setDocCount = useSetDocCount();
   const CloseDropdownMenu = useCallback(() => {
@@ -52,11 +59,27 @@ function ListMenu({ item, isEditor }: IListMenu) {
 
     const allDocRef = doc(db, `${auth.currentUser?.uid}/All`);
     const dateDocRef = doc(db, `${auth.currentUser?.uid}/Date`);
-    await updateDoc(allDocRef, { docMap: newAllDocument });
-    await setDocCount(item.date, 'Minus');
+    const listDocRef = doc(db, `${auth.currentUser?.uid}/Lists`);
     if (item.date) {
+      setDocIdsByDate(ids => ({
+        ...ids,
+        [item.date]: ids[item.date].filter(id => id !== item.id),
+      }));
       await updateDoc(dateDocRef, { [item.date]: arrayRemove(item.id) });
+      await setDocCount(item.date, 'Minus');
     }
+    if (item.list && item.list.id) {
+      const newMyLists = {
+        ...myLists,
+        [item.list.id]: {
+          ...myLists[item.list.id],
+          docIds: myLists[item.list.id].docIds.filter(id => id !== item.id),
+        },
+      };
+      setMyLists(newMyLists);
+      await updateDoc(listDocRef, { [item.list.id]: arrayRemove(item.id) });
+    }
+    await updateDoc(allDocRef, { docMap: newAllDocument });
   };
 
   const onClickConvert = async () => {
