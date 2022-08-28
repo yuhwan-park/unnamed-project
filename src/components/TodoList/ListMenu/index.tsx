@@ -20,7 +20,7 @@ import { auth, db } from 'firebase-source';
 import {
   useGetDocRef,
   useGetListDocRef,
-  useUpdateDocs,
+  useUpdateTodo,
   useDetectClickOutside,
   useSetDocCount,
 } from 'hooks';
@@ -41,7 +41,7 @@ function ListMenu({ item, isEditor }: IListMenu) {
   const setMyListDocs = useSetRecoilState(myListDocsState);
   const setDocCount = useSetDocCount();
   const [allDocument, setAllDocument] = useRecoilState(allDocumentState);
-  const updator = useUpdateDocs();
+  const updator = useUpdateTodo();
   const docRef = useGetDocRef(item);
   const ListDocRef = useGetListDocRef(item);
   const CloseDropdownMenu = useCallback(() => {
@@ -70,7 +70,7 @@ function ListMenu({ item, isEditor }: IListMenu) {
   };
 
   const onClickConvert = async () => {
-    await updator(item, 'isNote', !item.isNote, true);
+    await updator(item, 'isNote', !item.isNote);
   };
 
   const onClickMoveList = () => {

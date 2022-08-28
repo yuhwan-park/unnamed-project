@@ -9,10 +9,9 @@ import {
   allDocumentSelector,
   allDocumentState,
   dateSelector,
-  docByDate,
+  documentsByDate,
   docIdsByDate,
   documentCountByDateState,
-  documentState,
   loadingState,
   myListDocsState,
   screenStatusState,
@@ -41,9 +40,8 @@ function TodoList() {
   const allDocuments = useRecoilValue(allDocumentSelector);
   const screenStatus = useRecoilValue(screenStatusState);
   const [myListDocs, setMyListDocs] = useRecoilState(myListDocsState);
-  const [documents, setDocuments] = useRecoilState(documentState);
   const setDocIdsByDate = useSetRecoilState(docIdsByDate);
-  const docs = useRecoilValue(docByDate);
+  const documents = useRecoilValue(documentsByDate);
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
@@ -110,7 +108,7 @@ function TodoList() {
               ? myListDocs
               : screenStatus === 'All'
               ? allDocuments
-              : docs
+              : documents
           }
         />
       </S.ListContainer>

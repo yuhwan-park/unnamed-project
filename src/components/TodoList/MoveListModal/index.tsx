@@ -13,7 +13,7 @@ import { myListDocsState, myListsState, paramState } from 'atoms';
 import { deleteDoc, doc, setDoc } from 'firebase/firestore';
 import { auth, db } from 'firebase-source';
 // hooks
-import { useUpdateDocs } from 'hooks';
+import { useUpdateTodo } from 'hooks';
 // types
 import { IDocument, IMyList } from 'types';
 // styles
@@ -28,7 +28,7 @@ function MoveListModal({ item }: IMoveListModalProps) {
   const setMyListDocs = useSetRecoilState(myListDocsState);
   const params = useRecoilValue(paramState);
   const navigator = useNavigate();
-  const updator = useUpdateDocs();
+  const updator = useUpdateTodo();
 
   const onClickMoveListItem = async (list: IMyList) => {
     if (item.list && item.list.id === list.id) return;
@@ -38,7 +38,7 @@ function MoveListModal({ item }: IMoveListModalProps) {
       navigator(`/main/lists/${params['listId']}/tasks`);
     }
 
-    await updator(item, 'list', list, true);
+    await updator(item, 'list', list);
 
     if (item.list) {
       const oldMyListDocRef = doc(
@@ -60,7 +60,7 @@ function MoveListModal({ item }: IMoveListModalProps) {
     if (!item.list) return;
     setMyListDocs(docs => docs.filter(doc => doc.id !== item.id));
 
-    await updator(item, 'list', null, true);
+    await updator(item, 'list', null);
     await deleteDoc(
       doc(db, `${auth.currentUser?.uid}/Lists/${item.list.id}/${item.id}`),
     );

@@ -105,7 +105,7 @@ export const docIdsByDate = atom<string[]>({
   default: [],
 });
 
-export const docByDate = selector({
+export const documentsByDate = selector({
   key: 'docByDate',
   get: ({ get }) => {
     const docIds = get(docIdsByDate);

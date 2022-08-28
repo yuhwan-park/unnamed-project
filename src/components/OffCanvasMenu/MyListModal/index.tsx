@@ -24,7 +24,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 // hooks
-import { useUpdateDocs } from 'hooks';
+import { useUpdateTodo } from 'hooks';
 // styles
 import * as S from './style';
 // etc
@@ -35,7 +35,7 @@ function MyListModal() {
   const selectedList = useRecoilValue(selectedListState);
   const [myLists, setMyLists] = useRecoilState(myListsState);
   const myListDocs = useRecoilValue(myListDocsState);
-  const updator = useUpdateDocs();
+  const updator = useUpdateTodo();
   const navigator = useNavigate();
   const {
     register,
@@ -81,7 +81,7 @@ function MyListModal() {
     setToggleModal(null);
     await updateDoc(docRef, { lists: newLists });
     myListDocs.forEach(async document => {
-      await updator(document, 'list', { ...document.list, title }, true);
+      await updator(document, 'list', { ...document.list, title });
     });
   };
 
@@ -111,7 +111,7 @@ function MyListModal() {
     setMyLists(lists => lists.filter(li => li.id !== selectedList?.id));
     setToggleModal(null);
     myListDocs.forEach(async document => {
-      await updator(document, 'list', null, true);
+      await updator(document, 'list', null);
       await deleteDoc(
         doc(
           db,

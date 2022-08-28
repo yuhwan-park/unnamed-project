@@ -22,7 +22,7 @@ import {
 import { deleteDoc, doc, setDoc } from 'firebase/firestore';
 import { auth, db } from 'firebase-source';
 // hooks
-import { useUpdateDocs, useSetDocCount } from 'hooks';
+import { useUpdateTodo, useSetDocCount } from 'hooks';
 // styles
 import * as S from './style';
 
@@ -34,7 +34,7 @@ function EditorHeader() {
   const [showCalendar, setShowCalendar] = useState(false);
   const [newDate, setNewDate] = useState('');
   const setDocCount = useSetDocCount();
-  const updator = useUpdateDocs();
+  const updator = useUpdateTodo();
   const calendarRef = useRef<HTMLDivElement>(null);
 
   const onClickToggleCalendar = () => {
@@ -53,7 +53,7 @@ function EditorHeader() {
     if (!selectedDoc || !newDate || newDate === selectedDoc.date) return;
 
     setShowCalendar(false);
-    await updator(selectedDoc, 'date', newDate, true);
+    await updator(selectedDoc, 'date', newDate);
 
     if (selectedDoc.date) {
       const oldDocRef = doc(
