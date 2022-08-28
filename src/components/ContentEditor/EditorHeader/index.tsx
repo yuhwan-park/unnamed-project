@@ -19,7 +19,7 @@ import {
   showEditorState,
 } from 'atoms';
 // firebase
-import { deleteDoc, doc, setDoc } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, doc, setDoc } from 'firebase/firestore';
 import { auth, db } from 'firebase-source';
 // hooks
 import { useUpdateTodo, useSetDocCount } from 'hooks';
@@ -29,10 +29,10 @@ import * as S from './style';
 function EditorHeader() {
   const selectedDoc = useRecoilValue(selectedDocumentState);
   const isWide = useRecoilValue(isWideState);
+  const [newDate, setNewDate] = useState('');
+  const [showCalendar, setShowCalendar] = useState(false);
   const setDate = useSetRecoilState(dateState);
   const setShowEditor = useSetRecoilState(showEditorState);
-  const [showCalendar, setShowCalendar] = useState(false);
-  const [newDate, setNewDate] = useState('');
   const setDocCount = useSetDocCount();
   const updator = useUpdateTodo();
   const calendarRef = useRef<HTMLDivElement>(null);
@@ -52,25 +52,26 @@ function EditorHeader() {
   const onClickConfirmToUpdateDate = async () => {
     if (!selectedDoc || !newDate || newDate === selectedDoc.date) return;
 
+    const dateDocRef = doc(db, `${auth.currentUser?.uid}/Date`);
     setShowCalendar(false);
     await updator(selectedDoc, 'date', newDate);
 
     if (selectedDoc.date) {
-      const oldDocRef = doc(
-        db,
-        `${auth.currentUser?.uid}/${selectedDoc.date}/Document/${selectedDoc.id}`,
+      await setDoc(
+        dateDocRef,
+        { [selectedDoc.date]: arrayRemove(selectedDoc.id) },
+        { merge: true },
       );
       await setDocCount(selectedDoc.date, 'Minus');
-      await deleteDoc(oldDocRef);
     }
+
+    await setDoc(
+      dateDocRef,
+      { [newDate]: arrayUnion(selectedDoc.id) },
+      { merge: true },
+    );
     await setDocCount(newDate, 'Plus');
 
-    const newDocRef = doc(
-      db,
-      `${auth.currentUser?.uid}/${newDate}/Document/${selectedDoc.id}`,
-    );
-    const newItem = { ...selectedDoc, date: newDate };
-    await setDoc(newDocRef, newItem);
     setDate(dayjs(newDate));
   };
 
@@ -83,6 +84,7 @@ function EditorHeader() {
     document.addEventListener('mousedown', handleClickOutSide);
     return () => document.removeEventListener('mousedown', handleClickOutSide);
   }, []);
+
   return (
     <>
       {selectedDoc && (

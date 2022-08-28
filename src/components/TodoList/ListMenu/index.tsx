@@ -12,18 +12,12 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import PriorityFlag from 'components/common/PriorityFlag';
 import MoveListModal from '../MoveListModal';
 // states
-import { allDocumentState, documentState, myListDocsState } from 'atoms';
+import { allDocumentState, docIdsByDate } from 'atoms';
 // firebase
-import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { arrayRemove, doc, updateDoc } from 'firebase/firestore';
 import { auth, db } from 'firebase-source';
 // hooks
-import {
-  useGetDocRef,
-  useGetListDocRef,
-  useUpdateTodo,
-  useDetectClickOutside,
-  useSetDocCount,
-} from 'hooks';
+import { useUpdateTodo, useDetectClickOutside, useSetDocCount } from 'hooks';
 // types
 import { IDocument } from 'types';
 // styles
@@ -37,13 +31,10 @@ interface IListMenu {
 function ListMenu({ item, isEditor }: IListMenu) {
   const [isOpen, setIsOpen] = useState(false);
   const [moveListFlag, setMoveListFlag] = useState(false);
-  const setDocument = useSetRecoilState(documentState);
-  const setMyListDocs = useSetRecoilState(myListDocsState);
-  const setDocCount = useSetDocCount();
   const [allDocument, setAllDocument] = useRecoilState(allDocumentState);
+  const setDocIds = useSetRecoilState(docIdsByDate);
   const updator = useUpdateTodo();
-  const docRef = useGetDocRef(item);
-  const ListDocRef = useGetListDocRef(item);
+  const setDocCount = useSetDocCount();
   const CloseDropdownMenu = useCallback(() => {
     setIsOpen(false);
   }, []);
@@ -54,19 +45,18 @@ function ListMenu({ item, isEditor }: IListMenu) {
   };
 
   const onClickDelete = async () => {
-    setDocument(todos => todos.filter(todo => todo.id !== item.id));
-    setMyListDocs(docs => docs.filter(doc => doc.id !== item.id));
-
     const newAllDocument = { ...allDocument };
     delete newAllDocument[item.id];
     setAllDocument(newAllDocument);
-
-    if (ListDocRef) await deleteDoc(ListDocRef);
-    if (docRef) await deleteDoc(docRef);
+    setDocIds(ids => ids.filter(id => id !== item.id));
 
     const allDocRef = doc(db, `${auth.currentUser?.uid}/All`);
+    const dateDocRef = doc(db, `${auth.currentUser?.uid}/Date`);
     await updateDoc(allDocRef, { docMap: newAllDocument });
     await setDocCount(item.date, 'Minus');
+    if (item.date) {
+      await updateDoc(dateDocRef, { [item.date]: arrayRemove(item.id) });
+    }
   };
 
   const onClickConvert = async () => {
