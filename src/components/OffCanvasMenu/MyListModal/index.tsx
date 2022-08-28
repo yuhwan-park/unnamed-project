@@ -95,6 +95,7 @@ function MyListModal() {
       title,
       createdAt: Timestamp.fromDate(new Date()),
       id: newListId,
+      docIds: [],
     };
     setMyLists(prev => [...prev, listData]);
     setValue('title', '');

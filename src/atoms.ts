@@ -100,6 +100,20 @@ export const allDocumentSelector = selector({
   },
 });
 
+export const docIdsByDate = atom<string[]>({
+  key: 'docIdsByDate',
+  default: [],
+});
+
+export const docByDate = selector({
+  key: 'docByDate',
+  get: ({ get }) => {
+    const docIds = get(docIdsByDate);
+    const allDocs = get(allDocumentState);
+    return docIds.map(id => allDocs[id]);
+  },
+});
+
 interface IdocumentCountByDateState {
   [key: string]: number;
 }

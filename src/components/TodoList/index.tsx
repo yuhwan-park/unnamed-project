@@ -9,6 +9,8 @@ import {
   allDocumentSelector,
   allDocumentState,
   dateSelector,
+  docByDate,
+  docIdsByDate,
   documentCountByDateState,
   documentState,
   loadingState,
@@ -40,6 +42,8 @@ function TodoList() {
   const screenStatus = useRecoilValue(screenStatusState);
   const [myListDocs, setMyListDocs] = useRecoilState(myListDocsState);
   const [documents, setDocuments] = useRecoilState(documentState);
+  const setDocIdsByDate = useSetRecoilState(docIdsByDate);
+  const docs = useRecoilValue(docByDate);
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
@@ -57,20 +61,26 @@ function TodoList() {
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
       if (!user) return;
-      const docQurey = query(
-        collection(db, user.uid, date, 'Document'),
-        orderBy('createdAt'),
-      );
-      const querySnapshot = await getDocs(docQurey);
+      // const docQurey = query(
+      //   collection(db, user.uid, date, 'Document'),
+      //   orderBy('createdAt'),
+      // );
+      // const querySnapshot = await getDocs(docQurey);
 
-      const tempArray: any[] = [];
-      querySnapshot.forEach(doc => {
-        tempArray.push(doc.data());
-      });
-      setDocuments(tempArray);
+      // const tempArray: any[] = [];
+      // querySnapshot.forEach(doc => {
+      //   tempArray.push(doc.data());
+      // });
+      // setDocuments(tempArray);
+      const docSnap = await getDoc(doc(db, user.uid, 'Date'));
+      if (docSnap.exists() && docSnap.data()[date]) {
+        setDocIdsByDate(docSnap.data()[date] as string[]);
+      } else {
+        setDocIdsByDate([]);
+      }
       setIsLoading(obj => ({ ...obj, doc: true }));
     });
-  }, [date, setDocuments, setIsLoading]);
+  }, [date, setDocIdsByDate, setIsLoading]);
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
@@ -100,7 +110,7 @@ function TodoList() {
               ? myListDocs
               : screenStatus === 'All'
               ? allDocuments
-              : documents
+              : docs
           }
         />
       </S.ListContainer>
