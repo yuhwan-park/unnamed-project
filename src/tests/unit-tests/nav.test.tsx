@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react';
 import Header from 'components/common/Header';
 import '@testing-library/jest-dom';
 import dayjs from 'dayjs';
-import { toggleMenuState } from 'atoms';
+import { isOffCanvasOpenState } from 'atoms';
 import { RecoilObserver, render } from 'tests/utils';
 
 describe('Nav 컴포넌트 유닛 테스트', () => {
@@ -74,7 +74,7 @@ describe('Nav 컴포넌트 유닛 테스트', () => {
     const onChange = jest.fn();
     const { user } = render(
       <>
-        <RecoilObserver node={toggleMenuState} onChange={onChange} />
+        <RecoilObserver node={isOffCanvasOpenState} onChange={onChange} />
         <Header />
       </>,
       { route: '/main' },

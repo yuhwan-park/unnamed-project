@@ -8,7 +8,7 @@ import {
   dateSelector,
   docIdsByDateState,
   docIdsState,
-  documentCountByDateState,
+  docCountByDateState,
   loadingState,
   myListsState,
   paramState,
@@ -28,7 +28,7 @@ function GlobalLogic() {
   const [docIdsByDate, setDocIdsByDate] = useRecoilState(docIdsByDateState);
   const setParams = useSetRecoilState(paramState);
   const setAllDocuments = useSetRecoilState(allDocumentState);
-  const setDocumentCount = useSetRecoilState(documentCountByDateState);
+  const setDocumentCount = useSetRecoilState(docCountByDateState);
   const setIsLoading = useSetRecoilState(loadingState);
   const setDocIds = useSetRecoilState(docIdsState);
 

@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { screen } from '@testing-library/react';
-import { userState } from 'atoms';
+import { userInfoState } from 'atoms';
 import GlobalLogic from 'components/common/GlobalLogic';
 import CalendarList from 'components/OffCanvasMenu/CalendarList';
 import ShowAllList from 'components/OffCanvasMenu/ShowAllList';
@@ -21,7 +21,7 @@ describe('오프캔버스 메뉴 기능 테스트', () => {
     test('마운트 되었을 때 유저의 닉네임(이메일), 프로필 사진이 나온다', () => {
       render(
         <>
-          <RecoilSetter atom={userState} data={MOCK_USER} />
+          <RecoilSetter atom={userInfoState} data={MOCK_USER} />
           <UserAccount />
         </>,
         { route: '/main' },
@@ -35,7 +35,7 @@ describe('오프캔버스 메뉴 기능 테스트', () => {
     test('닉네임을 클릭 시 input으로 바뀌며 닉네임을 변경할 수 있다', async () => {
       const { user } = render(
         <>
-          <RecoilSetter atom={userState} data={MOCK_USER} />
+          <RecoilSetter atom={userInfoState} data={MOCK_USER} />
           <UserAccount />
         </>,
         { route: '/main' },
@@ -59,7 +59,7 @@ describe('오프캔버스 메뉴 기능 테스트', () => {
     test('톱니바퀴 아이콘을 클릭 시 메뉴 모달이 나타나며 로그아웃을 클릭 시 로그아웃된다', async () => {
       const { user } = render(
         <BrowserRouter>
-          <RecoilSetter atom={userState} data={MOCK_USER} />
+          <RecoilSetter atom={userInfoState} data={MOCK_USER} />
           <GlobalLogic />
           <UserAccount />
         </BrowserRouter>,

@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import Calendar from 'react-calendar';
 import { useRecoilValue } from 'recoil';
 // states
-import { documentCountByDateState } from 'atoms';
+import { docCountByDateState } from 'atoms';
 // styles
 import 'style/calendar.css';
 import * as S from './style';
@@ -14,7 +14,7 @@ interface ICalendarViewProps {
 }
 
 function CalendarView({ value, onClickDay }: ICalendarViewProps) {
-  const docCount = useRecoilValue(documentCountByDateState);
+  const docCount = useRecoilValue(docCountByDateState);
   return (
     <Calendar
       formatDay={(locale, date) => dayjs(date).format('D')}

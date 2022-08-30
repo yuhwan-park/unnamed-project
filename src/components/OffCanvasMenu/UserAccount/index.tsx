@@ -8,7 +8,7 @@ import { FieldValues, useForm } from 'react-hook-form';
 // components
 import UserAccountMenu from '../UserAccountMenu';
 // states
-import { userState } from 'atoms';
+import { userInfoState } from 'atoms';
 // firebase
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { auth, storage } from 'firebase-source';
@@ -28,7 +28,7 @@ const userIconStyle = {
 function UserAccount() {
   const fileRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [user, setUser] = useRecoilState(userState);
+  const [user, setUser] = useRecoilState(userInfoState);
   const { register, setFocus, handleSubmit } = useForm();
 
   const onClickProfileImage = () => {

@@ -9,25 +9,26 @@ import CalendarList from './CalendarList';
 import MyList from './MyList';
 import MyListModal from './MyListModal';
 // states
-import { isWideState, myListModalState, toggleMenuState } from 'atoms';
+import { isWideState, myListModalState, isOffCanvasOpenState } from 'atoms';
 // styles
 import * as S from './style';
 // etc
 import { menuVariants } from 'variants';
 
 function OffCanvasMenu() {
-  const [toggleMenu, setToggleMenu] = useRecoilState(toggleMenuState);
+  const [IsOffCanvasOpen, setIsOffCanvasOpen] =
+    useRecoilState(isOffCanvasOpenState);
   const toggleModal = useRecoilValue(myListModalState);
   const isWide = useRecoilValue(isWideState);
 
   useEffect(() => {
-    setToggleMenu(isWide);
-  }, [setToggleMenu, isWide]);
+    setIsOffCanvasOpen(isWide);
+  }, [setIsOffCanvasOpen, isWide]);
 
   return (
     <>
       <AnimatePresence>
-        {toggleMenu && (
+        {IsOffCanvasOpen && (
           <S.Wrapper
             key="offCanvas"
             variants={menuVariants}

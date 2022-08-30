@@ -1,11 +1,11 @@
-import { documentCountByDateState } from 'atoms';
+import { docCountByDateState } from 'atoms';
 import { auth, db } from 'firebase-source';
 import { doc, increment, setDoc } from 'firebase/firestore';
 import { useCallback } from 'react';
 import { useSetRecoilState } from 'recoil';
 
 function useSetDocCount() {
-  const setDocCount = useSetRecoilState(documentCountByDateState);
+  const setDocCount = useSetRecoilState(docCountByDateState);
 
   return useCallback(
     async (date: string, isIncrease: 'Plus' | 'Minus') => {

@@ -4,13 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 // states
-import { isWideState, screenStatusState, toggleMenuState } from 'atoms';
+import { isWideState, screenStatusState, isOffCanvasOpenState } from 'atoms';
 // styles
 import * as S from './style';
 
 function CalendarList() {
   const isWide = useRecoilValue(isWideState);
-  const setToggleMenu = useSetRecoilState(toggleMenuState);
+  const setIsOffCanvasOpen = useSetRecoilState(isOffCanvasOpenState);
   const [screenStatus, setScreenStatus] = useRecoilState(screenStatusState);
   const navigator = useNavigate();
 
@@ -18,7 +18,7 @@ function CalendarList() {
     navigator('/main');
     setScreenStatus('Date');
     if (!isWide) {
-      setToggleMenu(false);
+      setIsOffCanvasOpen(false);
     }
   };
 
