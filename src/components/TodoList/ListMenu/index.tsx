@@ -19,7 +19,7 @@ import {
   myListsState,
 } from 'atoms';
 // firebase
-import { arrayRemove, doc, updateDoc } from 'firebase/firestore';
+import { arrayRemove, deleteField, doc, updateDoc } from 'firebase/firestore';
 import { auth, db } from 'firebase-source';
 // hooks
 import { useUpdateTodo, useDetectClickOutside } from 'hooks';
@@ -77,7 +77,7 @@ function ListMenu({ item, isEditor }: IListMenu) {
       setMyLists(newMyLists);
       await updateDoc(listDocRef, { ...newMyLists });
     }
-    await updateDoc(allDocRef, { docMap: newAllDocument });
+    await updateDoc(allDocRef, { [item.id]: deleteField() });
   };
 
   const onClickConvert = async () => {
