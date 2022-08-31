@@ -1,21 +1,10 @@
-import { db } from 'firebase-source';
-import { doc, getDoc } from 'firebase/firestore';
 import { atom, selector } from 'recoil';
 import { IMyList } from 'types';
+import { fetchData } from 'utils';
 import { paramState } from './paramState';
 import { userInfoState } from './userInfoState';
 
 type MyListMap = { [key: string]: IMyList };
-
-const getMyListsData = async (uid: string): Promise<MyListMap> => {
-  if (uid) {
-    const docSnap = await getDoc(doc(db, uid, 'Lists'));
-    if (docSnap.exists()) {
-      return docSnap.data();
-    }
-  }
-  return {};
-};
 
 export const myListsState = atom<MyListMap>({
   key: 'myLists',
@@ -23,7 +12,7 @@ export const myListsState = atom<MyListMap>({
     key: 'myListsAsync',
     get: async ({ get }) => {
       const { uid } = get(userInfoState);
-      return await getMyListsData(uid);
+      return await fetchData<MyListMap>({ destination: 'Lists', uid });
     },
   }),
 });

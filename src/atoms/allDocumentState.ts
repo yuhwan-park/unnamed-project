@@ -1,21 +1,10 @@
-import { db } from 'firebase-source';
-import { doc, getDoc } from 'firebase/firestore';
 import { atom, selector } from 'recoil';
 import { IDocument } from 'types';
+import { fetchData } from 'utils';
 import { paramState } from './paramState';
 import { userInfoState } from './userInfoState';
 
 type DocMap = { [key: string]: IDocument };
-
-const getAllDocumentData = async (uid: string): Promise<DocMap> => {
-  if (uid) {
-    const allDocSnap = await getDoc(doc(db, uid, 'All'));
-    if (allDocSnap.exists()) {
-      return allDocSnap.data();
-    }
-  }
-  return {};
-};
 
 export const allDocumentState = atom<DocMap>({
   key: 'allDocument',
@@ -23,7 +12,7 @@ export const allDocumentState = atom<DocMap>({
     key: 'allDocumentAsync',
     get: async ({ get }) => {
       const { uid } = get(userInfoState);
-      return await getAllDocumentData(uid);
+      return await fetchData<DocMap>({ destination: 'All', uid });
     },
   }),
 });
