@@ -1,10 +1,31 @@
+import { db } from 'firebase-source';
+import { doc, getDoc } from 'firebase/firestore';
 import { atom, selector } from 'recoil';
 import { IMyList } from 'types';
 import { paramState } from './paramState';
+import { userInfoState } from './userInfoState';
 
-export const myListsState = atom<{ [key: string]: IMyList }>({
+type MyListMap = { [key: string]: IMyList };
+
+const getMyListsData = async (uid: string): Promise<MyListMap> => {
+  if (uid) {
+    const docSnap = await getDoc(doc(db, uid, 'Lists'));
+    if (docSnap.exists()) {
+      return docSnap.data();
+    }
+  }
+  return {};
+};
+
+export const myListsState = atom<MyListMap>({
   key: 'myLists',
-  default: {},
+  default: selector({
+    key: 'myListsAsync',
+    get: async ({ get }) => {
+      const { uid } = get(userInfoState);
+      return await getMyListsData(uid);
+    },
+  }),
 });
 
 export const myListsArray = selector({
