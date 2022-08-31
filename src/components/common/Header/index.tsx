@@ -19,7 +19,7 @@ import {
   dateState,
   screenStatusState,
   selectedListState,
-  toggleMenuState,
+  isOffCanvasOpenState,
 } from 'atoms';
 // hooks
 import { useDetectClickOutside } from 'hooks';
@@ -36,7 +36,7 @@ function Header() {
   const [toggleIssue, setToggleIssue] = useState(false);
   const selectedList = useRecoilValue(selectedListState);
   const screenStatus = useRecoilValue(screenStatusState);
-  const setToggleMenu = useSetRecoilState(toggleMenuState);
+  const setIsOffCanvasOpen = useSetRecoilState(isOffCanvasOpenState);
   const closeCalendar = useCallback(() => {
     setToggleCalendar(false);
   }, []);
@@ -58,7 +58,7 @@ function Header() {
   };
 
   const onClickMenuIcon = () => {
-    setToggleMenu(prev => !prev);
+    setIsOffCanvasOpen(prev => !prev);
   };
 
   const onMouseEnterToday = () => {

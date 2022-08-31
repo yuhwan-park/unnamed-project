@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import Calendar from 'react-calendar';
 import { useRecoilValue } from 'recoil';
 // states
-import { documentCountByDateState } from 'atoms';
+import { docIdsByDateState } from 'atoms';
 // styles
 import 'style/calendar.css';
 import * as S from './style';
@@ -14,7 +14,7 @@ interface ICalendarViewProps {
 }
 
 function CalendarView({ value, onClickDay }: ICalendarViewProps) {
-  const docCount = useRecoilValue(documentCountByDateState);
+  const docIdsByDate = useRecoilValue(docIdsByDateState);
   return (
     <Calendar
       formatDay={(locale, date) => dayjs(date).format('D')}
@@ -24,10 +24,10 @@ function CalendarView({ value, onClickDay }: ICalendarViewProps) {
       calendarType="US"
       showNeighboringMonth={false}
       onClickDay={onClickDay}
-      tileContent={({ date, view }) => {
+      tileContent={({ date }) => {
         const dateString = dayjs(date).format('YYYYMMDD');
-        if (docCount && docCount[dateString]) {
-          return <S.Count>{`(${docCount[dateString]})`}</S.Count>;
+        if (docIdsByDate[dateString]) {
+          return <S.Count>{`(${docIdsByDate[dateString].length})`}</S.Count>;
         }
         return null;
       }}

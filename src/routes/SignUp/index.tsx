@@ -7,7 +7,7 @@ import AuthForm from 'components/auth/AuthForm';
 import SocialLogin from 'components/auth/SocialLogin';
 import Loading from 'components/common/Loading';
 // states
-import { userState } from 'atoms';
+import { userInfoState } from 'atoms';
 // types
 import { IFormData } from 'types';
 // firebase
@@ -24,7 +24,7 @@ function SignUp() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [error, setError] = useState('');
   const navigator = useNavigate();
-  const setUserData = useSetRecoilState(userState);
+  const setUserData = useSetRecoilState(userInfoState);
 
   const onSignUp = async ({ email, password, nickname }: IFormData) => {
     // 이메일 로그인

@@ -22,7 +22,7 @@ import {
 import { arrayRemove, arrayUnion, doc, setDoc } from 'firebase/firestore';
 import { auth, db } from 'firebase-source';
 // hooks
-import { useUpdateTodo, useSetDocCount } from 'hooks';
+import { useUpdateTodo } from 'hooks';
 // styles
 import * as S from './style';
 
@@ -33,7 +33,6 @@ function EditorHeader() {
   const [showCalendar, setShowCalendar] = useState(false);
   const setDocIdsByDate = useSetRecoilState(docIdsByDateState);
   const setShowEditor = useSetRecoilState(showEditorState);
-  const setDocCount = useSetDocCount();
   const updator = useUpdateTodo();
   const calendarRef = useRef<HTMLDivElement>(null);
 
@@ -70,7 +69,6 @@ function EditorHeader() {
         { [selectedDoc.date]: arrayRemove(selectedDoc.id) },
         { merge: true },
       );
-      await setDocCount(selectedDoc.date, 'Minus');
     }
 
     await updator(selectedDoc, 'date', newDate);
@@ -79,7 +77,6 @@ function EditorHeader() {
       { [newDate]: arrayUnion(selectedDoc.id) },
       { merge: true },
     );
-    await setDocCount(newDate, 'Plus');
   };
 
   useEffect(() => {

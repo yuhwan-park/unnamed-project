@@ -11,7 +11,7 @@ import {
   isWideState,
   screenStatusState,
   selectedListState,
-  toggleMenuState,
+  isOffCanvasOpenState,
 } from 'atoms';
 // types
 import { IMyList } from 'types';
@@ -26,7 +26,7 @@ function MyListItem({ list }: IMyListItemProps) {
   const [isSelected, setIsSelected] = useState(false);
   const selectedList = useRecoilValue(selectedListState);
   const isWide = useRecoilValue(isWideState);
-  const setToggleMenu = useSetRecoilState(toggleMenuState);
+  const setIsOffCanvasOpen = useSetRecoilState(isOffCanvasOpenState);
   const setScreenStatus = useSetRecoilState(screenStatusState);
   const navigator = useNavigate();
 
@@ -34,7 +34,7 @@ function MyListItem({ list }: IMyListItemProps) {
     navigator(`/main/lists/${list.id}/tasks`);
     setScreenStatus('List');
     if (!isWide && !e.target.closest('.list-menu')) {
-      setToggleMenu(false);
+      setIsOffCanvasOpen(false);
     }
   };
 

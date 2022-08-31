@@ -1,5 +1,5 @@
 // dependencies
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import { AnimatePresence } from 'framer-motion';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -11,7 +11,7 @@ import OffCanvasMenu from 'components/OffCanvasMenu';
 import Loading from 'components/common/Loading';
 import GlobalLogic from 'components/common/GlobalLogic';
 // states
-import { isWideState, loadingState, showEditorState } from 'atoms';
+import { isWideState, showEditorState, userInfoState } from 'atoms';
 // sources
 import { editorVariants } from 'variants';
 import { useDetectClickOutside } from 'hooks';
@@ -21,7 +21,7 @@ import * as S from './style';
 function Main() {
   const [showEditor, setShowEditor] = useRecoilState(showEditorState);
   const [isWide, setIsWide] = useRecoilState(isWideState);
-  const isLoading = useRecoilValue(loadingState);
+  const { uid } = useRecoilValue(userInfoState);
   useDetectClickOutside({ onTriggered: () => setShowEditor(false) });
 
   const onClickScreen = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -45,48 +45,50 @@ function Main() {
 
   return (
     <>
-      {!isLoading && <Loading />}
-      <S.Wrapper onClick={onClickScreen}>
-        <Header />
-        {isWide ? (
-          <S.ResponsiveContainer>
-            <OffCanvasMenu />
-            <ReflexContainer orientation="vertical">
-              <ReflexElement className="left-pane">
-                <TodoList />
-              </ReflexElement>
-              <ReflexSplitter style={{ border: 'none' }} />
-              <ReflexElement
-                className="right-pane"
-                minSize={400}
-                maxSize={window.innerWidth / 2 + 100}
-              >
-                <ContentEditor />
-              </ReflexElement>
-            </ReflexContainer>
-          </S.ResponsiveContainer>
-        ) : (
-          <S.ResponsiveContainer>
-            <OffCanvasMenu />
-            <TodoList />
-            <AnimatePresence initial={false}>
-              {showEditor && (
-                <S.EditorContainer
-                  variants={editorVariants}
-                  animate="visible"
-                  initial="initial"
-                  exit="exit"
-                  transition={{ type: 'tween' }}
+      {!uid && <Loading />}
+      <Suspense fallback={<Loading />}>
+        <S.Wrapper onClick={onClickScreen}>
+          <Header />
+          {isWide ? (
+            <S.ResponsiveContainer>
+              <OffCanvasMenu />
+              <ReflexContainer orientation="vertical">
+                <ReflexElement className="left-pane">
+                  <TodoList />
+                </ReflexElement>
+                <ReflexSplitter style={{ border: 'none' }} />
+                <ReflexElement
+                  className="right-pane"
+                  minSize={400}
+                  maxSize={window.innerWidth / 2 + 100}
                 >
                   <ContentEditor />
-                </S.EditorContainer>
-              )}
-            </AnimatePresence>
-          </S.ResponsiveContainer>
-        )}
-      </S.Wrapper>
+                </ReflexElement>
+              </ReflexContainer>
+            </S.ResponsiveContainer>
+          ) : (
+            <S.ResponsiveContainer>
+              <OffCanvasMenu />
+              <TodoList />
+              <AnimatePresence initial={false}>
+                {showEditor && (
+                  <S.EditorContainer
+                    variants={editorVariants}
+                    animate="visible"
+                    initial="initial"
+                    exit="exit"
+                    transition={{ type: 'tween' }}
+                  >
+                    <ContentEditor />
+                  </S.EditorContainer>
+                )}
+              </AnimatePresence>
+            </S.ResponsiveContainer>
+          )}
+        </S.Wrapper>
 
-      <GlobalLogic />
+        <GlobalLogic />
+      </Suspense>
     </>
   );
 }

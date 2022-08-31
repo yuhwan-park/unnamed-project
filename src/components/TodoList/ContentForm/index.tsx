@@ -14,8 +14,6 @@ import {
 // firebase
 import { arrayUnion, doc, setDoc, Timestamp } from 'firebase/firestore';
 import { auth, db } from 'firebase-source';
-// hooks
-import { useSetDocCount } from 'hooks';
 // types
 import { ITaskFormData } from 'types';
 // styles
@@ -27,7 +25,6 @@ function ContentForm() {
   const setAllDocument = useSetRecoilState(allDocumentState);
   const setDocIdsByDate = useSetRecoilState(docIdsByDateState);
   const selectedList = useRecoilValue(selectedListState);
-  const setDocCount = useSetDocCount();
   const [isNote, setIsNote] = useState(false);
   const { register, handleSubmit, setValue } = useForm<ITaskFormData>();
 
@@ -79,9 +76,8 @@ function ContentForm() {
         [date]: ids[date] ? [...ids[date], data.id] : [data.id],
       }));
       await setDoc(docRef, { [date]: arrayUnion(data.id) }, { merge: true });
-      await setDocCount(date, 'Plus');
     }
-    await setDoc(allDocRef, { docMap: { [data.id]: data } }, { merge: true });
+    await setDoc(allDocRef, { [data.id]: data }, { merge: true });
   };
 
   return (

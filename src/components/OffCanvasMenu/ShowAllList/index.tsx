@@ -4,21 +4,21 @@ import { faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 // states
-import { isWideState, screenStatusState, toggleMenuState } from 'atoms';
+import { isWideState, screenStatusState, isOffCanvasOpenState } from 'atoms';
 // styles
 import * as S from './style';
 
 function ShowAllList() {
   const navigator = useNavigate();
   const isWide = useRecoilValue(isWideState);
-  const setToggleMenu = useSetRecoilState(toggleMenuState);
+  const setIsOffCanvasOpen = useSetRecoilState(isOffCanvasOpenState);
   const [screenStatus, setScreenStatus] = useRecoilState(screenStatusState);
 
   const onClickDateList = () => {
     navigator('/main/all/tasks');
     setScreenStatus('All');
     if (!isWide) {
-      setToggleMenu(false);
+      setIsOffCanvasOpen(false);
     }
   };
 

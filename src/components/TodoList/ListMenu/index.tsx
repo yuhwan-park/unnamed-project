@@ -22,7 +22,7 @@ import {
 import { arrayRemove, doc, updateDoc } from 'firebase/firestore';
 import { auth, db } from 'firebase-source';
 // hooks
-import { useUpdateTodo, useDetectClickOutside, useSetDocCount } from 'hooks';
+import { useUpdateTodo, useDetectClickOutside } from 'hooks';
 // types
 import { IDocument } from 'types';
 // styles
@@ -41,7 +41,6 @@ function ListMenu({ item, isEditor }: IListMenu) {
   const [myLists, setMyLists] = useRecoilState(myListsState);
   const setDocIdsByDate = useSetRecoilState(docIdsByDateState);
   const updator = useUpdateTodo();
-  const setDocCount = useSetDocCount();
   const CloseDropdownMenu = useCallback(() => {
     setIsOpen(false);
   }, []);
@@ -66,7 +65,6 @@ function ListMenu({ item, isEditor }: IListMenu) {
         [item.date]: ids[item.date].filter(id => id !== item.id),
       }));
       await updateDoc(dateDocRef, { [item.date]: arrayRemove(item.id) });
-      await setDocCount(item.date, 'Minus');
     }
     if (item.list && item.list.id) {
       const newMyLists = {
