@@ -21,11 +21,7 @@ function useUpdateTodo() {
         [document.id]: newDoc,
       }));
 
-      await setDoc(
-        allDocRef,
-        { docMap: { [document.id]: newDoc } },
-        { merge: true },
-      );
+      await setDoc(allDocRef, { [document.id]: newDoc }, { merge: true });
     },
     [setAllDocument],
   );

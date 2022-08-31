@@ -11,7 +11,7 @@ const getAllDocumentData = async (uid: string): Promise<DocMap> => {
   if (uid) {
     const allDocSnap = await getDoc(doc(db, uid, 'All'));
     if (allDocSnap.exists()) {
-      return allDocSnap.data().docMap;
+      return allDocSnap.data();
     }
   }
   return {};

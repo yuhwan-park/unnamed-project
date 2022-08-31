@@ -77,7 +77,7 @@ function ContentForm() {
       }));
       await setDoc(docRef, { [date]: arrayUnion(data.id) }, { merge: true });
     }
-    await setDoc(allDocRef, { docMap: { [data.id]: data } }, { merge: true });
+    await setDoc(allDocRef, { [data.id]: data }, { merge: true });
   };
 
   return (
