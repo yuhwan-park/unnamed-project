@@ -11,9 +11,9 @@ export const fetchData = async <T>({
   uid,
 }: FetchDataParams): Promise<T> => {
   if (uid) {
-    const allDocSnap = await getDoc(doc(db, uid, destination));
-    if (allDocSnap.exists()) {
-      return allDocSnap.data() as Promise<T>;
+    const docSnap = await getDoc(doc(db, uid, destination));
+    if (docSnap.exists()) {
+      return docSnap.data() as Promise<T>;
     }
   }
   return {} as Promise<T>;
