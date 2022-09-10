@@ -14,12 +14,12 @@ import { auth, db } from 'firebase-source';
 // hooks
 import { useUpdateTodo } from 'hooks';
 // types
-import { IDocument, IMyList } from 'types';
+import { Document, MyList } from '@types';
 // styles
 import * as S from './style';
 
 interface IMoveListModalProps {
-  item: IDocument;
+  item: Document;
 }
 
 function MoveListModal({ item }: IMoveListModalProps) {
@@ -28,7 +28,7 @@ function MoveListModal({ item }: IMoveListModalProps) {
   const updator = useUpdateTodo();
   const listsRef = doc(db, `${auth.currentUser?.uid}/Lists`);
 
-  const onClickMoveListItem = async (list: IMyList) => {
+  const onClickMoveListItem = async (list: MyList) => {
     if (item.list && item.list.id === list.id) return;
 
     if (item.list) {

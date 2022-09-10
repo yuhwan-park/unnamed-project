@@ -5,18 +5,18 @@ import { memo, useEffect, useState } from 'react';
 // components
 import ListItem from '../ListItem';
 // types
-import { IDocument } from 'types';
+import { Document } from '@types';
 // styles
 import * as S from './style';
 
 interface IListConstructorProps {
-  documentData: IDocument[];
+  documentData: Document[];
 }
 
 function ListConstructor({ documentData }: IListConstructorProps) {
-  const [doingTodo, setDoingTodo] = useState<IDocument[]>([]);
-  const [doneTodo, setDoneTodo] = useState<IDocument[]>([]);
-  const [notes, setNotes] = useState<IDocument[]>([]);
+  const [doingTodo, setDoingTodo] = useState<Document[]>([]);
+  const [doneTodo, setDoneTodo] = useState<Document[]>([]);
+  const [notes, setNotes] = useState<Document[]>([]);
   const [collapseDoingToDo, setCollapseDoingToDo] = useState(true);
   const [collapseDoneToDo, setCollapseDoneToDo] = useState(true);
   const [collapseNotes, setCollapseNotes] = useState(true);
@@ -38,9 +38,9 @@ function ListConstructor({ documentData }: IListConstructorProps) {
   };
 
   useEffect(() => {
-    const doingTodosData: IDocument[] = [];
-    const doneTodosData: IDocument[] = [];
-    const notesData: IDocument[] = [];
+    const doingTodosData: Document[] = [];
+    const doneTodosData: Document[] = [];
+    const notesData: Document[] = [];
     documentData.forEach(document => {
       if (document.isNote) notesData.push(document);
       else if (document.isDone) doneTodosData.push(document);

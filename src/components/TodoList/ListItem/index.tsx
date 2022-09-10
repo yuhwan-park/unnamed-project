@@ -14,12 +14,12 @@ import { screenStatusState } from 'atoms';
 // hooks
 import { useUpdateTodo } from 'hooks';
 // types
-import { IDocument } from 'types';
+import { Document } from '@types';
 // styles
 import * as S from './style';
 
 interface ITodoItemProps {
-  item: IDocument;
+  item: Document;
 }
 
 function ListItem({ item }: ITodoItemProps) {

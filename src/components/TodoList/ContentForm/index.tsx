@@ -14,10 +14,12 @@ import {
 // firebase
 import { arrayUnion, doc, setDoc, Timestamp } from 'firebase/firestore';
 import { auth, db } from 'firebase-source';
-// types
-import { ITaskFormData } from 'types';
 // styles
 import * as S from './style';
+
+interface ToDoSubmitForm {
+  title: string;
+}
 
 function ContentForm() {
   const date = useRecoilValue(dateSelector);
@@ -26,7 +28,7 @@ function ContentForm() {
   const setDocIdsByDate = useSetRecoilState(docIdsByDateState);
   const selectedList = useRecoilValue(selectedListState);
   const [isNote, setIsNote] = useState(false);
-  const { register, handleSubmit, setValue } = useForm<ITaskFormData>();
+  const { register, handleSubmit, setValue } = useForm<ToDoSubmitForm>();
 
   const onSelectChange = ({
     currentTarget: { value },
@@ -34,7 +36,7 @@ function ContentForm() {
     setIsNote(value === 'note');
   };
 
-  const onToDoSubmit = async ({ title }: ITaskFormData) => {
+  const onToDoSubmit = async ({ title }: ToDoSubmitForm) => {
     if (!auth.currentUser) return;
     setValue('title', '');
 

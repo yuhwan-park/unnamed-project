@@ -7,12 +7,12 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 // states
 import { dateState, screenStatusState } from 'atoms';
 // types
-import { IDocument } from 'types';
+import { Document } from '@types';
 // styles
 import * as S from './style';
 
 interface IListIconsProps {
-  item: IDocument;
+  item: Document;
 }
 
 function ListIcons({ item }: IListIconsProps) {

@@ -1,10 +1,10 @@
 import { atom, selector } from 'recoil';
-import { IMyList } from 'types';
+import { MyList } from '@types';
 import { fetchData } from 'utils';
 import { paramState } from './paramState';
 import { userInfoState } from './userInfoState';
 
-type MyListMap = { [key: string]: IMyList };
+type MyListMap = { [key: string]: MyList };
 
 export const myListsState = atom<MyListMap>({
   key: 'myLists',

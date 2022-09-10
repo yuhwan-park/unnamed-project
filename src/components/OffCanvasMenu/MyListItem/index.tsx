@@ -14,12 +14,12 @@ import {
   isOffCanvasOpenState,
 } from 'atoms';
 // types
-import { IMyList } from 'types';
+import { MyList } from '@types';
 // styles
 import * as S from './style';
 
 interface IMyListItemProps {
-  list: IMyList;
+  list: MyList;
 }
 
 function MyListItem({ list }: IMyListItemProps) {

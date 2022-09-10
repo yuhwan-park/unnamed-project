@@ -1,7 +1,7 @@
+import { UserInfo } from '@types';
 import { atom } from 'recoil';
-import { IUserState } from 'types';
 
-export const userInfoState = atom<IUserState>({
+export const userInfoState = atom<UserInfo>({
   key: 'user',
   default: {
     displayName: '',

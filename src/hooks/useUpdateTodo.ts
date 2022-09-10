@@ -3,14 +3,14 @@ import { auth, db } from 'firebase-source';
 import { doc, setDoc } from 'firebase/firestore';
 import { useCallback } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { IDocument } from 'types';
+import { Document } from '@types';
 
 function useUpdateTodo() {
   // 클라이언트단 & DB단의 Document 데이터 필드값을 수정하는 Hook
   const setAllDocument = useSetRecoilState(allDocumentState);
 
   return useCallback(
-    async (document: IDocument, key: string, value: any) => {
+    async (document: Document, key: string, value: any) => {
       if (!auth.currentUser) return;
 
       const newDoc = { ...document, [key]: value };

@@ -9,7 +9,7 @@ import Loading from 'components/common/Loading';
 // states
 import { userInfoState } from 'atoms';
 // types
-import { IFormData } from 'types';
+import { AuthFormData } from '@types';
 // firebase
 import {
   createUserWithEmailAndPassword,
@@ -26,7 +26,7 @@ function SignUp() {
   const navigator = useNavigate();
   const setUserData = useSetRecoilState(userInfoState);
 
-  const onSignUp = async ({ email, password, nickname }: IFormData) => {
+  const onSignUp = async ({ email, password, nickname }: AuthFormData) => {
     // 이메일 로그인
     try {
       const userCredential = await createUserWithEmailAndPassword(

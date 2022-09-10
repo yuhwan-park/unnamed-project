@@ -24,12 +24,12 @@ import { auth, db } from 'firebase-source';
 // hooks
 import { useUpdateTodo, useDetectClickOutside } from 'hooks';
 // types
-import { IDocument } from 'types';
+import { Document } from '@types';
 // styles
 import * as S from './style';
 
 interface IListMenu {
-  item: IDocument;
+  item: Document;
   isEditor: boolean;
 }
 

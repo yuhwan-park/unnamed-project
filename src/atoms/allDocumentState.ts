@@ -1,10 +1,10 @@
 import { atom, selector } from 'recoil';
-import { IDocument } from 'types';
+import { Document } from '@types';
 import { fetchData } from 'utils';
 import { paramState } from './paramState';
 import { userInfoState } from './userInfoState';
 
-type DocMap = { [key: string]: IDocument };
+type DocMap = { [key: string]: Document };
 
 export const allDocumentState = atom<DocMap>({
   key: 'allDocument',

@@ -5,12 +5,12 @@ import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 // types
-import { IFormData } from 'types';
+import { AuthFormData } from '@types';
 // styles
 import * as S from 'style/sign-page';
 
 interface IAuthFormProps {
-  onSubmit: (args: IFormData) => Promise<void>;
+  onSubmit: (args: AuthFormData) => Promise<void>;
 }
 
 function AuthForm({ onSubmit }: IAuthFormProps) {
@@ -20,7 +20,7 @@ function AuthForm({ onSubmit }: IAuthFormProps) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormData>();
+  } = useForm<AuthFormData>();
 
   useEffect(() => {
     setIsSingUp(location.pathname === '/signup');

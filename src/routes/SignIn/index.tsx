@@ -7,7 +7,7 @@ import AuthForm from 'components/auth/AuthForm';
 import SocialLogin from 'components/auth/SocialLogin';
 import Loading from 'components/common/Loading';
 // types
-import { IFormData } from 'types';
+import { AuthFormData } from '@types';
 // sources
 import { auth } from 'firebase-source';
 // styles
@@ -18,7 +18,7 @@ function SignIn() {
   const [error, setError] = useState('');
   const navigator = useNavigate();
 
-  const onSignIn = async ({ email, password }: IFormData) => {
+  const onSignIn = async ({ email, password }: AuthFormData) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (err: any) {

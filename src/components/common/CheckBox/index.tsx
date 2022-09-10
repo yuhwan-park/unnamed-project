@@ -5,12 +5,12 @@ import { memo } from 'react';
 // hooks
 import { useUpdateTodo } from 'hooks';
 // types
-import { IDocument } from 'types';
+import { Document } from '@types';
 // styles
 import * as S from './style';
 
 interface ICheckBoxProps {
-  todo: IDocument;
+  todo: Document;
 }
 
 function CheckBox({ todo }: ICheckBoxProps) {

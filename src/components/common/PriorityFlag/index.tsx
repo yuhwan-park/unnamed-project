@@ -4,12 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // hooks
 import { useUpdateTodo } from 'hooks';
 // types
-import { IDocument } from 'types';
+import { Document } from '@types';
 // styles
 import * as S from './style';
 
 interface IPriorityFlagProps {
-  todo: IDocument;
+  todo: Document;
   toggleMenu: () => void;
 }
 
