@@ -35,6 +35,7 @@
       {
         "additionalHooks": "useRecoilCallback"
       }
-    ]
+    ],
+    "react/no-unescaped-entities": "off"
   }
 }

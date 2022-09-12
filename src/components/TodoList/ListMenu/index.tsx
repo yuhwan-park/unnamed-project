@@ -19,14 +19,14 @@ import {
   myListsState,
 } from 'atoms';
 // firebase
-import { arrayRemove, deleteField, doc, updateDoc } from 'firebase/firestore';
-import { auth, db } from 'firebase-source';
+import { arrayRemove, deleteField, updateDoc } from 'firebase/firestore';
 // hooks
 import { useUpdateTodo, useDetectClickOutside } from 'hooks';
 // types
 import { Document } from '@types';
 // styles
 import * as S from './style';
+import { docRef } from 'utils';
 
 interface IListMenu {
   item: Document;
@@ -56,15 +56,12 @@ function ListMenu({ item, isEditor }: IListMenu) {
     setAllDocument(newAllDocument);
     setDocIds(ids => ids.filter(id => id !== item.id));
 
-    const allDocRef = doc(db, `${auth.currentUser?.uid}/All`);
-    const dateDocRef = doc(db, `${auth.currentUser?.uid}/Date`);
-    const listDocRef = doc(db, `${auth.currentUser?.uid}/Lists`);
     if (item.date) {
       setDocIdsByDate(ids => ({
         ...ids,
         [item.date]: ids[item.date].filter(id => id !== item.id),
       }));
-      await updateDoc(dateDocRef, { [item.date]: arrayRemove(item.id) });
+      await updateDoc(docRef('Date'), { [item.date]: arrayRemove(item.id) });
     }
     if (item.list && item.list.id) {
       const newMyLists = {
@@ -75,9 +72,9 @@ function ListMenu({ item, isEditor }: IListMenu) {
         },
       };
       setMyLists(newMyLists);
-      await updateDoc(listDocRef, { ...newMyLists });
+      await updateDoc(docRef('Lists'), { ...newMyLists });
     }
-    await updateDoc(allDocRef, { [item.id]: deleteField() });
+    await updateDoc(docRef('All'), { [item.id]: deleteField() });
   };
 
   const onClickConvert = async () => {

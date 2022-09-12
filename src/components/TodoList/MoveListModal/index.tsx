@@ -9,14 +9,15 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 // states
 import { myListsArray, myListsState } from 'atoms';
 // firebase
-import { doc, setDoc } from 'firebase/firestore';
-import { auth, db } from 'firebase-source';
+import { setDoc } from 'firebase/firestore';
 // hooks
 import { useUpdateTodo } from 'hooks';
 // types
 import { Document, MyList } from '@types';
 // styles
 import * as S from './style';
+// utils
+import { docRef } from 'utils';
 
 interface IMoveListModalProps {
   item: Document;
@@ -26,7 +27,6 @@ function MoveListModal({ item }: IMoveListModalProps) {
   const [myLists, setMyLists] = useRecoilState(myListsState);
   const sortedMyLists = useRecoilValue(myListsArray);
   const updator = useUpdateTodo();
-  const listsRef = doc(db, `${auth.currentUser?.uid}/Lists`);
 
   const onClickMoveListItem = async (list: MyList) => {
     if (item.list && item.list.id === list.id) return;
@@ -44,7 +44,7 @@ function MoveListModal({ item }: IMoveListModalProps) {
         },
       };
       setMyLists(newMyLists);
-      await setDoc(listsRef, { ...newMyLists });
+      await setDoc(docRef('Lists'), { ...newMyLists });
     } else {
       const newMyLists = {
         ...myLists,
@@ -54,7 +54,7 @@ function MoveListModal({ item }: IMoveListModalProps) {
         },
       };
       setMyLists(newMyLists);
-      await setDoc(listsRef, { ...newMyLists });
+      await setDoc(docRef('Lists'), { ...newMyLists });
     }
     await updator(item, 'list', list);
   };
@@ -69,7 +69,7 @@ function MoveListModal({ item }: IMoveListModalProps) {
       },
     };
     setMyLists(newMyLists);
-    await setDoc(listsRef, { ...newMyLists });
+    await setDoc(docRef('Lists'), { ...newMyLists });
     await updator(item, 'list', null);
   };
 

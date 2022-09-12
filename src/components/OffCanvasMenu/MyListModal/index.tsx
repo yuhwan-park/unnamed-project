@@ -13,20 +13,14 @@ import {
   allDocumentState,
 } from 'atoms';
 // firebase
-import { auth, db } from 'firebase-source';
-import {
-  deleteField,
-  doc,
-  setDoc,
-  Timestamp,
-  updateDoc,
-} from 'firebase/firestore';
+import { deleteField, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
 // hooks
 import { useUpdateTodo } from 'hooks';
 // styles
 import * as S from './style';
 // etc
 import { modalCoverVariants, modalVariants } from 'variants';
+import { docRef } from 'utils';
 
 function MyListModal() {
   const [toggleModal, setToggleModal] = useRecoilState(myListModalState);
@@ -68,8 +62,7 @@ function MyListModal() {
 
   const editList = async ({ title }: FieldValues) => {
     const isError = checkError(title);
-    if (!auth.currentUser || !isError || !selectedList) return;
-    const listRef = doc(db, `${auth.currentUser.uid}/Lists`);
+    if (!isError || !selectedList) return;
     const newLists = {
       ...myLists,
       [selectedList.id]: { ...selectedList, title },
@@ -77,14 +70,13 @@ function MyListModal() {
     setMyLists(newLists);
     setValue('title', '');
     setToggleModal(null);
-    await updateDoc(listRef, { ...newLists });
+    await updateDoc(docRef('Lists'), { ...newLists });
   };
 
   const createList = async ({ title }: FieldValues) => {
     const isError = checkError(title);
-    if (!auth.currentUser || !isError) return;
+    if (!isError) return;
 
-    const listsRef = doc(db, `${auth.currentUser.uid}/Lists`);
     const newMyList = {
       title,
       createdAt: Timestamp.fromDate(new Date()),
@@ -96,13 +88,12 @@ function MyListModal() {
     setValue('title', '');
     setToggleModal(null);
     navigator(`/main/lists/${newMyList.id}/tasks`);
-    await setDoc(listsRef, { ...newMyLists }, { merge: true });
+    await setDoc(docRef('Lists'), { ...newMyLists }, { merge: true });
   };
 
   const deleteList = async () => {
-    if (!auth.currentUser || !selectedList) return;
+    if (!selectedList) return;
 
-    const docRef = doc(db, `${auth.currentUser.uid}/Lists`);
     const newMyLists = { ...myLists };
     newMyLists[selectedList.id].docIds.forEach(async id => {
       await updator(allDocument[id], 'list', null);
@@ -111,7 +102,7 @@ function MyListModal() {
     delete newMyLists[selectedList.id];
     setMyLists(newMyLists);
     setToggleModal(null);
-    await updateDoc(docRef, { [selectedList.id]: deleteField() });
+    await updateDoc(docRef('Lists'), { [selectedList.id]: deleteField() });
   };
 
   return (

@@ -19,12 +19,13 @@ import {
   docIdsByDateState,
 } from 'atoms';
 // firebase
-import { arrayRemove, arrayUnion, doc, setDoc } from 'firebase/firestore';
-import { auth, db } from 'firebase-source';
+import { arrayRemove, arrayUnion, setDoc } from 'firebase/firestore';
 // hooks
 import { useUpdateTodo } from 'hooks';
 // styles
 import * as S from './style';
+// utils
+import { docRef } from 'utils';
 
 function EditorHeader() {
   const selectedDoc = useRecoilValue(selectedDocumentState);
@@ -51,7 +52,6 @@ function EditorHeader() {
   const onClickConfirmToUpdateDate = async () => {
     if (!selectedDoc || !newDate || newDate === selectedDoc.date) return;
 
-    const dateDocRef = doc(db, `${auth.currentUser?.uid}/Date`);
     setShowCalendar(false);
 
     if (selectedDoc.date) {
@@ -65,7 +65,7 @@ function EditorHeader() {
           : [selectedDoc.id],
       }));
       await setDoc(
-        dateDocRef,
+        docRef('Date'),
         { [selectedDoc.date]: arrayRemove(selectedDoc.id) },
         { merge: true },
       );
@@ -73,7 +73,7 @@ function EditorHeader() {
 
     await updator(selectedDoc, 'date', newDate);
     await setDoc(
-      dateDocRef,
+      docRef('Date'),
       { [newDate]: arrayUnion(selectedDoc.id) },
       { merge: true },
     );

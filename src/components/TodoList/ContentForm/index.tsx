@@ -12,10 +12,10 @@ import {
   selectedListState,
 } from 'atoms';
 // firebase
-import { arrayUnion, doc, setDoc, Timestamp } from 'firebase/firestore';
-import { auth, db } from 'firebase-source';
+import { arrayUnion, setDoc, Timestamp } from 'firebase/firestore';
 // styles
 import * as S from './style';
+import { docRef } from 'utils';
 
 interface ToDoSubmitForm {
   title: string;
@@ -37,10 +37,8 @@ function ContentForm() {
   };
 
   const onToDoSubmit = async ({ title }: ToDoSubmitForm) => {
-    if (!auth.currentUser) return;
     setValue('title', '');
 
-    const allDocRef = doc(db, `${auth.currentUser.uid}/All`);
     const data = {
       id: shortUUID.generate(),
       title,
@@ -57,7 +55,6 @@ function ContentForm() {
     setAllDocument(docs => ({ ...docs, [data.id]: data }));
 
     if (selectedList) {
-      const docRef = doc(db, `${auth.currentUser.uid}/Lists`);
       setMyLists(lists => ({
         ...lists,
         [selectedList.id]: {
@@ -67,19 +64,23 @@ function ContentForm() {
       }));
 
       await setDoc(
-        docRef,
+        docRef('Lists'),
         { [selectedList.id]: { docIds: arrayUnion(data.id) } },
         { merge: true },
       );
     } else {
-      const docRef = doc(db, `${auth.currentUser.uid}/Date`);
       setDocIdsByDate(ids => ({
         ...ids,
         [date]: ids[date] ? [...ids[date], data.id] : [data.id],
       }));
-      await setDoc(docRef, { [date]: arrayUnion(data.id) }, { merge: true });
+
+      await setDoc(
+        docRef('Date'),
+        { [date]: arrayUnion(data.id) },
+        { merge: true },
+      );
     }
-    await setDoc(allDocRef, { [data.id]: data }, { merge: true });
+    await setDoc(docRef('All'), { [data.id]: data }, { merge: true });
   };
 
   return (
