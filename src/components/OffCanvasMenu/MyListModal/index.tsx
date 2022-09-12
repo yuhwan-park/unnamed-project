@@ -96,7 +96,7 @@ function MyListModal() {
 
     const newMyLists = { ...myLists };
     newMyLists[selectedList.id].docIds.forEach(async id => {
-      await updator(allDocument[id], 'list', null);
+      await updator(allDocument[id], 'listId', '');
     });
 
     delete newMyLists[selectedList.id];

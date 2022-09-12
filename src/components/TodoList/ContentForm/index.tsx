@@ -49,7 +49,7 @@ function ContentForm() {
       isNote,
       priority: 4,
       date: selectedList ? '' : date,
-      list: selectedList ? selectedList : null,
+      listId: selectedList ? selectedList.id : '',
     };
 
     setAllDocument(docs => ({ ...docs, [data.id]: data }));

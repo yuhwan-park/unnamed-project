@@ -63,12 +63,12 @@ function ListMenu({ item, isEditor }: IListMenu) {
       }));
       await updateDoc(docRef('Date'), { [item.date]: arrayRemove(item.id) });
     }
-    if (item.list && item.list.id) {
+    if (item.listId) {
       const newMyLists = {
         ...myLists,
-        [item.list.id]: {
-          ...myLists[item.list.id],
-          docIds: myLists[item.list.id].docIds.filter(id => id !== item.id),
+        [item.listId]: {
+          ...myLists[item.listId],
+          docIds: myLists[item.listId].docIds.filter(id => id !== item.id),
         },
       };
       setMyLists(newMyLists);

@@ -29,8 +29,8 @@ function ListItem({ item }: ITodoItemProps) {
   const screenStatus = useRecoilValue(screenStatusState);
 
   const onClickList = () => {
-    if (item.list && screenStatus === 'List') {
-      navigator(`/main/lists/${item.list.id}/tasks/${item.id}`);
+    if (item.listId && screenStatus === 'List') {
+      navigator(`/main/lists/${item.listId}/tasks/${item.id}`);
     } else if (screenStatus === 'All') {
       navigator(`/main/all/tasks/${item.id}`);
     } else {

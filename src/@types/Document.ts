@@ -1,5 +1,4 @@
 import { Timestamp } from 'firebase/firestore';
-import { MyList } from './MyList';
 
 export interface Document {
   id: string;
@@ -11,5 +10,5 @@ export interface Document {
   isNote: boolean;
   priority: number;
   date: string;
-  list: MyList | null;
+  listId: string;
 }

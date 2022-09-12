@@ -1,8 +1,7 @@
 // dependencies
 import { Editor } from '@toast-ui/react-editor';
-import { createRef, memo, useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
-import { useMemo } from 'react';
 // components
 import EditorHeader from './EditorHeader';
 // states
@@ -19,7 +18,7 @@ function ContentEditor() {
   const document = useRecoilValue(selectedDocumentState);
   const flag = useRef(false);
   const updator = useUpdateTodo();
-  const editorRef = useMemo(() => createRef<Editor>(), []);
+  const editorRef = useRef<Editor>(null);
   let timer: NodeJS.Timeout;
 
   const onKeyUpEditor = () => {
@@ -29,7 +28,7 @@ function ContentEditor() {
     }
     timer = setTimeout(async () => {
       if (!document) return;
-      await updator(document, 'content', content);
+      await updator(document, 'content', content as string);
     }, 1000);
   };
 
@@ -37,7 +36,7 @@ function ContentEditor() {
     const content = editorRef.current?.getInstance().getMarkdown();
     setTimeout(async () => {
       if (!document) return;
-      await updator(document, 'content', content);
+      await updator(document, 'content', content as string);
     }, 100);
   };
 

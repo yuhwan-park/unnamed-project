@@ -29,14 +29,14 @@ function MoveListModal({ item }: IMoveListModalProps) {
   const updator = useUpdateTodo();
 
   const onClickMoveListItem = async (list: MyList) => {
-    if (item.list && item.list.id === list.id) return;
+    if (item.listId === list.id) return;
 
-    if (item.list) {
+    if (item.listId) {
       const newMyLists = {
         ...myLists,
-        [item.list.id]: {
-          ...myLists[item.list.id],
-          docIds: myLists[item.list.id].docIds.filter(id => id !== item.id),
+        [item.listId]: {
+          ...myLists[item.listId],
+          docIds: myLists[item.listId].docIds.filter(id => id !== item.id),
         },
         [list.id]: {
           ...myLists[list.id],
@@ -56,21 +56,21 @@ function MoveListModal({ item }: IMoveListModalProps) {
       setMyLists(newMyLists);
       await setDoc(docRef('Lists'), { ...newMyLists });
     }
-    await updator(item, 'list', list);
+    await updator(item, 'listId', list.id);
   };
 
   const onClickDeleteList = async () => {
-    if (!item.list) return;
+    if (!item.listId) return;
     const newMyLists = {
       ...myLists,
-      [item.list.id]: {
-        ...myLists[item.list.id],
-        docIds: myLists[item.list.id].docIds.filter(id => id !== item.id),
+      [item.listId]: {
+        ...myLists[item.listId],
+        docIds: myLists[item.listId].docIds.filter(id => id !== item.id),
       },
     };
     setMyLists(newMyLists);
     await setDoc(docRef('Lists'), { ...newMyLists });
-    await updator(item, 'list', null);
+    await updator(item, 'listId', '');
   };
 
   return (
@@ -80,7 +80,7 @@ function MoveListModal({ item }: IMoveListModalProps) {
           <FontAwesomeIcon icon={faCircleXmark} />
         </S.MenuIcon>
         <S.MyListTitle>없음</S.MyListTitle>
-        {!item.list && (
+        {!item.listId && (
           <S.CheckIconContainer>
             <FontAwesomeIcon icon={faCheck} />
           </S.CheckIconContainer>
@@ -97,7 +97,7 @@ function MoveListModal({ item }: IMoveListModalProps) {
                 <FontAwesomeIcon icon={faListUl} />
               </S.MenuIcon>
               <S.MyListTitle>{list.title}</S.MyListTitle>
-              {list.id === item.list?.id && (
+              {list.id === item.listId && (
                 <S.CheckIconContainer>
                   <FontAwesomeIcon icon={faCheck} />
                 </S.CheckIconContainer>
