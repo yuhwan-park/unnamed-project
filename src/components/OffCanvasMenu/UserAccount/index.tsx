@@ -2,7 +2,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCamera } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState } from 'recoil';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import shortUUID from 'short-uuid';
 import { FieldValues, useForm } from 'react-hook-form';
 // components
@@ -12,7 +12,7 @@ import { userInfoState } from 'atoms';
 // firebase
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { auth, storage } from 'firebase-source';
-import { onAuthStateChanged, updateProfile } from 'firebase/auth';
+import { updateProfile } from 'firebase/auth';
 // styles
 import * as S from './style';
 
@@ -87,14 +87,6 @@ function UserAccount() {
   const onSubmitNameInput = async ({ displayName }: FieldValues) => {
     await setDisplayName(displayName);
   };
-
-  useEffect(() => {
-    onAuthStateChanged(auth, user => {
-      if (!user) return;
-      const { displayName, email, uid, photoURL } = user;
-      setUser({ displayName, email, uid, photoURL });
-    });
-  }, [setUser]);
 
   return (
     <S.Wrapper>

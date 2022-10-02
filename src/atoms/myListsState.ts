@@ -1,20 +1,12 @@
 import { atom, selector } from 'recoil';
 import { MyList } from '@types';
-import { fetchData } from 'utils';
 import { paramState } from './paramState';
-import { userInfoState } from './userInfoState';
 
 type MyListMap = { [key: string]: MyList };
 
 export const myListsState = atom<MyListMap>({
   key: 'myLists',
-  default: selector({
-    key: 'myListsAsync',
-    get: async ({ get }) => {
-      const { uid } = get(userInfoState);
-      return await fetchData<MyListMap>({ destination: 'Lists', uid });
-    },
-  }),
+  default: {},
 });
 
 export const myListsArray = selector({
