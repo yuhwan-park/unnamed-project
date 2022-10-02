@@ -45,7 +45,7 @@ function Main() {
 
   return (
     <>
-      {!isLoading && <Loading />}
+      {isLoading && <Loading />}
       <GlobalLogic />
       <S.Wrapper onClick={onClickScreen}>
         <Header />

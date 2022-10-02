@@ -1,12 +1,14 @@
 import { atom, selector } from 'recoil';
 import { MyList } from '@types';
 import { paramState } from './paramState';
+import { snapshotEffect } from 'utils';
 
 type MyListMap = { [key: string]: MyList };
 
 export const myListsState = atom<MyListMap>({
   key: 'myLists',
-  default: {},
+  default: { needLoad: {} as MyList },
+  effects: [snapshotEffect('Lists')],
 });
 
 export const myListsArray = selector({

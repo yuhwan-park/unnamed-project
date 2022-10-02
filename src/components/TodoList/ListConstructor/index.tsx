@@ -42,6 +42,7 @@ function ListConstructor({ documentData }: IListConstructorProps) {
     const doneTodosData: Document[] = [];
     const notesData: Document[] = [];
     documentData.forEach(document => {
+      if (!document) return;
       if (document.isNote) notesData.push(document);
       else if (document.isDone) doneTodosData.push(document);
       else doingTodosData.push(document);

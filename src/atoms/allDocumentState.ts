@@ -1,12 +1,14 @@
 import { atom, selector } from 'recoil';
 import { Document } from '@types';
 import { paramState } from './paramState';
+import { snapshotEffect } from 'utils';
 
 type DocMap = { [key: string]: Document };
 
 export const allDocumentState = atom<DocMap>({
   key: 'allDocument',
-  default: {},
+  default: { needLoad: {} as Document },
+  effects: [snapshotEffect('All')],
 });
 
 export const allDocumentSelector = selector({
