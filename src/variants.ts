@@ -41,14 +41,10 @@ export const menuVariants = {
     width: 0,
     opacity: 0,
   },
-  visible: {
-    width: '350px',
-    opacity: 1,
-  },
-  exit: {
-    width: 0,
-    opacity: 0,
-  },
+  visible: (custom: boolean) => ({
+    width: custom ? '350px' : 0,
+    opacity: custom ? 1 : 0,
+  }),
 };
 
 export const editorVariants = {

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 export const Wrapper = styled(motion.nav)`
   height: 100%;
   background-color: rgb(244, 244, 244);
-  max-width: 350px;
+  width: 350px;
   overflow-x: hidden;
   overflow-y: scroll;
   @media ${devices.laptop} {

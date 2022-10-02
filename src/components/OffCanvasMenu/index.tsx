@@ -1,5 +1,4 @@
 // dependencies
-import { AnimatePresence } from 'framer-motion';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { memo, useEffect } from 'react';
 // components
@@ -27,25 +26,22 @@ function OffCanvasMenu() {
 
   return (
     <>
-      <AnimatePresence>
-        {IsOffCanvasOpen && (
-          <S.Wrapper
-            key="offCanvas"
-            variants={menuVariants}
-            initial="initial"
-            animate="visible"
-            exit="exit"
-            transition={{ type: 'tween' }}
-          >
-            <UserAccount />
-            <S.MainMenuContainer>
-              <ShowAllList />
-              <CalendarList />
-            </S.MainMenuContainer>
-            <MyList />
-          </S.Wrapper>
-        )}
-      </AnimatePresence>
+      <S.Wrapper
+        key="offCanvas"
+        custom={IsOffCanvasOpen}
+        variants={menuVariants}
+        initial="initial"
+        animate="visible"
+        transition={{ type: 'tween' }}
+      >
+        <UserAccount />
+        <S.MainMenuContainer>
+          <ShowAllList />
+          <CalendarList />
+        </S.MainMenuContainer>
+        <MyList />
+      </S.Wrapper>
+
       {toggleModal && <MyListModal />}
     </>
   );
