@@ -43,7 +43,7 @@ function ComplaintForm({ toggleFunc }: IComplaintFormProps) {
           {...register('title', { required: '필수 항목입니다.' })}
         />
         {errors.title && (
-          <S.ErrorMessage>{errors.title.message}</S.ErrorMessage>
+          <S.ErrorMessage>{errors.title.message?.toString()}</S.ErrorMessage>
         )}
         <label htmlFor="content">내용</label>
         <S.ComplaintTextArea
@@ -51,7 +51,7 @@ function ComplaintForm({ toggleFunc }: IComplaintFormProps) {
           {...register('content', { required: '필수 항목입니다.' })}
         />
         {errors.content && (
-          <S.ErrorMessage>{errors.content.message}</S.ErrorMessage>
+          <S.ErrorMessage>{errors.content.message?.toString()}</S.ErrorMessage>
         )}
         {message && <S.Message>{message}</S.Message>}
         <S.FormFooter>

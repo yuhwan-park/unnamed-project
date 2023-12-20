@@ -153,7 +153,9 @@ function MyListModal() {
                 {...register('title', { required: '필수 항목입니다' })}
               />
               {errors.title && (
-                <S.ErrorMessage>{errors.title.message}</S.ErrorMessage>
+                <S.ErrorMessage>
+                  {errors.title.message?.toString()}
+                </S.ErrorMessage>
               )}
             </S.ListModalBody>
             <S.ListModalFooter>

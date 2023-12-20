@@ -1,5 +1,4 @@
 // dependencies
-import { memo } from 'react';
 import { useRecoilValue } from 'recoil';
 // components
 import ContentForm from 'components/TodoList/ContentForm';
@@ -8,23 +7,32 @@ import ListConstructor from './ListConstructor';
 import { allDocumentSelector, documentsById, screenStatusState } from 'atoms';
 // styles
 import * as S from './style';
+import { useLocation } from 'react-router-dom';
 
 function TodoList() {
+  const location = useLocation();
   const allDocuments = useRecoilValue(allDocumentSelector);
   const screenStatus = useRecoilValue(screenStatusState);
   const documents = useRecoilValue(documentsById);
+  const screen = location.pathname.includes('all')
+    ? 'All'
+    : location.pathname.includes('lists')
+    ? 'List'
+    : 'Date';
+
+  console.log('screen', screen);
 
   return (
     <S.Wrapper>
-      {screenStatus !== 'All' && <ContentForm />}
+      {screen !== 'All' && <ContentForm />}
 
       <S.ListContainer>
         <ListConstructor
-          documentData={screenStatus === 'All' ? allDocuments : documents}
+          documentData={screen === 'All' ? allDocuments : documents}
         />
       </S.ListContainer>
     </S.Wrapper>
   );
 }
 
-export default memo(TodoList);
+export default TodoList;

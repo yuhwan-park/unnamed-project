@@ -1,7 +1,7 @@
 // dependencies
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { memo, useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { memo, useState } from 'react';
 // components
 import ListItem from '../ListItem';
 // types
@@ -14,12 +14,24 @@ interface IListConstructorProps {
 }
 
 function ListConstructor({ documentData }: IListConstructorProps) {
-  const [doingTodo, setDoingTodo] = useState<Document[]>([]);
-  const [doneTodo, setDoneTodo] = useState<Document[]>([]);
-  const [notes, setNotes] = useState<Document[]>([]);
   const [collapseDoingToDo, setCollapseDoingToDo] = useState(true);
   const [collapseDoneToDo, setCollapseDoneToDo] = useState(true);
   const [collapseNotes, setCollapseNotes] = useState(true);
+
+  const { doingTodo, doneTodo, notes } = documentData.reduce(
+    (acc, document) => {
+      if (!document) return acc;
+      if (document.isNote) acc.notes.push(document);
+      else if (document.isDone) acc.doneTodo.push(document);
+      else acc.doingTodo.push(document);
+      return acc;
+    },
+    { doingTodo: [], doneTodo: [], notes: [] } as {
+      doingTodo: Document[];
+      doneTodo: Document[];
+      notes: Document[];
+    },
+  );
 
   const onClickListHeader = (type: string) => {
     switch (type) {
@@ -36,21 +48,6 @@ function ListConstructor({ documentData }: IListConstructorProps) {
         break;
     }
   };
-
-  useEffect(() => {
-    const doingTodosData: Document[] = [];
-    const doneTodosData: Document[] = [];
-    const notesData: Document[] = [];
-    documentData.forEach(document => {
-      if (!document) return;
-      if (document.isNote) notesData.push(document);
-      else if (document.isDone) doneTodosData.push(document);
-      else doingTodosData.push(document);
-    });
-    setDoingTodo(doingTodosData.sort((a, b) => a.priority - b.priority));
-    setDoneTodo(doneTodosData);
-    setNotes(notesData);
-  }, [documentData]);
 
   return (
     <S.Wrapper>
