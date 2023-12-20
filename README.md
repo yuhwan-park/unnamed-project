@@ -2,6 +2,12 @@
 
 ![dail](https://ifh.cc/g/8CkTO3.png)
 
+## 0. 해보고 싶은 것들
+
+- [ ] firestore fetch logic을 react-query로 감싸보기
+- [ ] PWA 적용해보기
+- [ ] 모바일 UX에 맞는 트랜지션 애니메이션 적용해보자 [참조](https://uxdesign.cc/transition-animations-a-practical-guide-5dba4d42f659)
+
 ## 🔗 1. 서비스 소개
 
 1인으로 진행한 일정 관리, 일기, 할일 기록 웹어플리케이션입니다.
