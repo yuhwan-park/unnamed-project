@@ -13,4 +13,5 @@ export const NoteIconContainer = styled(IconContainer)`
     color: ${({ theme }) => theme.iconColor};
     width: 20px;
   }
+  display: block;
 `;
