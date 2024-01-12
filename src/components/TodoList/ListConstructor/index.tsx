@@ -1,12 +1,6 @@
-// dependencies
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { memo, useState } from 'react';
-// components
-import ListItem from '../ListItem';
-// types
 import { Document } from '@types';
-// styles
+import CollapsibleList from 'components/common/CollapsibleList';
+import ListItem from '../ListItem';
 import * as S from './style';
 
 interface IListConstructorProps {
@@ -14,10 +8,6 @@ interface IListConstructorProps {
 }
 
 function ListConstructor({ documentData }: IListConstructorProps) {
-  const [collapseDoingToDo, setCollapseDoingToDo] = useState(true);
-  const [collapseDoneToDo, setCollapseDoneToDo] = useState(true);
-  const [collapseNotes, setCollapseNotes] = useState(true);
-
   const { doingTodo, doneTodo, notes } = documentData.reduce(
     (acc, document) => {
       if (!document) return acc;
@@ -33,76 +23,30 @@ function ListConstructor({ documentData }: IListConstructorProps) {
     },
   );
 
-  const onClickListHeader = (type: string) => {
-    switch (type) {
-      case 'doing':
-        setCollapseDoingToDo(prev => !prev);
-        break;
-      case 'done':
-        setCollapseDoneToDo(prev => !prev);
-        break;
-      case 'note':
-        setCollapseNotes(prev => !prev);
-        break;
-      default:
-        break;
-    }
-  };
-
   return (
     <S.Wrapper>
       {doingTodo.length > 0 && (
-        <ul>
-          <S.ListHeader
-            isCollapsed={collapseDoingToDo}
-            onClick={() => onClickListHeader('doing')}
-          >
-            <FontAwesomeIcon
-              icon={faChevronRight}
-              size="sm"
-              className="toggle-menu-icon"
-            />
-            <h2>할일 {`(${doingTodo.length})`}</h2>
-          </S.ListHeader>
-          {collapseDoingToDo &&
-            doingTodo.map(todo => <ListItem key={todo.id} item={todo} />)}
-        </ul>
+        <CollapsibleList title={`할일 (${doingTodo.length})`}>
+          {doingTodo.map(todo => (
+            <ListItem key={todo.id} item={todo} />
+          ))}
+        </CollapsibleList>
       )}
 
       {doneTodo.length > 0 && (
-        <ul>
-          <S.ListHeader
-            isCollapsed={collapseDoneToDo}
-            onClick={() => onClickListHeader('done')}
-          >
-            <FontAwesomeIcon
-              icon={faChevronRight}
-              size="sm"
-              className="toggle-menu-icon"
-            />
-            <h2>완료 {`(${doneTodo.length})`}</h2>
-          </S.ListHeader>
-          {collapseDoneToDo &&
-            doneTodo.map(todo => <ListItem key={todo.id} item={todo} />)}
-        </ul>
+        <CollapsibleList title={`완료 (${doneTodo.length})`}>
+          {doneTodo.map(todo => (
+            <ListItem key={todo.id} item={todo} />
+          ))}
+        </CollapsibleList>
       )}
 
       {notes.length > 0 && (
-        <ul>
-          <S.ListHeader
-            isCollapsed={collapseNotes}
-            onClick={() => onClickListHeader('note')}
-          >
-            <FontAwesomeIcon
-              icon={faChevronRight}
-              size="sm"
-              className="toggle-menu-icon"
-            />
-            <h2>노트 {`(${notes.length})`}</h2>
-          </S.ListHeader>
-          {collapseNotes &&
-            notes.map(note => <ListItem key={note.id} item={note} />)}
-        </ul>
+        <CollapsibleList title={`노트 (${notes.length})`}>
+          {notes.map(todo => (
+            <ListItem key={todo.id} item={todo} />
+          ))}
+        </CollapsibleList>
       )}
 
       {!documentData.length && (
@@ -115,4 +59,4 @@ function ListConstructor({ documentData }: IListConstructorProps) {
   );
 }
 
-export default memo(ListConstructor);
+export default ListConstructor;
