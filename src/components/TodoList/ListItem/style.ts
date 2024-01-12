@@ -14,4 +14,5 @@ export const NoteIconContainer = styled(IconContainer)`
     width: 20px;
   }
   display: block;
+  text-decoration: dashed;
 `;
