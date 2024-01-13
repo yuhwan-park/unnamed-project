@@ -2,7 +2,7 @@ import { screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import App from 'App';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import SignIn from 'routes/SignIn';
+import SignIn from 'pages/SignIn';
 import { render } from './utils';
 import { signOut } from 'firebase/auth';
 import { auth } from 'firebase-source';
