@@ -27,7 +27,7 @@
     "build": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "rm -rf ./build && npm run build && firebase deploy"
+    "deploy": "rm -rf ./build && npm run build && firebase deploy --project dail-a5dc1"
   },
   "eslintConfig": {
     "extends": [
