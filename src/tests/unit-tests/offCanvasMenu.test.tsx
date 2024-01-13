@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom';
 import { screen } from '@testing-library/react';
 import { userInfoState } from 'atoms';
-import GlobalLogic from 'components/common/GlobalLogic';
 import CalendarList from 'components/OffCanvasMenu/CalendarList';
 import ShowAllList from 'components/OffCanvasMenu/ShowAllList';
 import UserAccount from 'components/OffCanvasMenu/UserAccount';
@@ -60,7 +59,6 @@ describe('오프캔버스 메뉴 기능 테스트', () => {
       const { user } = render(
         <BrowserRouter>
           <RecoilSetter atom={userInfoState} data={MOCK_USER} />
-          <GlobalLogic />
           <UserAccount />
         </BrowserRouter>,
         { route: '/main' },

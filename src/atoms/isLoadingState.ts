@@ -1,18 +1,17 @@
 import { selector } from 'recoil';
 import { allDocumentState } from './allDocumentState';
-import { docIdsByDateState } from './docIdsByDateState';
 import { myListsState } from './myListsState';
+import { docIdsByDateState } from './docIdsByDateState';
 
 export const isLoadingState = selector({
-  key: 'isLoading',
+  key: 'isLoadingState',
   get: ({ get }) => {
-    const allDoc = get(allDocumentState);
-    const docIdsByDate = get(docIdsByDateState);
+    const allDocuments = get(allDocumentState);
     const myLists = get(myListsState);
-    return (
-      !!allDoc['needLoad'] &&
-      !!docIdsByDate['needLoad'] &&
-      !!myLists['needLoad']
+    const docIdsByDate = get(docIdsByDateState);
+
+    return [docIdsByDate, myLists, allDocuments].every(
+      ({ isLoading }) => isLoading,
     );
   },
 });

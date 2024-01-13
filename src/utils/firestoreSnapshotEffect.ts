@@ -10,7 +10,9 @@ export const snapshotEffect =
       if (user) {
         onSnapshot(doc(db, user.uid, destination), doc => {
           if (doc.exists()) {
-            setSelf(doc.data() as T);
+            setSelf((doc.data() ?? {}) as T);
+          } else {
+            setSelf({} as T);
           }
         });
       }

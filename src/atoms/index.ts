@@ -1,8 +1,6 @@
 export * from './allDocumentState';
 export * from './dateState';
 export * from './docIdsByDateState';
-export * from './docIdsState';
-export * from './documentsById';
 export * from './isOffCanvasOpenState';
 export * from './isWideState';
 export * from './myListModalState';
@@ -11,4 +9,3 @@ export * from './paramState';
 export * from './screenStatusState';
 export * from './showEditorState';
 export * from './userInfoState';
-export * from './isLoadingState';

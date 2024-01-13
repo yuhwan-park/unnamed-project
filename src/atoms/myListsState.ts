@@ -7,7 +7,7 @@ type MyListMap = { [key: string]: MyList };
 
 export const myListsState = atom<MyListMap>({
   key: 'myLists',
-  default: { needLoad: {} as MyList },
+  default: { isLoading: {} as MyList },
   effects: [snapshotEffect('Lists')],
 });
 

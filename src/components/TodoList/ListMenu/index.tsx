@@ -12,12 +12,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import PriorityFlag from 'components/common/PriorityFlag';
 import MoveListModal from '../MoveListModal';
 // states
-import {
-  allDocumentState,
-  docIdsByDateState,
-  docIdsState,
-  myListsState,
-} from 'atoms';
+import { allDocumentState, docIdsByDateState, myListsState } from 'atoms';
 // firebase
 import { arrayRemove, deleteField, updateDoc } from 'firebase/firestore';
 // hooks
@@ -37,7 +32,6 @@ function ListMenu({ item, isEditor }: IListMenu) {
   const [isOpen, setIsOpen] = useState(false);
   const [moveListFlag, setMoveListFlag] = useState(false);
   const [allDocument, setAllDocument] = useRecoilState(allDocumentState);
-  const setDocIds = useSetRecoilState(docIdsState);
   const [myLists, setMyLists] = useRecoilState(myListsState);
   const setDocIdsByDate = useSetRecoilState(docIdsByDateState);
   const updator = useUpdateTodo();
@@ -54,7 +48,6 @@ function ListMenu({ item, isEditor }: IListMenu) {
     const newAllDocument = { ...allDocument };
     delete newAllDocument[item.id];
     setAllDocument(newAllDocument);
-    setDocIds(ids => ids.filter(id => id !== item.id));
 
     if (item.date) {
       setDocIdsByDate(ids => ({

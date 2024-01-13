@@ -4,31 +4,24 @@ import { useRecoilValue } from 'recoil';
 import ContentForm from 'components/TodoList/ContentForm';
 import ListConstructor from './ListConstructor';
 // states
-import { allDocumentSelector, documentsById, screenStatusState } from 'atoms';
+import { allDocumentSelector, documentsSelector } from 'atoms';
 // styles
-import * as S from './style';
 import { useLocation } from 'react-router-dom';
+import * as S from './style';
 
 function TodoList() {
   const location = useLocation();
+  const isAllDocumentPage = location.pathname.includes('all');
   const allDocuments = useRecoilValue(allDocumentSelector);
-  const screenStatus = useRecoilValue(screenStatusState);
-  const documents = useRecoilValue(documentsById);
-  const screen = location.pathname.includes('all')
-    ? 'All'
-    : location.pathname.includes('lists')
-    ? 'List'
-    : 'Date';
-
-  console.log('screen', screen);
+  const documents = useRecoilValue(documentsSelector);
 
   return (
     <S.Wrapper>
-      {screen !== 'All' && <ContentForm />}
+      {!isAllDocumentPage && <ContentForm />}
 
       <S.ListContainer>
         <ListConstructor
-          documentData={screen === 'All' ? allDocuments : documents}
+          documentData={isAllDocumentPage ? allDocuments : documents}
         />
       </S.ListContainer>
     </S.Wrapper>
