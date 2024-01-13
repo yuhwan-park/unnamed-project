@@ -40,17 +40,15 @@ const MainRoute = () => {
     return () => window.removeEventListener('resize', handleWindowResize);
   }, [setIsWide]);
 
+  if (isLoading) return <Loading />;
   return (
-    <>
-      {isLoading && <Loading />}
-      <Wrapper onClick={onClickScreen}>
-        <Header />
-        <ResponsiveContainer>
-          <OffCanvasMenu />
-          <Outlet />
-        </ResponsiveContainer>
-      </Wrapper>
-    </>
+    <Wrapper onClick={onClickScreen}>
+      <Header />
+      <ResponsiveContainer>
+        <OffCanvasMenu />
+        <Outlet />
+      </ResponsiveContainer>
+    </Wrapper>
   );
 };
 

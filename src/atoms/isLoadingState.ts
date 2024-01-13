@@ -10,7 +10,7 @@ export const isLoadingState = selector({
     const myLists = get(myListsState);
     const docIdsByDate = get(docIdsByDateState);
 
-    return [docIdsByDate, myLists, allDocuments].every(
+    return [docIdsByDate, myLists, allDocuments].some(
       ({ isLoading }) => isLoading,
     );
   },
