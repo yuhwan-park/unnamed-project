@@ -16,10 +16,8 @@ function Router() {
         <Route path="main" element={<MainRoute />}>
           <Route index element={<Main />} />
           <Route path=":id" element={<Main />} />
-          <Route path="lists/:listId/tasks" element={<Main />} />
-          <Route path="lists/:listId/tasks/:id" element={<Main />} />
-          <Route path="all/tasks" element={<Main />} />
-          <Route path="all/tasks/:id" element={<Main />} />
+          <Route path="lists/:listId/tasks/:id?" element={<Main />} />
+          <Route path="all/tasks/:id?" element={<Main />} />
         </Route>
       </Route>
       <Route path="signup" element={<SignUp />} />
