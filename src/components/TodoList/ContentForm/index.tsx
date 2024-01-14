@@ -16,6 +16,7 @@ import { arrayUnion, setDoc, Timestamp } from 'firebase/firestore';
 // styles
 import * as S from './style';
 import { docRef } from 'utils';
+import { useNavigate } from 'react-router-dom';
 
 interface ToDoSubmitForm {
   title: string;
@@ -27,6 +28,7 @@ function ContentForm() {
   const setAllDocument = useSetRecoilState(allDocumentState);
   const setDocIdsByDate = useSetRecoilState(docIdsByDateState);
   const selectedList = useRecoilValue(selectedListState);
+  const navigate = useNavigate();
   const [isNote, setIsNote] = useState(false);
   const { register, handleSubmit, setValue } = useForm<ToDoSubmitForm>();
 
@@ -63,6 +65,8 @@ function ContentForm() {
         },
       }));
 
+      navigate(`/main/lists/${selectedList.id}/tasks/${data.id}`);
+
       await setDoc(
         docRef('Lists'),
         { [selectedList.id]: { docIds: arrayUnion(data.id) } },
@@ -73,6 +77,8 @@ function ContentForm() {
         ...ids,
         [date]: ids[date] ? [...ids[date], data.id] : [data.id],
       }));
+
+      navigate(`/main/${data.id}`);
 
       await setDoc(
         docRef('Date'),

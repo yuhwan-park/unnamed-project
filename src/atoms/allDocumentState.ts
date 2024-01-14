@@ -19,7 +19,7 @@ export const allDocumentSelector = selector({
   get: ({ get }) => {
     const allDocuments = get(allDocumentState);
     const sorted = Object.values(allDocuments).sort(
-      (a, b) => a.createdAt?.seconds - b.createdAt?.seconds,
+      (a, b) => b.createdAt?.seconds - a.createdAt?.seconds,
     );
     return sorted;
   },
