@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { ListHeader } from 'style/main-page';
 
 export const MyListContainer = styled.div`
-  padding: 10px 20px 100px 10px;
-  margin-bottom: 40px;
+  padding: 10px 0 100px 0;
+  margin: 0 20px 40px;
 `;
 
 export const ListTitle = styled.div`
