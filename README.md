@@ -1,6 +1,7 @@
 # 📝 Dail
 
-![dail](https://ifh.cc/g/8CkTO3.png)
+![dail](static/1.png)
+![dail](static/2.png)
 
 ## 0. 해보고 싶은 것들
 
