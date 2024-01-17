@@ -1,9 +1,10 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { RecoilRoot } from 'recoil';
-import { Theme } from 'theme';
-import { ThemeProvider } from 'styled-components';
 import { ReactElement } from 'react';
+import { MemoryRouter } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
+import { ThemeProvider } from 'styled-components';
+import { Theme } from 'theme';
 
 const customRender = (ui: ReactElement, { route = '/' } = {}) => {
   window.history.pushState({}, 'Test page', route);
@@ -12,7 +13,13 @@ const customRender = (ui: ReactElement, { route = '/' } = {}) => {
     user: userEvent.setup(),
     ...render(
       <RecoilRoot>
-        <ThemeProvider theme={Theme}>{ui}</ThemeProvider>
+        <ThemeProvider theme={Theme}>
+          {route ? (
+            <MemoryRouter initialEntries={[route]}>{ui}</MemoryRouter>
+          ) : (
+            <>{ui}</>
+          )}
+        </ThemeProvider>
       </RecoilRoot>,
     ),
   };

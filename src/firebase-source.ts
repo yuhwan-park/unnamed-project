@@ -17,4 +17,4 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
-auth.useDeviceLanguage(); // 비밀번호 재설정 시 디바이스에 맞는 언어로 보내기 위한 함수
+auth?.useDeviceLanguage(); // 비밀번호 재설정 시 디바이스에 맞는 언어로 보내기 위한 함수
