@@ -1,12 +1,8 @@
-// dependencies
+import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-// types
 import { AuthFormData } from '@types';
-// styles
 import * as S from 'style/sign-page';
 
 interface IAuthFormProps {
@@ -14,7 +10,6 @@ interface IAuthFormProps {
 }
 
 function AuthForm({ onSubmit }: IAuthFormProps) {
-  const [isSignUp, setIsSingUp] = useState(false);
   const location = useLocation();
   const {
     register,
@@ -22,13 +17,10 @@ function AuthForm({ onSubmit }: IAuthFormProps) {
     formState: { errors },
   } = useForm<AuthFormData>();
 
-  useEffect(() => {
-    setIsSingUp(location.pathname === '/signup');
-  }, [location.pathname]);
+  const isSignUp = location.pathname === '/signup';
 
   return (
     <S.Form onSubmit={handleSubmit(onSubmit)}>
-      {/* 회원가입 페이지일 때만 닉네임 인풋 렌더 */}
       {isSignUp && (
         <S.InputContainer>
           <FontAwesomeIcon icon={faUser} />
@@ -39,7 +31,6 @@ function AuthForm({ onSubmit }: IAuthFormProps) {
         </S.InputContainer>
       )}
 
-      {/* 이메일 인풋 */}
       <S.InputContainer>
         <FontAwesomeIcon icon={faEnvelope} />
         <S.TextInput
@@ -55,7 +46,6 @@ function AuthForm({ onSubmit }: IAuthFormProps) {
       </S.InputContainer>
       {errors.email && <S.ErrorMessage>{errors.email.message}</S.ErrorMessage>}
 
-      {/* 비밀번호 인풋 */}
       <S.InputContainer>
         <FontAwesomeIcon icon={faLock} />
         <S.TextInput
