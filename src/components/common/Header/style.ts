@@ -19,7 +19,6 @@ export const Today = styled(motion.div)`
   height: 50px;
   font-size: 18px;
   color: white;
-  font-family: ${props => props.theme.fontFamily.main};
 `;
 
 export const CalendarContainer = styled.div`

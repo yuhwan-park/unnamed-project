@@ -1,3 +1,4 @@
+import './style/fonts.css';
 import Router from 'routes/Router';
 import { BrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';

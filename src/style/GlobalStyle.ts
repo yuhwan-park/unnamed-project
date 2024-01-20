@@ -19,7 +19,6 @@ time, mark, audio, video {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font-family: ${props => props.theme.fontFamily.main};
   vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
@@ -52,7 +51,6 @@ table {
 }
 * {
   box-sizing: border-box;
-  font-size: 16px;
   font-family: 'Nanum Gothic', sans-serif;
 }
 a {
