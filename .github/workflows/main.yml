@@ -1,4 +1,4 @@
-name: Example Workflow
+name: Deploy
 
 on:
   pull_request:
@@ -7,8 +7,9 @@ on:
 
 jobs:
   build:
+    name: Deployment
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout branch
         uses: actions/checkout@v2
@@ -18,12 +19,12 @@ jobs:
         with:
           cmd: install --production # will run `yarn install` command
 
-    - name: Build
+      - name: Build
         uses: borales/actions-yarn@v2.3.0
         with:
           cmd: build
 
-    - name: Deploy
+      - name: Deploy
         uses: w9jds/firebase-action@master
         with:
           args: deploy
