@@ -22,3 +22,4 @@ jobs:
         env:
           CI: true
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
+          PROJECT_ID: dail-a5dc1
