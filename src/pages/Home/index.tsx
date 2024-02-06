@@ -23,7 +23,7 @@ function Home() {
   return (
     <S.Wrapper>
       <S.Nav>
-        <S.Logo>dail</S.Logo>
+        <S.Logo>dail-t1</S.Logo>
         <S.Links>
           <Link to={'/signin'}>로그인</Link>
           <Link to={'/signup'}>회원가입</Link>
