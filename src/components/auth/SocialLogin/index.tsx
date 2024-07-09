@@ -1,5 +1,5 @@
 // firebase
-import { GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from 'firebase-source';
 // styles
 import * as S from './style';
@@ -9,7 +9,7 @@ function SocialLogin() {
   const provider = new GoogleAuthProvider();
 
   const onClickSignInWithGoogle = async () => {
-    await signInWithRedirect(auth, provider);
+    await signInWithPopup(auth, provider);
   };
 
   return (
